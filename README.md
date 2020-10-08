@@ -1,2 +1,5 @@
 # Final-Year-Project-py-galaxies
-My final year project. 
+Code for my final year project.
+
+Working towards a Python front end for L-Galaxies.
+
