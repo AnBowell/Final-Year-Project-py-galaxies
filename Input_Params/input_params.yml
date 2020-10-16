@@ -1,30 +1,36 @@
 # L-Galaxies input file
 
-inputFiles:
- graphFile: '/lustre/scratch/astro/ab898/FYP/Input Data/mega_graph_mini.hdf5'
+input_files:
+ graph_file: '../Input Data/mega_graph_latest.hdf5'
 
-outputFiles:
- haloFile:   '/lustre/scratch/astro/ab898/FYP/Output Data/SMT13HaloOutput.hdf5'
- galaxyFile: '/lustre/scratch/astro/ab898/FYP/Output Data/SMT13GalaxyOutput.hdf5'
+output_files:
+ halo_file:   '../Output Data/SMT13HaloOutput.hdf5'
+ galaxy_file: '../Output Data/SMT13GalaxyOutput.hdf5'
 
 cosmology:
- OmegaM:        
+ omega_m:        
   Description: 'Matter density parameter'
   Value:        0.30
   Units:       'None'
- fBaryon:
+ f_baryon:
   Description: 'Baryon fraction'
   Value:        0.155
   Units:       'None'
 
-modelSwitches:
+model_switches:
  HOD:
   Description: 'Halo occupation description for stars (as primitive test)'
   Value:        True
+ sub_halo:
+  Description: 'For each graph, load in Sub-halo data?'
+  Value:        False
  
 performance:
  io_nRec:
   Description: 'Size of HDF5 io buffer (number of records)'
   Value:        1000
+
+
+ 
   
 

@@ -1,0 +1,30 @@
+# L-Galaxies input file
+
+input_files:
+ halo_file: '../Output Data/SMT13HaloOutput.hdf5'
+ 
+# The following should really be attributes of the data
+cosmo:
+ baryon_fraction: 0.155
+
+plots:
+ baryon_fraction: 
+  show : True
+  figsize: [8,5]
+  xscale: 'log'
+  yscale: 'linear'
+  marker_type: '.'
+  marker_size: 10
+  xlabel: 'Mass'
+  ylabel: 'Baryon mass / Mass'
+  save: True
+  save_path: 'Graph_Outputs/Baryon Fraction.jpg'
+  dpi: 600
+
+graphs:
+ graph_min: 0
+ graph_max: 1000 # Note - includes last element!
+ 
+snapshots:
+ snap_min: 61
+ snap_max: 61 # Note - includes last element!
