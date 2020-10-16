@@ -1,4 +1,4 @@
-#Py-Galaxies
+# Py-Galaxies
 Python interface for the L-Galaxies SAM. 
 
 ## Table of contents
