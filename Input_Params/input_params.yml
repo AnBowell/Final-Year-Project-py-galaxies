@@ -23,7 +23,7 @@ model_switches:
   Value:        True
  sub_halo:
   Description: 'For each graph, load in Sub-halo data?'
-  Value:        False
+  Value:        True
  
 performance:
  io_nRec:
