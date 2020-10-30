@@ -144,6 +144,7 @@ class HDFProperties:
         self.HDF_output_filepath = model_params.output_filepath
         self.graph_input_file = None
         self.halo_output_file = None
+        
         self.dtype_halo = np.dtype([
                 ('graph_ID',np.int32),
                 ('snap_ID',np.int32),
@@ -155,29 +156,10 @@ class HDFProperties:
                 ])
         
         self.dtype_subhalo_stores = np.dtype([
-                ('sub_3D_velocity_dispersion',np.float64),
-                #('sub_desc_start_index',np.int32),
-                ('sub_direct_desc_contribution',object),
-                ('sub_direct_desc_ids',object),
-                ('sub_direct_prog_contribution',object),
-                ('sub_direct_prog_ids',object),
-                # ('sub_generation_id',np.int32),
-                # ('sub_generation_length',np.int32),
-                # ('sub_generation_start_index',np.int32),
-                ('sub_half_mass_radius',np.float64),
-                ('sub_half_mass_velocity_radius',np.float64),
-                ('sub_mean_pos',np.float64,(3)),
-                ('sub_mean_vel',np.float64,(3)),
-                #('sub_ndesc',np.int32),
-                ('sub_halo_mass',np.float64),
-                #('sub_nprog',np.int32),
-                #('sub_prog_start_index',np.int32),
-                ('sub_redshifts',np.float64),
-                ('sub_rms_radius',np.float64),
-                #('sub_snapshots',np.int32),
-                ('sub_v_max',np.float64),
-                ('subhalo_catalog_halo_ids',np.int64),
-                ('subhalo_start_index',np.int32),
+                ('central_sub_halo_ID',np.int32),
+                ('central_sub_halo_dist',np.float64),
+                ('central_sub_halo_mass',np.float64),
+                ('prog_contrib_mass',np.float64)
                 ])
 
         self.open_graph_input()
@@ -683,7 +665,18 @@ class HaloProperties:
                                                         self.desc_end]
        self.desc_mass = graph_properties.direct_desc_contribution[
                                        self.desc_start:self.desc_end]
-    
+       
+       self.mean_pos = graph_properties.mean_pos[halo_ID]
+       
+       # Add in to documentation 
+       
+       self.velocity_dispersion_3D = graph_properties.velocity_dispersion_3D[
+                                     halo_ID]
+       self.mean_vel = graph_properties.mean_vel[halo_ID]
+       
+       self.rms_radius = graph_properties.rms_radius[halo_ID]
+       
+       
        self.mass_baryon = 0.
        self.mass_from_progenitors = 0.
        self.mass_baryon_from_progenitors = 0.
@@ -714,8 +707,141 @@ class HaloProperties:
        #     self.mass_stars = 0.
        #     self.mass_stars_from_progenitors = 0.
     
+    # def extract_sub_halo_data(self,graph_properties,dtype_subhalo_stores,
+    #                           part_mass):
+    #     """Simple method to store subhalo properties in a structured np array.
+        
+    #     A very similar system to what the __init__ function does. This however,
+    #     is optional as subhalos may not always be needed. 
+        
+
+    #     Parameters
+    #     ----------
+    #     graph_properties : :obj: 'Class'
+    #         An instance of GraphProperties containing the graph data.
+    #     dtype_subhalo_stores : dtype
+    #         The dtype for the stuctured array to save subhalo properties in.
+    #     part_mass : float
+    #         Dark matter particle mass.
+
+    #     Returns
+    #     -------
+    #     None.
+
+    #     """
+                
+    #     self.sub_halo_attrs = np.empty(self.n_subhalo,dtype=
+    #                                    dtype_subhalo_stores)
+
+    #     for pos_counter,sub_halo_ID in enumerate(self.sub_graph_halo_ids):
+            
+            
+                           
+            
+    #         prog_start_index = graph_properties.sub_prog_start_index[sub_halo_ID]
+    #         nprog = graph_properties.sub_nprog[sub_halo_ID]
+    #         prog_end_index = prog_start_index + nprog
+            
+            
+    #         desc_start_index = graph_properties.sub_desc_start_index[sub_halo_ID]
+    #         ndesc = graph_properties.sub_ndesc[sub_halo_ID]
+    #         desc_end_index = desc_start_index + ndesc
+            
+            
+    #         nparts = graph_properties.sub_nparts[sub_halo_ID]
+            
+    #         sub_halo_mass = nparts * part_mass
+            
+            
+    #         sub_halo_attributes_tuple = (
+    #              graph_properties.sub_velocity_dispersion_3D[sub_halo_ID],
+    #              # graph_properties.sub_desc_start_index[sub_halo_ID],
+    #              graph_properties.sub_direct_desc_contribution[desc_start_index:
+    #                                                            desc_end_index],
+    #              graph_properties.sub_direct_desc_ids[desc_start_index:
+    #                                                   desc_end_index],
+    #              graph_properties.sub_direct_prog_contribution[prog_start_index:
+    #                                                            prog_end_index],
+    #              graph_properties.sub_direct_prog_ids[prog_start_index:
+    #                                                   prog_end_index],
+
+    #              # graph_properties.sub_generation_id[sub_halo_ID],
+    #              # graph_properties.sub_generation_length[sub_halo_ID],
+    #              # graph_properties.sub_generation_start_index[sub_halo_ID], 
+    #              graph_properties.sub_half_mass_radius[sub_halo_ID],
+    #              graph_properties.sub_half_mass_velocity_radius[sub_halo_ID],
+    #              graph_properties.sub_mean_pos[sub_halo_ID],
+    #              graph_properties.sub_mean_vel[sub_halo_ID],
+    #              # graph_properties.sub_ndesc[sub_halo_ID], 
+    #              sub_halo_mass,
+    #              # graph_properties.sub_nprog[sub_halo_ID],
+    #              # graph_properties.sub_prog_start_index[sub_halo_ID],
+    #              graph_properties.sub_redshifts[sub_halo_ID],
+    #              graph_properties.sub_rms_radius[sub_halo_ID],
+    #              #graph_properties.sub_snapshots[sub_halo_ID],
+    #              graph_properties.sub_v_max[sub_halo_ID],
+    #              graph_properties.subhalo_catalog_halo_ids[sub_halo_ID]
+    #              )
+                
+    #         self.sub_halo_attrs[pos_counter] = sub_halo_attributes_tuple
+    #     return None    
+    
+    @staticmethod
+    def find_central_halo(vel,rms_vel,pos,rms_radius,sub_vel,sub_rms_vel,
+                          sub_pos,sub_rms_radius):
+        """ Using phase space finds the closest galaxy to main halo.
+        
+        This function follows equation 14 in Will's paper:
+            
+        https://arxiv.org/pdf/2003.01187.pdf.
+        
+
+        Parameters
+        ----------
+        vel : ndarray of float64
+            1x3 array of velocities pertaining to the host halo.
+        rms_vel : float
+            The root-mean-squared velocity of the host halo.
+        pos : ndarry of float64
+            1x3 array of the mean position of the host halo.
+        rms_radius : float
+            The root-mean-squared radius of the host halo.
+        sub_vel : ndarray of float64
+            1x3 array of velocities pertaining to the subhalo.
+        sub_rms_vel : float
+            The root-mean-squared velocity of the subhalo.
+        sub_pos : ndarry of float64
+            1x3 array of the mean position of the subhalo.
+        sub_rms_radius : float
+            The root-mean-squared radius of the subhalo.
+
+        Returns
+        -------
+        central_subhalo_ID_pos : int
+            Array index of the central subhalo's ID
+        float
+            The phase space distance between the subhalo and host halo center.
+
+        """
+        
+        
+        pos_dists = np.sqrt(np.sum((pos - sub_pos) ** 2,axis = 1))/(rms_radius +
+                                                                    sub_rms_radius)
+        
+        vel_dists = np.sqrt(np.sum((vel - sub_vel) ** 2,axis = 1))/(rms_vel +
+                                                                   sub_rms_vel)
+        
+        total = pos_dists + vel_dists
+        
+        central_subhalo_ID_pos = np.argmin(total)
+        
+        return central_subhalo_ID_pos, total[central_subhalo_ID_pos]
+    
+    
+    
+
     def extract_sub_halo_data(self,graph_properties,dtype_subhalo_stores,
-                              part_mass):
+                              part_mass,f_baryon):
         """Simple method to store subhalo properties in a structured np array.
         
         A very similar system to what the __init__ function does. This however,
@@ -736,64 +862,126 @@ class HaloProperties:
         None.
 
         """
+        
+        
+        if graph_properties.n_subhalos[self.halo_ID] > 0:
+            
+            central_sub_halo_ID_pos, central_sub_halo_dist  = \
+                self.find_central_halo(self.mean_vel,
+                                      self.velocity_dispersion_3D,
+                                      self.mean_pos,
+                                      self.rms_radius,
+                                      graph_properties.sub_mean_vel[
+                                          self.sub_graph_halo_ids],
+                                      graph_properties.sub_velocity_dispersion_3D[
+                                          self.sub_graph_halo_ids],
+                                      graph_properties.sub_mean_pos[
+                                          self.sub_graph_halo_ids],
+                                      graph_properties.sub_rms_radius[
+                                          self.sub_graph_halo_ids]
+                                      )
+            
+            central_sub_halo_ID = \
+                self.sub_graph_halo_ids[central_sub_halo_ID_pos]
                 
-        self.sub_halo_attrs = np.empty(self.n_subhalo,dtype=
-                                       dtype_subhalo_stores)
-
-        for pos_counter,sub_halo_ID in enumerate(self.sub_graph_halo_ids):
-                           
-            
-            prog_start_index = graph_properties.sub_prog_start_index[sub_halo_ID]
-            nprog = graph_properties.sub_nprog[sub_halo_ID]
+            nparts = graph_properties.sub_nparts[central_sub_halo_ID]
+    
+            central_sub_halo_mass = nparts * part_mass 
+        
+            prog_start_index = graph_properties.sub_prog_start_index[central_sub_halo_ID]
+            nprog = graph_properties.sub_nprog[central_sub_halo_ID]
             prog_end_index = prog_start_index + nprog
-            
-            
-            desc_start_index = graph_properties.sub_desc_start_index[sub_halo_ID]
-            ndesc = graph_properties.sub_ndesc[sub_halo_ID]
+            desc_start_index = graph_properties.sub_desc_start_index[central_sub_halo_ID]
+            ndesc = graph_properties.sub_ndesc[central_sub_halo_ID]
             desc_end_index = desc_start_index + ndesc
             
             
-            nparts = graph_properties.sub_nparts[sub_halo_ID]
             
-            sub_halo_mass = nparts * part_mass
-            
-            
-            sub_halo_attributes_tuple = (
-                 graph_properties.sub_velocity_dispersion_3D[sub_halo_ID],
-                 # graph_properties.sub_desc_start_index[sub_halo_ID],
-                 graph_properties.sub_direct_desc_contribution[desc_start_index:
-                                                               desc_end_index],
-                 graph_properties.sub_direct_desc_ids[desc_start_index:
-                                                      desc_end_index],
-                 graph_properties.sub_direct_prog_contribution[prog_start_index:
-                                                               prog_end_index],
-                 graph_properties.sub_direct_prog_ids[prog_start_index:
-                                                      prog_end_index],
-
-                 # graph_properties.sub_generation_id[sub_halo_ID],
-                 # graph_properties.sub_generation_length[sub_halo_ID],
-                 # graph_properties.sub_generation_start_index[sub_halo_ID], 
-                 graph_properties.sub_half_mass_radius[sub_halo_ID],
-                 graph_properties.sub_half_mass_velocity_radius[sub_halo_ID],
-                 graph_properties.sub_mean_pos[sub_halo_ID],
-                 graph_properties.sub_mean_vel[sub_halo_ID],
-                 # graph_properties.sub_ndesc[sub_halo_ID], 
-                 sub_halo_mass,
-                 # graph_properties.sub_nprog[sub_halo_ID],
-                 # graph_properties.sub_prog_start_index[sub_halo_ID],
-                 graph_properties.sub_redshifts[sub_halo_ID],
-                 graph_properties.sub_rms_radius[sub_halo_ID],
-                 #graph_properties.sub_snapshots[sub_halo_ID],
-                 graph_properties.sub_v_max[sub_halo_ID],
-                 graph_properties.subhalo_catalog_halo_ids[sub_halo_ID],
-                 graph_properties.subhalo_start_index[sub_halo_ID]
-                 )
+            prog_mass = np.sum(graph_properties.
+                               sub_direct_prog_contribution[prog_start_index:
+                                                            prog_end_index] * 
+                                                            part_mass)
                 
-            self.sub_halo_attrs[pos_counter] = sub_halo_attributes_tuple
+            sub_halo_attributes_tuple = (
+              central_sub_halo_ID,
+              central_sub_halo_dist,
+              central_sub_halo_mass,
+              prog_mass,
+              )
+            
+            self.sub_halo_attrs = np.array(sub_halo_attributes_tuple,
+                                           dtype=dtype_subhalo_stores)
+        
+        else:
+            
+            self.sub_halo_attrs = np.full(1,2**30,dtype=dtype_subhalo_stores)
+
+            
         return None    
-              
-           
-    
+        
+        # for pos_counter,sub_halo_ID in enumerate(self.sub_graph_halo_ids):
+            
+            
+        #     dist = self.mean_pos - graph_properties.sub_mean_pos[sub_halo_ID]
+            
+            
+        #     print(dist)
+            
+                           
+            
+        #     prog_start_index = graph_properties.sub_prog_start_index[sub_halo_ID]
+        #     nprog = graph_properties.sub_nprog[sub_halo_ID]
+        #     prog_end_index = prog_start_index + nprog
+            
+            
+        #     desc_start_index = graph_properties.sub_desc_start_index[sub_halo_ID]
+        #     ndesc = graph_properties.sub_ndesc[sub_halo_ID]
+        #     desc_end_index = desc_start_index + ndesc
+            
+            
+        #     nparts = graph_properties.sub_nparts[sub_halo_ID]
+            
+        #     sub_halo_mass = nparts * part_mass
+            
+            
+        #     sub_halo_attributes_tuple = (
+        #          graph_properties.sub_velocity_dispersion_3D[sub_halo_ID],
+        #          # graph_properties.sub_desc_start_index[sub_halo_ID],
+        #          graph_properties.sub_direct_desc_contribution[desc_start_index:
+        #                                                        desc_end_index],
+        #          graph_properties.sub_direct_desc_ids[desc_start_index:
+        #                                               desc_end_index],
+        #          graph_properties.sub_direct_prog_contribution[prog_start_index:
+        #                                                        prog_end_index],
+        #          graph_properties.sub_direct_prog_ids[prog_start_index:
+        #                                               prog_end_index],
+
+        #          # graph_properties.sub_generation_id[sub_halo_ID],
+        #          # graph_properties.sub_generation_length[sub_halo_ID],
+        #          # graph_properties.sub_generation_start_index[sub_halo_ID], 
+        #          graph_properties.sub_half_mass_radius[sub_halo_ID],
+        #          graph_properties.sub_half_mass_velocity_radius[sub_halo_ID],
+        #          graph_properties.sub_mean_pos[sub_halo_ID],
+        #          graph_properties.sub_mean_vel[sub_halo_ID],
+        #          # graph_properties.sub_ndesc[sub_halo_ID], 
+        #          sub_halo_mass,
+        #          # graph_properties.sub_nprog[sub_halo_ID],
+        #          # graph_properties.sub_prog_start_index[sub_halo_ID],
+        #          graph_properties.sub_redshifts[sub_halo_ID],
+        #          graph_properties.sub_rms_radius[sub_halo_ID],
+        #          #graph_properties.sub_snapshots[sub_halo_ID],
+        #          graph_properties.sub_v_max[sub_halo_ID],
+        #          graph_properties.subhalo_catalog_halo_ids[sub_halo_ID]
+        #          )
+                
+        #     self.sub_halo_attrs[pos_counter] = sub_halo_attributes_tuple
+        # return None    
+
+
+        
+
+
+
 class PlotHalos: 
     
     def __init__(self,yml_filepath):
@@ -1009,5 +1197,5 @@ def inclusive_mass_contribution(halo):
         
     return None
 
-def sub_gather_progenitors():
+def gather_sub_progenitors():
     return None 
