@@ -1,7 +1,7 @@
 # L-Galaxies input file
 
 input_files:
- graph_file: '../Input Data/mega_graph_mini.hdf5'
+ graph_file: '../Input Data/mega_graph_mini_09-11.hdf5'
 
 output_files:
  halo_file:   '../Output Data/SMT13HaloOutput.hdf5'

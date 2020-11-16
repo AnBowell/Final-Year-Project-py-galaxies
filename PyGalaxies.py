@@ -14,6 +14,7 @@ Created on Fri Oct  9 15:13:55 2020
 
 @author: Andrew
 """
+
 import matplotlib.pyplot as plt
 import numpy as np
 import h5py as h5
@@ -158,8 +159,10 @@ class HDFProperties:
                 ])
         
         self.dtype_subhalo_stores = np.dtype([
-                ('prog_DM_mass',np.float64),
-                ('stellar_mass',np.float64)
+                ('sub_graph_ids', np.int32),
+                ('prog_DM_mass', np.float64),
+                ('stellar_mass', np.float64),
+                ('descended', bool)
                 ])
 
         self.open_graph_input()
@@ -492,8 +495,11 @@ class GraphProperties:
         
         self.sub_halo = model_params.sub_halo
         
-        self.graph_halo_ids = open_HDF_group['graph_halo_ids'][:]
+        self.graph_halo_ids = np.arange(len(self.nparts))
+
+        self.n_halos_in_graph = open_HDF_group.attrs["nhalos_in_graph"]
         
+        # Add to docs
         
         
         
@@ -517,7 +523,7 @@ class GraphProperties:
                     open_HDF_group['sub_generation_length'][:]
                 self.sub_generation_start_index = \
                     open_HDF_group['sub_generation_start_index'][:]
-                self.sub_graph_halo_ids = open_HDF_group['sub_graph_halo_ids'][:]
+                
                 self.sub_mean_pos = open_HDF_group['sub_mean_pos'][:]
                 self.sub_ndesc = open_HDF_group['sub_ndesc'][:]
                 self.sub_nparts = open_HDF_group['sub_nparts'][:]
@@ -540,6 +546,8 @@ class GraphProperties:
                 self.sub_v_max = open_HDF_group['sub_v_max'][:]
                 self.subhalo_start_index = open_HDF_group['subhalo_start_index'][:]    
                 self.host_halos = open_HDF_group['host_halos'][:]
+                
+                self.sub_graph_halo_ids = np.arange(len(self.sub_nparts))
                 
             except KeyError:
                 self.n_subhalos = 2**30
@@ -568,9 +576,7 @@ class GraphProperties:
                 self.sub_v_max = 2**30
                 self.subhalo_start_index = 2**30
                 self.host_halos = 2**30
-                
-                
-        
+            
 class HaloProperties:
     """A container for the properties needed for each halo.
    
@@ -715,6 +721,8 @@ class HaloProperties:
                        self.subhalo_start_index + 
                        self.n_subhalo]  
                
+           self.sub_halo_attrs[:]['sub_graph_ids'] = self.sub_graph_halo_ids  
+               
            if graph_properties.n_subhalos[self.halo_ID] > 0:
                
 
@@ -792,98 +800,122 @@ class HaloProperties:
         return central_subhalo_ID_pos, total[central_subhalo_ID_pos]
     
     def initialize_stellar_mass(self):
+        """ Assigns stellar mass of 1 to all new sub-halos
+        
+        Gives sub-halos initial stellar mass and a bool flag to check whether
+        each galaxy has given its mass to a descendent. 
+        
+        Returns
+        -------
+        None.
+
+        """
         
         self.sub_halo_attrs[:]['stellar_mass'] = 1
+        self.sub_halo_attrs[:]['descended'] = False
         
     
     def collect_galaxy_prog_info(self, graph_properties, part_mass,
                                  array_of_halo_properties):
         
-        for i_galaxy, galaxy_ID in enumerate(self.sub_graph_halo_ids):
-            
-            nprog = graph_properties.sub_nprog[galaxy_ID]
-            
-            
-            # print('Graph: {}'.format(self.graph_ID))
-            # print('Halo ID: {}'.format(self.halo_ID))
-            # print('Current Galaxy ID: {}'.format(galaxy_ID))
-            # print('All galaxy IDs: {}'.format(self.sub_graph_halo_ids))
-            
-            if nprog > 0 :
-                
-               
+        """ Collects infomation from galaxy progenitors
+        
+        This method finds the galaxy progenitors and calculates how much 
+        stellar mass etc is to be ibtained from them.
+        
 
-                
-                prog_start_index = graph_properties.sub_prog_start_index[galaxy_ID]
+        Parameters
+        ----------
+        graph_properties : :obj: 'Class'
+            Class of the graph properties. Galaxy information to be extracted
+            from here.
+        part_mass : float
+            The dark matter particle mass.
+        array_of_halo_properties : ndarry of type 'Class'
+            Numpy array containing the halo-classes previously processed. This
+            is so that galaxy stellar mass and other properties can be obtained
+            from progenitors.
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        for i_galaxy, galaxy_ID in enumerate(self.sub_graph_halo_ids):
+
+            nprog = graph_properties.sub_nprog[galaxy_ID]
+
+            if nprog > 0 :
+            
+                prog_start_index = graph_properties.sub_prog_start_index[
+                                                                    galaxy_ID]
                 
                 prog_end_index = prog_start_index + nprog
                 
-                prog_ids = graph_properties.sub_direct_prog_ids[prog_start_index:
+                prog_sub_ids = graph_properties.sub_direct_prog_ids[prog_start_index:
                                                                 prog_end_index]
                     
-               # prev_n_desc = graph_properties.sub_ndesc[galaxy_ID-1]
-                
-                
                 prog_masses, prog_total_mass  = gather_prog_contrib_mass(
                                                     graph_properties, 
                                                     prog_start_index,
                                                     prog_end_index,
                                                     part_mass)
                 
-                
-                # print('Prog IDs: {}'.format(prog_ids))
-
-                #if prev_n_desc < 2 :
-                    
-                # prog_host_halo_IDs = graph_properties.host_halos[prog_ids]
-                
-           
-
-                # prog_halo_properties = array_of_halo_properties[prog_host_halo_IDs]
-                
-            
-                
-                # total_stellar_mass_this_snap = 0.
-                
-                
-                
-                # #np.sum(prog_halo.sub_halo_attrs[:]['stellar_mass'])]
-                
-                
-                
-                # for prog_halo in prog_halo_properties:
-                
-                    
-                    
-                #     total_stellar_mass_this_snap += np.sum(prog_halo.
-                #                                           sub_halo_attrs[:]
-                #                                           ['stellar_mass'])
-                    
-                    
-                
-                # total_stellar_mass = (total_stellar_mass_this_snap +
-                #                       self.sub_halo_attrs[0]['stellar_mass']) 
-                
-        
-                # self.sub_halo_attrs[i_galaxy]['stellar_mass'] = total_stellar_mass 
-        
-                
-        
                 self.sub_halo_attrs[i_galaxy]['prog_DM_mass'] = prog_total_mass 
+                
+
+                prog_host_halo_IDs = graph_properties.host_halos[prog_sub_ids]
+
+                prog_halo_properties = array_of_halo_properties[
+                                                prog_host_halo_IDs]
+   
+    
+                for prog_halo, prog_sub_id in zip(prog_halo_properties,
+                                                  prog_sub_ids):
+    
+    
+    
+                    row_indicies = np.where((prog_halo.
+                                           sub_halo_attrs['sub_graph_ids'] ==
+                                           prog_sub_id))
+                    
+                    
+                    if prog_halo.sub_halo_attrs[row_indicies]['descended']:
+                        continue
+                    
+                    prog_sub_mass = prog_halo.sub_halo_attrs[
+                                                row_indicies]['stellar_mass']
+                    
+                    desc_start_index = graph_properties.sub_desc_start_index[
+                                                                 prog_sub_id]
+                    
+                    main_desc_id = graph_properties.sub_direct_desc_ids[desc_start_index]
+        
+            
+                    
+        
+                    row_index_this_snap = np.where((self.sub_halo_attrs[
+                                                    'sub_graph_ids'] 
+                                                    == galaxy_ID)) # main_desc_id
+                    
+           
+                    total_mass = self.sub_halo_attrs[row_index_this_snap
+                                             ]['stellar_mass'] + prog_sub_mass
+                    
+         
+        
+                    self.sub_halo_attrs[int(row_index_this_snap[0])]['stellar_mass'] = \
+                            total_mass
+                
+                   
+                    prog_halo.sub_halo_attrs[int(row_indicies[0])]['descended'] = True
+
+                        
             else: 
                 
                 self.sub_halo_attrs[i_galaxy]['prog_DM_mass'] = 0. 
                 
-                #May have to find most mass in common. For now just take first one.
-                
-                # This also assumes the progenitor halo 
-                
-                
-
-        
-
-
-
 class PlotHalos: 
     
     def __init__(self,yml_filepath):
@@ -1104,6 +1136,29 @@ def inclusive_mass_contribution(halo):
 def gather_prog_contrib_mass(graph_properties, prog_start_index, 
                              prog_end_index, part_mass):
     
+    """ Calcualtes the DM mass inherited from galaxy progenitors 
+    
+
+    Parameters
+    ----------
+    graph_properties : :obj: 'Class'
+        Graph properties class containing all information for a graph.
+    prog_start_index : int
+        Progenitor start index for current galaxy.
+    prog_end_index : int
+        Progenitor end index for current galaxy.
+    part_mass : float
+        Dark matter particle mass.
+
+    Returns
+    -------
+    prog_masses : ndarry 
+        The DM mass contributions from the progenitors.
+    prog_total_mass : float
+        The total DM mass inherited from all progenitors.
+
+    """
+    
     prog_masses =  graph_properties.sub_direct_prog_contribution[
                    prog_start_index:prog_end_index]
     
@@ -1114,73 +1169,3 @@ def gather_prog_contrib_mass(graph_properties, prog_start_index,
     return prog_masses, prog_total_mass
         
 
-
-# def extract_sub_halo_data(self,halo,array_of_halo_properties,
-#                           graph_properties,dtype_subhalo_stores,
-#                           part_mass,f_baryon):
-#     """Simple method to store subhalo properties in a structured np array.
-    
-#     A very similar system to what the __init__ function does. This however,
-#     is optional as subhalos may not always be needed. 
-    
-
-#     Parameters
-#     ----------
-#     graph_properties : :obj: 'Class'
-#         An instance of GraphProperties containing the graph data.
-#     dtype_subhalo_stores : dtype
-#         The dtype for the stuctured array to save subhalo properties in.
-#     part_mass : float
-#         Dark matter particle mass.
-
-#     Returns
-#     -------
-#     None.
-
-#     """
-    
-    
-
-            
-#     nparts = graph_properties.sub_nparts[central_sub_halo_ID]
-
-#     central_sub_halo_mass = nparts * part_mass 
-
-#     prog_start_index = graph_properties.sub_prog_start_index[central_sub_halo_ID]
-#     nprog = graph_properties.sub_nprog[central_sub_halo_ID]
-#     prog_end_index = prog_start_index + nprog
-#     desc_start_index = graph_properties.sub_desc_start_index[central_sub_halo_ID]
-#     ndesc = graph_properties.sub_ndesc[central_sub_halo_ID]
-#     desc_end_index = desc_start_index + ndesc
-    
-#     prog_ids = graph_properties.sub_direct_prog_ids[prog_start_index:
-#                                                     prog_end_index]
-    
-#     prog_mass = np.sum(graph_properties.
-#                        sub_direct_prog_contribution[prog_start_index:
-#                                                     prog_end_index])
-                
-#     desc_mass = np.sum(graph_properties.
-#                        sub_direct_desc_contribution[desc_start_index:
-#                                                     desc_end_index])
-    
-#     # x = calc_subhalo_bary_mass(halo,array_of_halo_properties,central_sub_halo_mass, desc_mass,
-#     #                            prog_mass, part_mass, nprog, prog_ids)
-        
-        
-        
-        
-        
-#     sub_halo_attributes_tuple = (
-#       central_sub_halo_ID,
-#       central_sub_halo_dist,
-#       central_sub_halo_mass,
-#       prog_mass,
-#       )
-    
-#     self.sub_halo_attrs = np.array(sub_halo_attributes_tuple,
-#                                    dtype=dtype_subhalo_stores)
-
-
-        
-#     return None   
