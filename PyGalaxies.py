@@ -162,7 +162,8 @@ class HDFProperties:
                 ('sub_graph_ids', np.int32),
                 ('prog_DM_mass', np.float64),
                 ('stellar_mass', np.float64),
-                ('descended', bool)
+                ('descended', bool),
+                ('SFR', np.float64)
                 ])
 
         self.open_graph_input()
@@ -454,7 +455,6 @@ class GraphProperties:
             The mass of the dark matter particles. Attribute in HDF.
         
         """
-    
         self.graph_ID = graph_ID
         
         open_HDF_group = open_HDF_file[str(graph_ID)]
@@ -636,8 +636,6 @@ class HaloProperties:
     sub_halo_attrs : ndarray of type 'dtype_subhalo_stores'
         The subhalo properties. A structured numpy arrary to store all the 
         properties of a single subhalo.
-    
- 
     """   
     def __init__(self,graph_ID, snap_ID, halo_ID, graph_properties, part_mass,
                  dtype_subhalo_stores):
@@ -690,6 +688,9 @@ class HaloProperties:
        
        self.rms_radius = graph_properties.rms_radius[halo_ID]
        
+       #add to docs 
+       self.redshift = graph_properties.redshifts[halo_ID]
+       self.stellar_mass = 0.
        
        self.mass_baryon = 0.
        self.mass_from_progenitors = 0.
@@ -713,7 +714,7 @@ class HaloProperties:
            self.sub_halo_attrs = np.empty(self.n_subhalo, 
                                           dtype = dtype_subhalo_stores)
            
-           self.initialize_stellar_mass() # Currently starts all halos with 1.
+           self.initialize_sub_halo_attrs() # Currently starts all halos with 1.
            
            
            self.sub_graph_halo_ids = graph_properties.sub_graph_halo_ids[
@@ -785,8 +786,6 @@ class HaloProperties:
             The phase space distance between the subhalo and host halo center.
 
         """
-        
-        
         pos_dists = np.sqrt(np.sum((pos - sub_pos) ** 2,axis = 1))/(rms_radius +
                                                                     sub_rms_radius)
         
@@ -799,8 +798,8 @@ class HaloProperties:
         
         return central_subhalo_ID_pos, total[central_subhalo_ID_pos]
     
-    def initialize_stellar_mass(self):
-        """ Assigns stellar mass of 1 to all new sub-halos
+    def initialize_sub_halo_attrs(self):
+        """ Assigns stellar mass of 1 to all new sub-halos.
         
         Gives sub-halos initial stellar mass and a bool flag to check whether
         each galaxy has given its mass to a descendent. 
@@ -808,11 +807,11 @@ class HaloProperties:
         Returns
         -------
         None.
-
-        """
         
+        """
         self.sub_halo_attrs[:]['stellar_mass'] = 1
         self.sub_halo_attrs[:]['descended'] = False
+        self.sub_halo_attrs[:]['SFR'] = 0.
         
     
     def collect_galaxy_prog_info(self, graph_properties, part_mass,
@@ -916,6 +915,107 @@ class HaloProperties:
                 
                 self.sub_halo_attrs[i_galaxy]['prog_DM_mass'] = 0. 
                 
+                
+    def add_baryon_mass(self):
+        
+        self.mass_baryon += np.sum(self.sub_halo_attrs[:]['stellar_mass'])    
+
+        return None
+    
+
+    
+    @staticmethod
+    def Behroozi_formula(a, z, halo_mass):
+        
+        log_Mh = np.log10(halo_mass)
+        
+        nu = np.exp(-4 * (a ** 2))
+        
+        #characteristic  stellar/halo mass ratio
+        log_epsilon = -1.777 + (-0.006 * (a - 1) + (-0.000) * z) * nu
+        
+        #characteristic mass
+        log_M1  = 11.514 + (-1.793 * (a - 1) + (-0.251) * z) * nu
+        
+        log_mass_frac = log_Mh - log_M1
+    
+        
+        log_stellar_mass = log_epsilon + log_M1 + \
+                           HaloProperties.powerlaw_Behroozi(log_mass_frac, nu, z, a) + \
+                           HaloProperties.powerlaw_Behroozi(0, nu, z, a)
+                           
+        stellar_mass = 10 ** log_stellar_mass                  
+        
+        return stellar_mass
+    
+    @staticmethod
+    def powerlaw_Behroozi(x, nu, z, a):
+        
+        alpha = -1.412 + (0.731* (a - 1)) * nu
+        
+        delta = 3.508 + (2.608 * (a - 1) + -0.043 * z) * nu
+        
+        gamma = 0.316 + (1.319 * (a - 1) + 0.279  * z) * nu
+    
+        f_x = -np.log10((10 ** (alpha * gamma)) + 1) + \
+              delta*(((np.log10(1 + np.exp(x))) ** gamma)/  (1 + np.exp(10 ** 
+                                                                        (-x))))
+    
+        return f_x
+        
+    def add_stellar_mass(self):
+        
+        if self.sub_graph_halo_ids.size > 0:
+        
+            z = self.redshift
+            
+            a = 1 / (1 + z)
+            
+            Behroozi_stellar_mass = self.Behroozi_formula(a, z, self.mass)
+            
+            index = np.where((self.sub_halo_attrs['sub_graph_ids'] == 
+                    self.central_galaxy_ID))
+            
+            old_star_mass = self.sub_halo_attrs[index]['stellar_mass']
+            
+            print(Behroozi_stellar_mass, old_star_mass)
+            
+            stellar_mass = max(Behroozi_stellar_mass, old_star_mass)
+            
+            star_mass_delta = stellar_mass - old_star_mass
+            
+            #Maybe change the 1 in future. Time bwteen snapshots
+            self.sub_halo_attrs[int(index[0])]['SFR'] =  star_mass_delta / 1 
+        
+            self.sub_halo_attrs[int(index[0])]['stellar_mass'] = old_star_mass \
+                + star_mass_delta
+
+            self.stellar_mass += (old_star_mass + star_mass_delta)
+        
+        return None
+        
+    def calculate_infall(self, f_baryon):
+        
+        # Sums total bary mass. Only stellar for now but more to add.
+        
+        halo_old_bary_mass = self.mass_baryon
+        
+        mass_baryon = max(f_baryon * self.mass, self.mass_baryon)
+        
+        baryon_mass_delta = mass_baryon - halo_old_bary_mass
+        
+        if baryon_mass_delta > 0:
+            
+            self.mass_baryon += baryon_mass_delta
+        
+        return None
+            
+        
+        
+        
+    
+        
+                
 class PlotHalos: 
     
     def __init__(self,yml_filepath):
@@ -978,7 +1078,6 @@ class PlotHalos:
         None.
 
         """
-    
         for plot_kind in self.plots:   
             
             if self.plots[plot_kind]['show']:   
@@ -1022,7 +1121,6 @@ class PlotHalos:
             formula.
 
         """
-        
         if plot_kind == 'baryon_fraction':
         
             x = self.halo_data['mass']
@@ -1039,7 +1137,7 @@ class PlotHalos:
 
 
 def set_baryon_fraction(halo,array_of_halo_properties,f_baryon):
-    """ Caclulates the mass of baryons in the halo
+    """ Caclulates the mass of baryons in the halo.
     
     Uses the global f_baryon (baryon fraction) variable to calculate the total
     mass provided by baryons.
@@ -1059,7 +1157,6 @@ def set_baryon_fraction(halo,array_of_halo_properties,f_baryon):
         Halo class object is updated
         
     """
-    
     this_inclusive_contribution = 0.
     
     for prog in halo.prog_ids:
@@ -1079,7 +1176,7 @@ def set_baryon_fraction(halo,array_of_halo_properties,f_baryon):
     return None
 
 def gather_progenitors(halo,part_mass):
-    """Sums the mass from the progenitors
+    """Sum the mass from the progenitors.
 
     Parameters
     ----------
@@ -1092,14 +1189,13 @@ def gather_progenitors(halo,part_mass):
         Halo class object is updated
     
     """
-
     halo.mass_from_progenitors = np.sum(halo.prog_mass)*part_mass
 
     return None
 
 
 def inclusive_mass_contribution(halo):
-    """Calculate the mass of particles that don't descend. 
+    """Calculate the mass of particles that don't descend.
     
     This functions calculates the true mass contributions to the descendents.
     This is needed as not 100% of the mass is passed down.
