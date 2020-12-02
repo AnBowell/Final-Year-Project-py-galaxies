@@ -18,8 +18,9 @@ Created on Fri Oct  9 15:13:55 2020
 import matplotlib.pyplot as plt
 import numpy as np
 import h5py as h5
-import yaml
 import datetime
+import psutil
+import yaml
 import time
 import gc
 
@@ -107,56 +108,8 @@ class Monitor:
     def __init__(self, no_of_graphs, amount_of_funcs):
         
         self.amount_of_funcs = amount_of_funcs
-
-        self.time_storage_array = np.empty((no_of_graphs, amount_of_funcs, 2),
-                                           dtype = float)
-                                           
-                                           
-    def graph_timer_setup(self, n_halos):    
-
-        self.temp_store_array = np.empty((n_halos, self.amount_of_funcs))
         
-        return None
-
-    def start_timer(self):
-        
-        self.graph_x_start_time = time.perf_counter_ns()
-    
-    def store_func_time(self, func_no, halo_no):
-        
-        new_time = time.perf_counter_ns() 
-        
-        self.temp_store_array[halo_no, func_no-1] = new_time - self.graph_x_start_time 
-        
-        self.graph_x_start_time  = new_time
-        
-        return None
-
-    def store_average_graph_times(self, graph_no):
-        
-        self.time_storage_array[graph_no, :, 0] = np.mean(self.temp_store_array,
-                                                          axis = 0)
-        
-        self.time_storage_array[graph_no, :, 1] = np.std(self.temp_store_array,
-                                                          axis = 0)
-        
-    def save_timing_stats(self, output_file_path, file_name):
-        
-        file_name = file_name.split('.hdf')[0].split('/')[-1]
-        
-        #the_time_now = datetime.datetime.now().strftime("%d-%m-%Y %H.%M.%S")
-        np.save('{}Timing Data {}'.format(output_file_path, file_name),
-                self.time_storage_array)
-       
-    @staticmethod
-    def bar_chart_funcs(output_file_path, file_name, save_file_path):
-                
-        file_name = file_name.split('.hdf')[0].split('/')[-1]
-        
-        plotting_data = np.load('{}Timing Data {}.npy'.format(output_file_path, 
-                                                           file_name))
-                
-        function_descriptions = """
+        self.function_descs ="""
         1. Initialise Halo properties class (does also find most central halo). \n
         2. Calculate mass in common. \n
         3. Gather DM mass from progenitors. \n
@@ -167,10 +120,107 @@ class Monitor:
         8. Calculates top-up from berhoozi et al. \n
         9 Actually adds the top up from berhoozi et al. \n
         """
+
+        self.time_storage_array = np.empty((no_of_graphs, amount_of_funcs, 2))
+        
+        
+        self.memory_storage_array = np.empty((no_of_graphs,
+                                               amount_of_funcs,
+                                               2))
+        
+        self.process  = psutil.Process()
+                                           
+                                         
+    def graph_timer_setup(self, n_halos):    
+
+        self.temp_time_store_array = np.empty((n_halos, self.amount_of_funcs))
+        
+        self.temp_mem_store_array = np.empty((n_halos, self.amount_of_funcs,2))
+        
+        return None
+
+    def start_timer(self):
+        
+        self.graph_x_start_mem = self.process.memory_info().rss
+        
+        self.graph_x_start_time = time.perf_counter_ns()
+        
+    def store_func_time(self, func_no, halo_no):
+        
+        
+        self.temp_time_store_array[halo_no, func_no-1] = (time.perf_counter_ns() -
+                                                          self.graph_x_start_time)
+        
+        new_mem = self.process.memory_info().rss
+        
+        
+        self.temp_mem_store_array[halo_no, func_no-1,0] = new_mem
+        
+        self.temp_mem_store_array[halo_no, func_no-1,1] = (new_mem
+                                                           - self.graph_x_start_mem)
+        
+        #self.temp_mem_store_array[halo_no, func_no-1,2] = (self.process.memory_percent())
+        
+        self.graph_x_start_mem = new_mem
+    
+        # Down here to avoid mem_processing
+        self.graph_x_start_time  = time.perf_counter_ns() 
+        return None
+    
+
+    def store_average_graph_times(self, graph_no):
+        
+        self.time_storage_array[graph_no, :, 0] = np.mean(self.temp_time_store_array,
+                                                          axis = 0)
+        
+        self.time_storage_array[graph_no, :, 1] = np.std(self.temp_time_store_array,
+                                                          axis = 0)
+        
+        self.memory_storage_array[graph_no, :, 0] = self.temp_mem_store_array[-1, :, 0]
+        
+        self.memory_storage_array[graph_no, :, 1] = np.mean(
+                                                    self.temp_mem_store_array[:,:,1]
+                                                    , axis = 0)
+
+
+    def save_timing_stats(self, output_file_path, file_name):
+        
+        file_name = file_name.split('.hdf')[0].split('/')[-1]
+
+        np.save('{}Timing Data {}'.format(output_file_path, file_name),
+                self.time_storage_array)
+        
+        
+        # Calculate the mem percentage and save memory data
+        
+        mem_percentage = (self.memory_storage_array[:,:,0] / 
+                          psutil.virtual_memory().total) * 100
+        
+        shape = list(self.memory_storage_array.shape)
+        
+        shape[-1] = shape[-1] + 1
+        
+        z = np.zeros(tuple(shape))
+        
+        z[:,:,:2] = self.memory_storage_array
+        
+        z[:,:,-1] = mem_percentage
+        
+        np.save('{}Memory Data {}'.format(output_file_path, file_name), z)
+        
+        
+        
+       
+    def plot_timing_barchart(self,output_file_path, file_name, save_file_path):
+                
+        file_name = file_name.split('.hdf')[0].split('/')[-1]
+        
+        plotting_data = np.load('{}Timing Data {}.npy'.format(output_file_path, 
+                                                           file_name))
+        
         
         labels = np.arange(1,len(plotting_data[0,:,0])+1,1)
-        
-                
+
         
         fig,(ax1,ax2) = plt.subplots(1,2,figsize=(12,6))
         ax1.bar(labels,np.nanmean(plotting_data[:,:,0],axis= 0))
@@ -181,9 +231,39 @@ class Monitor:
         ax1.set_axisbelow(True)
         ax1.set_xlabel('Function Measured')
         ax2.set_axis_off()
-        ax2.text(0.1,0.1,function_descriptions)
+        ax2.text(0.1,0.1,self.function_descs)
         plt.tight_layout()
         plt.savefig('{} Bar graph for {}.jpg'.format(save_file_path, 
+                                                           file_name), dpi = 600)
+        plt.show()
+        
+        
+    def plot_memory_barchart(self,output_file_path, file_name, save_file_path):
+        
+        file_name = file_name.split('.hdf')[0].split('/')[-1]
+        
+        plotting_data = np.load('{}Memory Data {}.npy'.format(output_file_path, 
+                                                           file_name))
+        
+        
+        labels = np.arange(1,len(plotting_data[0,:,1])+1,1)
+
+        plotting_data = np.where((plotting_data[:,:,1] < 0),np.nan,plotting_data[:,:,1])
+
+
+        fig,(ax1,ax2) = plt.subplots(1,2,figsize=(12,6))
+        ax1.bar(labels,np.nanmean(plotting_data,axis= 0))
+        ax1.set_xticklabels(labels)
+        ax1.set_xticks(labels)
+        
+        ax1.set_ylabel('Mean memory used [B] over all graphs with sub-halos.')
+        ax1.grid(True, alpha = 0.6)
+        ax1.set_axisbelow(True)
+        ax1.set_xlabel('Function Measured')
+        ax2.set_axis_off()
+        ax2.text(0.1,0.1,self.function_descs)
+        plt.tight_layout()
+        plt.savefig('{} Memory Bar graph for {}.jpg'.format(save_file_path, 
                                                            file_name), dpi = 600)
         plt.show()
 
@@ -1189,6 +1269,8 @@ class HaloProperties:
         )
 
         return f_x
+    
+    
 
     def add_stellar_mass(self):
 
@@ -1197,6 +1279,7 @@ class HaloProperties:
             z = self.redshift
 
             a = 1 / (1 + z)
+        
 
             Behroozi_stellar_mass = self.Behroozi_formula(a, z, self.mass)
 

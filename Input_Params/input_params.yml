@@ -35,7 +35,7 @@ Monitoring:
   Description: 'Whether or not to time parts of code and save output'
   Value: True
   graph_save_path: 'Graph_Outputs/Timing/'
-  timing_data_save_path: 'Timing Data/'
+  timing_data_save_path: 'Monitoring Data/'
  
 
  
