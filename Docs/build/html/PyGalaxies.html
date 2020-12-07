@@ -1,0 +1,1870 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PyGalaxies package &mdash; PyGalaxies 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyGalaxies
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">PyGalaxies package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-PyGalaxies.HDF_graph_properties">PyGalaxies.HDF_graph_properties module</a></li>
+<li><a class="reference internal" href="#module-PyGalaxies.Halos">PyGalaxies.Halos module</a></li>
+<li><a class="reference internal" href="#module-PyGalaxies.Monitor">PyGalaxies.Monitor module</a></li>
+<li><a class="reference internal" href="#module-PyGalaxies.Parameters">PyGalaxies.Parameters module</a></li>
+<li><a class="reference internal" href="#module-PyGalaxies">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyGalaxies</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>PyGalaxies package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/PyGalaxies.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pygalaxies-package">
+<h1>PyGalaxies package<a class="headerlink" href="#pygalaxies-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-PyGalaxies.HDF_graph_properties">
+<span id="pygalaxies-hdf-graph-properties-module"></span><h2>PyGalaxies.HDF_graph_properties module<a class="headerlink" href="#module-PyGalaxies.HDF_graph_properties" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mon Dec  7 10:58:24 2020</p>
+<p>&#64;author: Andrew</p>
+<dl class="py class">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.HDF_graph_properties.</code><code class="sig-name descname">GraphProperties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_ID</span></em>, <em class="sig-param"><span class="n">open_HDF_file</span></em>, <em class="sig-param"><span class="n">model_params</span></em>, <em class="sig-param"><span class="n">part_mass</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A container for all data contained within a single graph.</p>
+<p>This class consists of data gathered from a single graph. This documentat-
+tion will essentially be copied from Will’s.</p>
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.desc_start_index">
+<code class="sig-name descname">desc_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.desc_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting index (pointer) for each halo’sentries in all descendant
+halo arrays (i.e.direct_desc_ids,direct_desc_contribution,​ etc.).
+Entries containing 2**30 have nodescendants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.direct_desc_contribution">
+<code class="sig-name descname">direct_desc_contribution</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.direct_desc_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dark matter particles contributed ​to​ each direct
+descendent ​from the halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.direct_desc_ids">
+<code class="sig-name descname">direct_desc_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.direct_desc_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The descendent halo IDs, extracted usingdesc_start_index​ and ​ndesc​</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.direct_prog_contribution">
+<code class="sig-name descname">direct_prog_contribution</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.direct_prog_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dark matter particlescontributed ​by​ each direct
+progenitor ​to​ thehalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.direct_prog_ids">
+<code class="sig-name descname">direct_prog_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.direct_prog_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The progenitor halo IDs, extracted usingprog_start_index​ and ​nprog​.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.generation_id">
+<code class="sig-name descname">generation_id</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.generation_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID (or number) associated with eachgeneration. Counting starts
+from the earliest snapshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.generation_length">
+<code class="sig-name descname">generation_length</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.generation_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of halos in each generation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.generation_start_index">
+<code class="sig-name descname">generation_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.generation_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting index (pointer) for each host halo generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.graph_halo_ids">
+<code class="sig-name descname">graph_halo_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.graph_halo_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The internal graph halo ID assigned to ahalo. NOTE: These differ from
+the halocatalog. These run from 0 - N​host​ with theindex equal to the
+value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.halo_catalog_halo_ids">
+<code class="sig-name descname">halo_catalog_halo_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.halo_catalog_halo_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The halo catalog ID assigned to each halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.mean_pos">
+<code class="sig-name descname">mean_pos</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.mean_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mean position of the particles in the halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.ndesc">
+<code class="sig-name descname">ndesc</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.ndesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of descendants for each halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.nparts">
+<code class="sig-name descname">nparts</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.nparts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dark matter particles in each halo.Well,</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.nprog">
+<code class="sig-name descname">nprog</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.nprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of progenitors for each halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.prog_start_index">
+<code class="sig-name descname">prog_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.prog_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting index (pointer) for each halo’sentries in all progenitor
+halo arrays (i.e.direct_prog_ids,direct_prog_contribution,​ etc.).
+Entries containing 2**30 have nodescendants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.redshifts">
+<code class="sig-name descname">redshifts</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.redshifts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The redshift for each halo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.snapshots">
+<code class="sig-name descname">snapshots</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.snapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the snapshot in the snapshottext file dictated in the
+param file, for eachhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_desc_start_index">
+<code class="sig-name descname">sub_desc_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_desc_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting index (pointer) for eachsubhalo’s entries in all
+descendant subhaloarrays (i.e. ​sub_direct_desc_ids,
+sub_direct_desc_contribution,​ etc.).Entries containing 2**30 have
+nodescendants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_desc_contribution">
+<code class="sig-name descname">sub_direct_desc_contribution</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_desc_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dark matter particlescontributed ​to​ each direct
+descendent ​fromthe subhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_desc_ids">
+<code class="sig-name descname">sub_direct_desc_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_desc_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The descendent subhalo IDs, extractedusing ​sub_desc_start_index​
+and sub_ndesc​.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_prog_contribution">
+<code class="sig-name descname">sub_direct_prog_contribution</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_prog_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dark matter particlescontributed ​by​ each direct
+progenitor ​to​ thesubhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_prog_ids">
+<code class="sig-name descname">sub_direct_prog_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_direct_prog_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The progenitor subhalo IDs, extracted using sub_prog_start_index​ and
+​sub_nprog​.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_generation_id">
+<code class="sig-name descname">sub_generation_id</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_generation_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID (or number) associated with eachgeneration. Counting starts
+from the earliest snapshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_generation_length">
+<code class="sig-name descname">sub_generation_length</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_generation_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of subhalos in each generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_generation_start_index">
+<code class="sig-name descname">sub_generation_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_generation_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting index (pointer) for each subhalogeneration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>indarray of type ‘int’nt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_graph_halo_ids">
+<code class="sig-name descname">sub_graph_halo_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_graph_halo_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The internal graph subhalo ID assigned to asubhalo. NOTE: These differ
+from the halocatalog. These run from 0 - N​sut​ with theindex equal to
+the value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_mean_pos">
+<code class="sig-name descname">sub_mean_pos</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_mean_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The mean position of the particles in the subhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_ndesc">
+<code class="sig-name descname">sub_ndesc</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_ndesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of descendents for eachsubhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_nparts">
+<code class="sig-name descname">sub_nparts</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_nparts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of dark matter particles in eachhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_nprog">
+<code class="sig-name descname">sub_nprog</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_nprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of progenitors for each halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_prog_start_index">
+<code class="sig-name descname">sub_prog_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_prog_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The starting index (pointer) for eachsubhalo’s entries in all
+progenitor subhaloarrays (i.e. ​sub_direct_prog_ids,
+sub_direct_prog_contribution,​ etc.).Entries containing 2**30 have
+no descendants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_redshifts">
+<code class="sig-name descname">sub_redshifts</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_redshifts" title="Permalink to this definition">¶</a></dt>
+<dd><p>The redshift for each subhalo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_snapshots">
+<code class="sig-name descname">sub_snapshots</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_snapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the snapshot in the snapshottext file dictated in the
+param file, for each subhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.subhalo_catalog_halo_ids">
+<code class="sig-name descname">subhalo_catalog_halo_ids</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.subhalo_catalog_halo_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The subhalo catalog ID assigned to each subhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.velocity_dispersion_3D">
+<code class="sig-name descname">velocity_dispersion_3D</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.velocity_dispersion_3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The velocity dispersion for each halo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.half_mass_radius">
+<code class="sig-name descname">half_mass_radius</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.half_mass_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The half mass radius for each halo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndaarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.half_mass_velocity_radius">
+<code class="sig-name descname">half_mass_velocity_radius</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.half_mass_velocity_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The half mass velocity radius for each halo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndaarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.mean_vel">
+<code class="sig-name descname">mean_vel</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.mean_vel" title="Permalink to this definition">¶</a></dt>
+<dd><p>An array 3 by N_halos long. It contains the x,y,z velocities for each
+halo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndaarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.rms_radius">
+<code class="sig-name descname">rms_radius</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.rms_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The rms radius of each halo within the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.v_max">
+<code class="sig-name descname">v_max</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.v_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum velocity of the halo within the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_halo">
+<code class="sig-name descname">sub_halo</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>From yml input file. Sub halos or no sub halos basically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_velocity_dispersion_3D">
+<code class="sig-name descname">sub_velocity_dispersion_3D</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_velocity_dispersion_3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>The velocity dispersion for each subhalo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_half_mass_radius">
+<code class="sig-name descname">sub_half_mass_radius</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_half_mass_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The half mass radius for each subhalo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndaarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_half_mass_velocity_radius">
+<code class="sig-name descname">sub_half_mass_velocity_radius</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_half_mass_velocity_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The half mass velocity radius for each subhalo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndaarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_mean_vel">
+<code class="sig-name descname">sub_mean_vel</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_mean_vel" title="Permalink to this definition">¶</a></dt>
+<dd><p>An array 3 by N_halos long. It contains the x,y,z velocities for each
+subhalo in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndaarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_rms_radius">
+<code class="sig-name descname">sub_rms_radius</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_rms_radius" title="Permalink to this definition">¶</a></dt>
+<dd><p>The rms radius of each subhalo within the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.sub_v_max">
+<code class="sig-name descname">sub_v_max</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.sub_v_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximum velocity of the subhalo within the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘float’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.subhalo_start_index">
+<code class="sig-name descname">subhalo_start_index</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.subhalo_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starting index for the subhalo within the graph. Indexed with the halo
+ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.host_halos">
+<code class="sig-name descname">host_halos</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.host_halos" title="Permalink to this definition">¶</a></dt>
+<dd><p>The host halo ID for the sub halos. n_subhalos long,indexed with sub-
+halo ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Opening HDF datasets for a graph and saving them to the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph_ID</strong> (<em>int</em>) – The ID of the graph to be opened.</p></li>
+<li><p><strong>open_HDF_file</strong> – Open HDF5 file that is to be read from.</p></li>
+<li><p><strong>model_params</strong> (<em>obj: 'Class'</em>) – ModelParams class object.</p></li>
+<li><p><strong>part_mass</strong> (<em>float</em>) – The mass of the dark matter particles. Attribute in HDF.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.GraphProperties.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_ID</span></em>, <em class="sig-param"><span class="n">open_HDF_file</span></em>, <em class="sig-param"><span class="n">model_params</span></em>, <em class="sig-param"><span class="n">part_mass</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.GraphProperties.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opening HDF datasets for a graph and saving them to the class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph_ID</strong> (<em>int</em>) – The ID of the graph to be opened.</p></li>
+<li><p><strong>open_HDF_file</strong> – Open HDF5 file that is to be read from.</p></li>
+<li><p><strong>model_params</strong> (<em>obj: 'Class'</em>) – ModelParams class object.</p></li>
+<li><p><strong>part_mass</strong> (<em>float</em>) – The mass of the dark matter particles. Attribute in HDF.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.HDF_graph_properties.</code><code class="sig-name descname">HDFProperties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class containing the attributes and methods for the HDF5 files.</p>
+<p>This class is used to store attributes that are applied accross all graphs
+such as the dark matter particle mass and the total amount of graphs. It
+was also seen useful to store the input/output HDF5 files here alongside
+methods to open/write/close files.</p>
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.HDF_input_filepath">
+<code class="sig-name descname">HDF_input_filepath</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.HDF_input_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath for the HDF input file. Usually in yml parameters file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.HDF_output_filepath">
+<code class="sig-name descname">HDF_output_filepath</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.HDF_output_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath for the HDF output file. Usually in yml parameters file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.graph_input_file">
+<code class="sig-name descname">graph_input_file</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.graph_input_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>The open HDF5 input file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">obj</dt>
+<dd class="field-odd"><p>‘File’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.halo_output_file">
+<code class="sig-name descname">halo_output_file</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.halo_output_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>The open output HDF5 file to which the halo data is to be stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">obj</dt>
+<dd class="field-odd"><p>‘File’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.dtype_halo">
+<code class="sig-name descname">dtype_halo</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.dtype_halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy dtype describing the types of the different class attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dtype</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.halo_output_data">
+<code class="sig-name descname">halo_output_data</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.halo_output_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array of type custom defined dtype_halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarry</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.halo_output_dataset">
+<code class="sig-name descname">halo_output_dataset</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.halo_output_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>HDF5 dataset to which the halo data should be stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">obj</dt>
+<dd class="field-odd"><p>‘Dataset’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.n_halo">
+<code class="sig-name descname">n_halo</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.n_halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple counter for the amount of halos processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.no_of_graphs">
+<code class="sig-name descname">no_of_graphs</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.no_of_graphs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The amount of graphs within the input HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.part_mass">
+<code class="sig-name descname">part_mass</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.part_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>The dark matter particle mass. Universal for all graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.dtype_subhalo_stores">
+<code class="sig-name descname">dtype_subhalo_stores</code><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.dtype_subhalo_stores" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy dtype for the structured array in which subhalo attributes are
+stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dtype</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Key variables about the HDF files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>HDF_input_filepath</strong> (<em>str</em>) – The filepath for the HDF input file. Usually in yml parameters file.</p></li>
+<li><p><strong>HDF_output_filepath</strong> (<em>str</em>) – The filepath for the HDF output file. Usually in yml parameters file.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key variables about the HDF files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>HDF_input_filepath</strong> (<em>str</em>) – The filepath for the HDF input file. Usually in yml parameters file.</p></li>
+<li><p><strong>HDF_output_filepath</strong> (<em>str</em>) – The filepath for the HDF output file. Usually in yml parameters file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.close_graph_io">
+<em class="property">static </em><code class="sig-name descname">close_graph_io</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">open_HDF5_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.close_graph_io" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close an open HDF5 file. Static method to allow general use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>open_HDF5_file</strong> – An open HDF5 file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.flush_output">
+<code class="sig-name descname">flush_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.flush_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resize the HDF5 dataset and saves generated data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.open_galaxy_output">
+<em class="property">static </em><code class="sig-name descname">open_galaxy_output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.open_galaxy_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open the output HDF5 file in write mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em>) – Filepath file should be created at.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HDF5 file open in write mode.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>obj: ‘File’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.open_graph_input">
+<code class="sig-name descname">open_graph_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.open_graph_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open input graph file (HDF5) using h5py.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.open_halo_output">
+<code class="sig-name descname">open_halo_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.open_halo_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open halo output HDF5 file and create dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.HDF_graph_properties.HDFProperties.output_halos">
+<code class="sig-name descname">output_halos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">halos</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.HDF_graph_properties.HDFProperties.output_halos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store attributes of HaloProperties class to structered array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>halos</strong> (<em>ndarry</em>) – Numpy array of type object. Each element contains a HaloProperties
+class.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyGalaxies.Halos">
+<span id="pygalaxies-halos-module"></span><h2>PyGalaxies.Halos module<a class="headerlink" href="#module-PyGalaxies.Halos" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mon Dec  7 10:57:31 2020</p>
+<p>&#64;author: Andrew</p>
+<dl class="py class">
+<dt id="PyGalaxies.Halos.HaloProperties">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.Halos.</code><code class="sig-name descname">HaloProperties</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_ID</span></em>, <em class="sig-param"><span class="n">snap_ID</span></em>, <em class="sig-param"><span class="n">halo_ID</span></em>, <em class="sig-param"><span class="n">graph_properties</span></em>, <em class="sig-param"><span class="n">part_mass</span></em>, <em class="sig-param"><span class="n">dtype_subhalo_stores</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A container for the properties needed for each halo.</p>
+<p>No sophisticated methods, it just truncates the GraphProperites class to
+ensure data from the current generation is selected. A simple method is
+included to  truncate the correct properties for subhalos and store them in
+a structured numpy array.</p>
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.graph_ID">
+<code class="sig-name descname">graph_ID</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.graph_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>The graph_ID (from HDF5 group).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.snap_ID">
+<code class="sig-name descname">snap_ID</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.snap_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>The snapshot ID currently being processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.halo_ID">
+<code class="sig-name descname">halo_ID</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.halo_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>The halo ID of currently being processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.catalog_ID">
+<code class="sig-name descname">catalog_ID</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.catalog_ID" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ID of the halo corresponding to the original catalog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.mass">
+<code class="sig-name descname">mass</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass of halo. Amount of dark matter particles * mass of particle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.nprog">
+<code class="sig-name descname">nprog</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.nprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>The amount of progenitors the halo has.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.prog_start">
+<code class="sig-name descname">prog_start</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.prog_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index at which this halo’s progenitors start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.prog_end">
+<code class="sig-name descname">prog_end</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.prog_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index at which this halo’s progenitors end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.prog_ids">
+<code class="sig-name descname">prog_ids</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.prog_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array of the progenitor IDs for the halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>narray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.prog_mass">
+<code class="sig-name descname">prog_mass</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.prog_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array of the progenitor mass contributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarry</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.ndesc">
+<code class="sig-name descname">ndesc</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.ndesc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Amount of descendent halos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.desc_start">
+<code class="sig-name descname">desc_start</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.desc_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index at which this halo’s descendents start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.desc_end">
+<code class="sig-name descname">desc_end</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.desc_end" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index at which this halo’s descendents end.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.desc_ids">
+<code class="sig-name descname">desc_ids</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.desc_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array of the halo’s descendent IDs of type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.desc_mass">
+<code class="sig-name descname">desc_mass</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.desc_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array of the descendent mass contributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.mass_baryon">
+<code class="sig-name descname">mass_baryon</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.mass_baryon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mass of Baryons within the halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.mass_from_progenitors">
+<code class="sig-name descname">mass_from_progenitors</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.mass_from_progenitors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total mass of all the progenitor halos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.mass_baryon_from_progenitors">
+<code class="sig-name descname">mass_baryon_from_progenitors</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.mass_baryon_from_progenitors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total mass of all the Baryons contained within the progenitor halos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.inclusive_contribution">
+<code class="sig-name descname">inclusive_contribution</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.inclusive_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>The amount of mass that goes ‘missing’ when a halo descends.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.done">
+<code class="sig-name descname">done</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.done" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not the halo has been processed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.subhalo_start_index">
+<code class="sig-name descname">subhalo_start_index</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.subhalo_start_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index at which the subhalos, corresponding to the main halo, start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.n_subhalo">
+<code class="sig-name descname">n_subhalo</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.n_subhalo" title="Permalink to this definition">¶</a></dt>
+<dd><p>The amount of subhalos in the host halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.sub_graph_halo_ids">
+<code class="sig-name descname">sub_graph_halo_ids</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.sub_graph_halo_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>The subhalo IDs that are contained within the main halo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘int’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Halos.HaloProperties.sub_halo_attrs">
+<code class="sig-name descname">sub_halo_attrs</code><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.sub_halo_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The subhalo properties. A structured numpy arrary to store all the
+properties of a single subhalo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of type ‘dtype_subhalo_stores’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Clipping graph properties to the correct generation for halo use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph_ID</strong> (<em>str</em>) – The graph_ID (from HDF5 group).</p></li>
+<li><p><strong>snap_ID</strong> (<em>int</em>) – The snapshot ID currently being processed.</p></li>
+<li><p><strong>halo_ID</strong> (<em>int</em>) – The halo ID of currently being processed.</p></li>
+<li><p><strong>graph_properties</strong> – An instance of GraphProperties.</p></li>
+<li><p><strong>part_mass</strong> (<em>int</em>) – The dark matter particle mass.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.Behroozi_formula">
+<em class="property">static </em><code class="sig-name descname">Behroozi_formula</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">a</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">halo_mass</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.Behroozi_formula" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_ID</span></em>, <em class="sig-param"><span class="n">snap_ID</span></em>, <em class="sig-param"><span class="n">halo_ID</span></em>, <em class="sig-param"><span class="n">graph_properties</span></em>, <em class="sig-param"><span class="n">part_mass</span></em>, <em class="sig-param"><span class="n">dtype_subhalo_stores</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clipping graph properties to the correct generation for halo use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph_ID</strong> (<em>str</em>) – The graph_ID (from HDF5 group).</p></li>
+<li><p><strong>snap_ID</strong> (<em>int</em>) – The snapshot ID currently being processed.</p></li>
+<li><p><strong>halo_ID</strong> (<em>int</em>) – The halo ID of currently being processed.</p></li>
+<li><p><strong>graph_properties</strong> – An instance of GraphProperties.</p></li>
+<li><p><strong>part_mass</strong> (<em>int</em>) – The dark matter particle mass.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.add_baryon_mass">
+<code class="sig-name descname">add_baryon_mass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.add_baryon_mass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.add_stellar_mass">
+<code class="sig-name descname">add_stellar_mass</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.add_stellar_mass" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.calc_halo_DM_descend">
+<code class="sig-name descname">calc_halo_DM_descend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">part_mass</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.calc_halo_DM_descend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.calc_halo_attrs_descend">
+<code class="sig-name descname">calc_halo_attrs_descend</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">part_mass</span></em>, <em class="sig-param"><span class="n">array_of_halo_properties</span></em>, <em class="sig-param"><span class="n">halo_descend_attrs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.calc_halo_attrs_descend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.calculate_infall">
+<code class="sig-name descname">calculate_infall</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f_baryon</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.calculate_infall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.collect_galaxy_prog_info">
+<code class="sig-name descname">collect_galaxy_prog_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_properties</span></em>, <em class="sig-param"><span class="n">HDF_properties</span></em>, <em class="sig-param"><span class="n">array_of_halo_properties</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.collect_galaxy_prog_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collect infomation from galaxy progenitors.</p>
+<p>This method finds the galaxy progenitors and calculates how much
+stellar mass etc is to be ibtained from them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph_properties</strong> – Class of the graph properties. Galaxy information to be extracted
+from here.</p></li>
+<li><p><strong>part_mass</strong> (<em>float</em>) – The dark matter particle mass.</p></li>
+<li><p><strong>array_of_halo_properties</strong> (<em>ndarry of type 'Class'</em>) – Numpy array containing the halo-classes previously processed. This
+is so that galaxy stellar mass and other properties can be obtained
+from progenitors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.find_central_galaxy">
+<em class="property">static </em><code class="sig-name descname">find_central_galaxy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vel</span></em>, <em class="sig-param"><span class="n">rms_vel</span></em>, <em class="sig-param"><span class="n">pos</span></em>, <em class="sig-param"><span class="n">rms_radius</span></em>, <em class="sig-param"><span class="n">sub_vel</span></em>, <em class="sig-param"><span class="n">sub_rms_vel</span></em>, <em class="sig-param"><span class="n">sub_pos</span></em>, <em class="sig-param"><span class="n">sub_rms_radius</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.find_central_galaxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use phase space finds the closest galaxy to main halo.</p>
+<p>This function follows equation 14 in Will’s paper:</p>
+<p><a class="reference external" href="https://arxiv.org/pdf/2003.01187.pdf">https://arxiv.org/pdf/2003.01187.pdf</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vel</strong> (<em>ndarray of float64</em>) – 1x3 array of velocities pertaining to the host halo.</p></li>
+<li><p><strong>rms_vel</strong> (<em>float</em>) – The root-mean-squared velocity of the host halo.</p></li>
+<li><p><strong>pos</strong> (<em>ndarry of float64</em>) – 1x3 array of the mean position of the host halo.</p></li>
+<li><p><strong>rms_radius</strong> (<em>float</em>) – The root-mean-squared radius of the host halo.</p></li>
+<li><p><strong>sub_vel</strong> (<em>ndarray of float64</em>) – 1x3 array of velocities pertaining to the subhalo.</p></li>
+<li><p><strong>sub_rms_vel</strong> (<em>float</em>) – The root-mean-squared velocity of the subhalo.</p></li>
+<li><p><strong>sub_pos</strong> (<em>ndarry of float64</em>) – 1x3 array of the mean position of the subhalo.</p></li>
+<li><p><strong>sub_rms_radius</strong> (<em>float</em>) – The root-mean-squared radius of the subhalo.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>central_subhalo_ID_pos</strong> (<em>int</em>) – Array index of the central subhalo’s ID</p></li>
+<li><p><em>float</em> – The phase space distance between the subhalo and host halo center.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.gather_progenitors">
+<code class="sig-name descname">gather_progenitors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">part_mass</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.gather_progenitors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sum the mass from the progenitors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>halo</strong> – HaloProperties class object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Halo class object is updated</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.halo_descendent_props">
+<code class="sig-name descname">halo_descendent_props</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.halo_descendent_props" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the mass of particles that don’t descend.</p>
+<p>This functions calculates the true mass contributions to the descendents.
+This is needed as not 100% of the mass is passed down.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>halo</strong> – HaloProperties class object</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.initialize_sub_halo_attrs">
+<code class="sig-name descname">initialize_sub_halo_attrs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.initialize_sub_halo_attrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign stellar mass of 1 to all new sub-halos.</p>
+<p>Gives sub-halos initial stellar mass and a bool flag to check whether
+each galaxy has given its mass to a descendent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.powerlaw_Behroozi">
+<em class="property">static </em><code class="sig-name descname">powerlaw_Behroozi</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">nu</span></em>, <em class="sig-param"><span class="n">z</span></em>, <em class="sig-param"><span class="n">a</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.powerlaw_Behroozi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.HaloProperties.set_baryon_fraction">
+<code class="sig-name descname">set_baryon_fraction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">array_of_halo_properties</span></em>, <em class="sig-param"><span class="n">f_baryon</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.HaloProperties.set_baryon_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Caclulates the mass of baryons in the halo.</p>
+<p>Uses the global f_baryon (baryon fraction) variable to calculate the total
+mass provided by baryons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>halo</strong> – HaloProperties class object</p></li>
+<li><p><strong>array_of_halo_properties</strong> (<em>ndarry</em>) – Numpy array of HaloProperties classes for all halos this snapshot.</p></li>
+<li><p><strong>f_baryon</strong> (<em>float</em>) – The baryon fractions from the input parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Halo class object is updated</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="PyGalaxies.Halos.PlotHalos">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.Halos.</code><code class="sig-name descname">PlotHalos</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yml_filepath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.PlotHalos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Load in parameters from the yml graph file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>yml_filepath</strong> (<em>str</em>) – Filepath to the yml parameters file for plotting.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="PyGalaxies.Halos.PlotHalos.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yml_filepath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.PlotHalos.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load in parameters from the yml graph file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>yml_filepath</strong> (<em>str</em>) – Filepath to the yml parameters file for plotting.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.PlotHalos.filter_halos">
+<code class="sig-name descname">filter_halos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.PlotHalos.filter_halos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter selected halosusing graph and snap IDs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.PlotHalos.generate_plots">
+<code class="sig-name descname">generate_plots</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.PlotHalos.generate_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate plots of chosen variable.</p>
+<p>Method to generate plots. Asthetics are set-up here using the
+parameters read in earlier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Halos.PlotHalos.generate_x_y_data">
+<code class="sig-name descname">generate_x_y_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plot_kind</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.PlotHalos.generate_x_y_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate the data using formulas.</p>
+<p>Based on the requested plots from the yml file, this method uses
+different formulas to create the desired plot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>plot_kind</strong> (<em>str</em>) – The type of plot requested form the yml file. E.g. ‘baryon_fraction’</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x</strong> (<em>ndarray of type ‘float’</em>) – The x-axis data for the plot. E.g. mass.</p></li>
+<li><p><strong>y</strong> (<em>ndarray of type ‘float’</em>) – The y-axis data for the plot. Generally created with a simple
+formula.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="PyGalaxies.Halos.gather_prog_contrib_mass">
+<code class="sig-prename descclassname">PyGalaxies.Halos.</code><code class="sig-name descname">gather_prog_contrib_mass</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_properties</span></em>, <em class="sig-param"><span class="n">prog_start_index</span></em>, <em class="sig-param"><span class="n">prog_end_index</span></em>, <em class="sig-param"><span class="n">part_mass</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Halos.gather_prog_contrib_mass" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcualtes the DM mass inherited from galaxy progenitors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph_properties</strong> – Graph properties class containing all information for a graph.</p></li>
+<li><p><strong>prog_start_index</strong> (<em>int</em>) – Progenitor start index for current galaxy.</p></li>
+<li><p><strong>prog_end_index</strong> (<em>int</em>) – Progenitor end index for current galaxy.</p></li>
+<li><p><strong>part_mass</strong> (<em>float</em>) – Dark matter particle mass.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>prog_masses</strong> (<em>ndarry</em>) – The DM mass contributions from the progenitors.</p></li>
+<li><p><strong>prog_total_mass</strong> (<em>float</em>) – The total DM mass inherited from all progenitors.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyGalaxies.Monitor">
+<span id="pygalaxies-monitor-module"></span><h2>PyGalaxies.Monitor module<a class="headerlink" href="#module-PyGalaxies.Monitor" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mon Dec  7 10:56:29 2020</p>
+<p>&#64;author: Andrew</p>
+<dl class="py class">
+<dt id="PyGalaxies.Monitor.Monitor">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.Monitor.</code><code class="sig-name descname">Monitor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">no_of_graphs</span></em>, <em class="sig-param"><span class="n">amount_of_funcs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.graph_timer_setup">
+<code class="sig-name descname">graph_timer_setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_halos</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.graph_timer_setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.plot_memory_barchart">
+<code class="sig-name descname">plot_memory_barchart</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_file_path</span></em>, <em class="sig-param"><span class="n">file_name</span></em>, <em class="sig-param"><span class="n">save_file_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.plot_memory_barchart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.plot_timing_barchart">
+<code class="sig-name descname">plot_timing_barchart</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_file_path</span></em>, <em class="sig-param"><span class="n">file_name</span></em>, <em class="sig-param"><span class="n">save_file_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.plot_timing_barchart" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.save_timing_stats">
+<code class="sig-name descname">save_timing_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">output_file_path</span></em>, <em class="sig-param"><span class="n">file_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.save_timing_stats" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.start_timer">
+<code class="sig-name descname">start_timer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.start_timer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.store_average_graph_times">
+<code class="sig-name descname">store_average_graph_times</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">graph_no</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.store_average_graph_times" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Monitor.Monitor.store_func_time">
+<code class="sig-name descname">store_func_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func_no</span></em>, <em class="sig-param"><span class="n">halo_no</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Monitor.Monitor.store_func_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyGalaxies.Parameters">
+<span id="pygalaxies-parameters-module"></span><h2>PyGalaxies.Parameters module<a class="headerlink" href="#module-PyGalaxies.Parameters" title="Permalink to this headline">¶</a></h2>
+<p>Created on Mon Dec  7 10:55:02 2020</p>
+<p>&#64;author: Andrew</p>
+<dl class="py class">
+<dt id="PyGalaxies.Parameters.ModelParams">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.Parameters.</code><code class="sig-name descname">ModelParams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yml_filepath</span></em>, <em class="sig-param"><span class="n">verbosity</span></em>, <em class="sig-param"><span class="n">debug_flag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Read in yml parameters and store them.</p>
+<p>Simple class to read in and store parameters from the yml file. Simple
+methods included to print out the parameters etc.</p>
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.yml_filepath">
+<code class="sig-name descname">yml_filepath</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.yml_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filepath to the yml file containing the model parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.verbosity">
+<code class="sig-name descname">verbosity</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.verbosity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The level of detail needed for debugging messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.debug_flag">
+<code class="sig-name descname">debug_flag</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.debug_flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>To print out debugging messages, true or false.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.param_dict">
+<code class="sig-name descname">param_dict</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.param_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary containing contents of yml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.input_filepath">
+<code class="sig-name descname">input_filepath</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.input_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath to the input HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.output_filepath">
+<code class="sig-name descname">output_filepath</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.output_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath to the output HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.f_baryon">
+<code class="sig-name descname">f_baryon</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.f_baryon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Baryon fraction as allocated in yml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.io_nRec">
+<code class="sig-name descname">io_nRec</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.io_nRec" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO buffer size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.sub_halo">
+<code class="sig-name descname">sub_halo</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.sub_halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether sub_halo data should be included or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.omega_m">
+<code class="sig-name descname">omega_m</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.omega_m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Density parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Key parameters for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yml_filepath</strong> (<em>str</em>) – Filepath to the yml file containing the model parameters.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – The level of detail needed for debugging messages.</p></li>
+<li><p><strong>debug_flag</strong> (<em>bool</em>) – To print out debugging messages, true or false.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="PyGalaxies.Parameters.ModelParams.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yml_filepath</span></em>, <em class="sig-param"><span class="n">verbosity</span></em>, <em class="sig-param"><span class="n">debug_flag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key parameters for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yml_filepath</strong> (<em>str</em>) – Filepath to the yml file containing the model parameters.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – The level of detail needed for debugging messages.</p></li>
+<li><p><strong>debug_flag</strong> (<em>bool</em>) – To print out debugging messages, true or false.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Parameters.ModelParams.output_params">
+<code class="sig-name descname">output_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.output_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Short method to print out parameters.</p>
+<p>May be replaced for inbuilt method Peter mentioned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-PyGalaxies">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-PyGalaxies" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Andrew Bowell, Will Roper, and Peter Thomas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
