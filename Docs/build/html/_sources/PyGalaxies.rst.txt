@@ -4,37 +4,13 @@ PyGalaxies package
 Submodules
 ----------
 
-PyGalaxies.HDF\_graph\_properties module
-----------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: PyGalaxies.HDF_graph_properties
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyGalaxies.Halos module
------------------------
-
-.. automodule:: PyGalaxies.Halos
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyGalaxies.Monitor module
--------------------------
-
-.. automodule:: PyGalaxies.Monitor
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-PyGalaxies.Parameters module
-----------------------------
-
-.. automodule:: PyGalaxies.Parameters
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   PyGalaxies.HDF_graph_properties
+   PyGalaxies.Halos
+   PyGalaxies.Monitor
+   PyGalaxies.Parameters
 
 Module contents
 ---------------

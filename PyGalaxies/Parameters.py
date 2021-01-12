@@ -7,7 +7,6 @@ Created on Mon Dec  7 10:55:02 2020
 
 import yaml
 
-
 class ModelParams:
     """Read in yml parameters and store them.
 

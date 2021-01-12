@@ -1,0 +1,1 @@
+long checkPrimeNumber (long n);

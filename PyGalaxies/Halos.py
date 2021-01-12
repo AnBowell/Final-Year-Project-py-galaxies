@@ -12,7 +12,7 @@ import yaml
 
 
 class HaloProperties:
-    """A container for the properties needed for each halo.
+    """A container for the properties needed for each halo. 
 
     No sophisticated methods, it just truncates the GraphProperites class to
     ensure data from the current generation is selected. A simple method is

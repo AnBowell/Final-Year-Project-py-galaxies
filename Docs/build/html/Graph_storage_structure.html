@@ -1,0 +1,925 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Merger graph HDF storage structure &mdash; PyGalaxies 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="General Structure Of L-Galaxies and PyGalaxies" href="lgal_structure.html" />
+    <link rel="prev" title="Introduction to PyGalaxies" href="Introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyGalaxies
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction to PyGalaxies</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Merger graph HDF storage structure</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#root">Root</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#header">Header</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graphs-n">Graphs (N)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lgal_structure.html">General Structure Of L-Galaxies and PyGalaxies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Variable_naming_convention.html">Variable Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">PyGalaxies</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyGalaxies</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Merger graph HDF storage structure</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Graph_storage_structure.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="merger-graph-hdf-storage-structure">
+<h1>Merger graph HDF storage structure<a class="headerlink" href="#merger-graph-hdf-storage-structure" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>This page details the data format for the graph files produced by MEGA, which is a work in progress and subject to change.</p>
+<p>Any dataset of length N host , N sub , N gen and N graph is ordered such that the index is the corresponding ID (all
+IDs start at 0). For example, to get data for graph 3 from an N graph length array ( arr ) you would simply
+index it thusly:</p>
+<p>arr[3]</p>
+<p>Any dataset of length N prog , N desc , N subprog , and N subdesc contain the data for progenitors and descendents
+and are of ambiguous length. Due to this there are associated pointer (start_index) and length (nprog,
+ndesc) arrays. This is also true when trying to extract individual generations from the N host and N sub arrays
+using the generation start and length arrays.</p>
+<p>Data can be extracted from these using:</p>
+<p>arr[start: start + length]</p>
+<div class="section" id="root">
+<h2>Root<a class="headerlink" href="#root" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 81%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head" colspan="2"><p><strong>Groups</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Key</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Header</p></td>
+<td><p>Contains Metadata for the simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p>N</p></td>
+<td><div class="line-block">
+<div class="line">The groups containing the data for</div>
+<div class="line">each individual graph.</div>
+<div class="line">N runs from 0 - N graph -1.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 49%" />
+<col style="width: 12%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head" colspan="4"><p><strong>Datasets</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Key</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Units</strong></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Type</strong>/</div>
+<div class="line"><strong>Shape</strong></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>graph_lengths</p></td>
+<td><p>The length of each graph.</p></td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[]/</div>
+<div class="line">(N graph , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>root_nparts</p></td>
+<td><div class="line-block">
+<div class="line">The number of particles in the most</div>
+<div class="line">massive host halo in the root generation</div>
+<div class="line">of each graph (lowest redshift generation).</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[]/</div>
+<div class="line">(N graph , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>nhalos_in_graph</p></td>
+<td><p>The number of halos in each graph.</p></td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[]/</div>
+<div class="line">(N graph , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_graph_lengths</p></td>
+<td><p>The length of all subhalo graphs.</p></td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[]/</div>
+<div class="line">(N graph , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_nhalos_in_graph</p></td>
+<td><p>The number of subhalos in each graph.</p></td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[]/</div>
+<div class="line">(N graph , )</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="header">
+<h2>Header<a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 55%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head" colspan="4"><p><strong>Attributes</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Key</p></td>
+<td><p>Description</p></td>
+<td><p>Units</p></td>
+<td><p>Type</p></td>
+</tr>
+<tr class="row-odd"><td><p>past_mass</p></td>
+<td><p>The dark matter particle mass</p></td>
+<td><p>M_sun</p></td>
+<td><p>float</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="graphs-n">
+<h2>Graphs (N)<a class="headerlink" href="#graphs-n" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 51%" />
+<col style="width: 13%" />
+<col style="width: 12%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td colspan="4"><p><strong>Attributes</strong></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Key</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Units</strong></p></td>
+<td><p><strong>Type</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>length</p></td>
+<td><div class="line-block">
+<div class="line">The length of this graph, i.e.</div>
+<div class="line">the number of generations</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>root_mass</p></td>
+<td><div class="line-block">
+<div class="line">The number of particles in the</div>
+<div class="line">most massive halo in the root</div>
+<div class="line">generation (lowest redshift generation)</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>nhalos_in_graph</p></td>
+<td><div class="line-block">
+<div class="line">The number of halos in this</div>
+<div class="line">graph</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>sub_length</p></td>
+<td><div class="line-block">
+<div class="line">The length of this subhalo graph,</div>
+<div class="line">i.e. the number of generations</div>
+<div class="line">containing subhalos</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>sub_root_mass</p></td>
+<td><div class="line-block">
+<div class="line">The number of particles in the most</div>
+<div class="line">massive subhalo in the root generation</div>
+<div class="line">(lowest redshift generation)</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>sub_nhalos_in_graph</p></td>
+<td><div class="line-block">
+<div class="line">The number of subhalos in this</div>
+<div class="line">graph</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 46%" />
+<col style="width: 10%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head" colspan="4"><p><strong>Datasets</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Key</strong></p></td>
+<td><p><strong>Description</strong></p></td>
+<td><p><strong>Units</strong></p></td>
+<td><div class="line-block">
+<div class="line"><strong>Type</strong>/</div>
+<div class="line"><strong>Shape</strong></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>graph_halo_ids</p></td>
+<td><div class="line-block">
+<div class="line">The internal graph halo ID assigned to a</div>
+<div class="line">halo. NOTE: These differ from the halo</div>
+<div class="line">catalog. These run from 0 - N host with the</div>
+<div class="line">index equal to the value.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>halo_catalog_halo_ids</p></td>
+<td><div class="line-block">
+<div class="line">The halo catalog ID assigned to each</div>
+<div class="line">halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>snapshots</p></td>
+<td><div class="line-block">
+<div class="line">The index of the snapshot in the snapshot</div>
+<div class="line">text file dictated in the param file,</div>
+<div class="line">for each halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>redshifts</p></td>
+<td><div class="line-block">
+<div class="line">The redshift for each halo in the</div>
+<div class="line">graph.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">float[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>generation_id</p></td>
+<td><div class="line-block">
+<div class="line">The ID (or number) associated with each</div>
+<div class="line">generation. Counting starts from</div>
+<div class="line">the earliest snapshot.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N gen, )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>nparts</p></td>
+<td><div class="line-block">
+<div class="line">The number of dark matter particles</div>
+<div class="line">in each halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>mean_pos</p></td>
+<td><div class="line-block">
+<div class="line">The mean position of the particles</div>
+<div class="line">in the halo.</div>
+</div>
+</td>
+<td><p>cMpc</p></td>
+<td><div class="line-block">
+<div class="line">float[] /</div>
+<div class="line">(N host , 3)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>generation_start_index</p></td>
+<td><div class="line-block">
+<div class="line">The starting index (pointer) for each</div>
+<div class="line">host halo generation.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N gen , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>generation_length</p></td>
+<td><div class="line-block">
+<div class="line">The number of halos in each</div>
+<div class="line">generation.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N gen , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>nprog</p></td>
+<td><div class="line-block">
+<div class="line">The number of progenitors for each</div>
+<div class="line">halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>ndesc</p></td>
+<td><div class="line-block">
+<div class="line">The number of descendents for each</div>
+<div class="line">halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>prog_start_index</p></td>
+<td><div class="line-block">
+<div class="line">The starting index (pointer) for each halo’s</div>
+<div class="line">entries in all progenitor halo arrays (i.e.</div>
+<div class="line">direct_prog_ids,</div>
+<div class="line">direct_prog_contribution, etc.).</div>
+<div class="line">Entries containing 2**30 have no</div>
+<div class="line">descendants.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>desc_start_index</p></td>
+<td><div class="line-block">
+<div class="line">The starting index (pointer) for each halo’s</div>
+<div class="line">entries in all descendant halo arrays(i.e.</div>
+<div class="line">direct_desc_ids,</div>
+<div class="line">direct_desc_contribution, etc.).</div>
+<div class="line">Entries containing 2**30 have no</div>
+<div class="line">descendants.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N host , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>direct_prog_ids</p></td>
+<td><div class="line-block">
+<div class="line">The progenitor halo IDs, extracted using</div>
+<div class="line">prog_start_index and nprog.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N prog, )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>direct_desc_ids</p></td>
+<td><div class="line-block">
+<div class="line">The descendent halo IDs, extracted using</div>
+<div class="line">desc_start_index and ndesc.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N desc, )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>direct_prog_contribution</p></td>
+<td><div class="line-block">
+<div class="line">The number of dark matter particles</div>
+<div class="line">contributed <strong>by</strong> each direct progenitor</div>
+<div class="line"><strong>to</strong> the halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N prog , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>direct_desc_contribution</p></td>
+<td><div class="line-block">
+<div class="line">The number of dark matter particles</div>
+<div class="line">contributed <strong>to</strong> each direct descendent</div>
+<div class="line"><strong>from</strong> the halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N desc, )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_graph_halo_ids</p></td>
+<td><div class="line-block">
+<div class="line">The internal graph subhalo ID assigned to a</div>
+<div class="line">subhalo. NOTE: These differ from the halo</div>
+<div class="line">catalog. These run from 0 - N sut with the</div>
+<div class="line">index equal to the value.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N sub , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>subhalo_catalog_halo_ids</p></td>
+<td><div class="line-block">
+<div class="line">The subhalo catalog ID assigned</div>
+<div class="line">to each subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N sub , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_snapshots</p></td>
+<td><div class="line-block">
+<div class="line">The index of the snapshot in the snapshot</div>
+<div class="line">text file dictated in the param file,</div>
+<div class="line">for each subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N sub , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_redshifts</p></td>
+<td><div class="line-block">
+<div class="line">The redshift for each subhalo in the</div>
+<div class="line">graph.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">float[] /</div>
+<div class="line">(N sub ,)</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_generation_id</p></td>
+<td><div class="line-block">
+<div class="line">The ID (or number) associated with each</div>
+<div class="line">generation. Counting starts from the</div>
+<div class="line">earliest snapshot.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N gen , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_nparts</p></td>
+<td><div class="line-block">
+<div class="line">The number of dark matter particles</div>
+<div class="line">in each halo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N sub , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_mean_pos</p></td>
+<td><div class="line-block">
+<div class="line">The mean position of the particles</div>
+<div class="line">in the subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">float[] /</div>
+<div class="line">(N sub , 3)</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_generation_start_index</p></td>
+<td><div class="line-block">
+<div class="line">The starting index (pointer) for each</div>
+<div class="line">subhalo generation.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N gen , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_generation_length</p></td>
+<td><div class="line-block">
+<div class="line">The number of subhalos in each</div>
+<div class="line">generation</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N gen , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_nprog</p></td>
+<td><div class="line-block">
+<div class="line">The number of progenitors for each</div>
+<div class="line">subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subp , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_ndesc</p></td>
+<td><div class="line-block">
+<div class="line">The number of descendents for</div>
+<div class="line">each subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subd , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_prog_start_index</p></td>
+<td><div class="line-block">
+<div class="line">The starting index (pointer) for each</div>
+<div class="line">subhalo’s entries in all progenitor subhalo</div>
+<div class="line">arrays (i.e. sub_direct_prog_ids,</div>
+<div class="line">sub_direct_prog_contribution, etc.).</div>
+<div class="line">Entries containing 2**30 have no</div>
+<div class="line">descendants.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subp , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_desc_start_index</p></td>
+<td><div class="line-block">
+<div class="line">The starting index (pointer) for each</div>
+<div class="line">subhalo’s entries in all descendant subhalo</div>
+<div class="line">arrays (i.e. sub_direct_desc_ids,</div>
+<div class="line">sub_direct_desc_contribution, etc.).</div>
+<div class="line">Entries containing 2**30 have no</div>
+<div class="line">descendants.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subd , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_direct_prog_ids</p></td>
+<td><div class="line-block">
+<div class="line">The progenitor subhalo IDs, extracted using</div>
+<div class="line">sub_prog_start_index and sub_nprog .</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subp , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_direct_desc_ids</p></td>
+<td><div class="line-block">
+<div class="line">The descendent subhalo IDs, extracted</div>
+<div class="line">using sub_desc_start_index and</div>
+<div class="line">sub_ndesc.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subd , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>sub_direct_prog_contribution</p></td>
+<td><div class="line-block">
+<div class="line">The number of dark matter particles</div>
+<div class="line">contributed <strong>by</strong> each direct progenitor</div>
+<div class="line"><strong>to</strong> the subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subp , )</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>sub_direct_desc_contribution</p></td>
+<td><div class="line-block">
+<div class="line">The number of dark matter particles</div>
+<div class="line">contributed to each direct descendent from</div>
+<div class="line">the subhalo.</div>
+</div>
+</td>
+<td><p>None</p></td>
+<td><div class="line-block">
+<div class="line">int[] /</div>
+<div class="line">(N subd , )</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lgal_structure.html" class="btn btn-neutral float-right" title="General Structure Of L-Galaxies and PyGalaxies" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Introduction.html" class="btn btn-neutral float-left" title="Introduction to PyGalaxies" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Andrew Bowell, Will Roper, and Peter Thomas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

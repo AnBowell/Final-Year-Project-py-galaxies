@@ -32,7 +32,8 @@ release = '0.0.1'
 # ones.
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 
-              'sphinx.ext.napoleon','sphinx_rtd_theme']
+              'sphinx.ext.napoleon','sphinx_rtd_theme',
+              'sphinx.ext.autosummary']
 
 autoclass_content = 'both'
 napoleon_numpy_docstring = True

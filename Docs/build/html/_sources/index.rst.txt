@@ -3,12 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PyGalaxies's documentation!
-======================================
+PyGalaxies documentation!
+=========================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   Introduction
+   
+   Graph_storage_structure
+   
+   lgal_structure
+   
+   Variable_naming_convention
+
+   modules
+   
+   
 
 
 

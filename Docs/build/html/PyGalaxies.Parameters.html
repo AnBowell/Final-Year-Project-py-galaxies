@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>PyGalaxies.Parameters module &mdash; PyGalaxies 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyGalaxies
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="PyGalaxies.Halos.html">PyGalaxies.Halos module</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyGalaxies</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>PyGalaxies.Parameters module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/PyGalaxies.Parameters.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-PyGalaxies.Parameters">
+<span id="pygalaxies-parameters-module"></span><h1>PyGalaxies.Parameters module<a class="headerlink" href="#module-PyGalaxies.Parameters" title="Permalink to this headline">¶</a></h1>
+<p>Created on Mon Dec  7 10:55:02 2020</p>
+<p>&#64;author: Andrew</p>
+<dl class="py class">
+<dt id="PyGalaxies.Parameters.ModelParams">
+<em class="property">class </em><code class="sig-prename descclassname">PyGalaxies.Parameters.</code><code class="sig-name descname">ModelParams</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yml_filepath</span></em>, <em class="sig-param"><span class="n">verbosity</span></em>, <em class="sig-param"><span class="n">debug_flag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Read in yml parameters and store them.</p>
+<p>Simple class to read in and store parameters from the yml file. Simple
+methods included to print out the parameters etc.</p>
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.yml_filepath">
+<code class="sig-name descname">yml_filepath</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.yml_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filepath to the yml file containing the model parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.verbosity">
+<code class="sig-name descname">verbosity</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.verbosity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The level of detail needed for debugging messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.debug_flag">
+<code class="sig-name descname">debug_flag</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.debug_flag" title="Permalink to this definition">¶</a></dt>
+<dd><p>To print out debugging messages, true or false.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.param_dict">
+<code class="sig-name descname">param_dict</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.param_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary containing contents of yml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dictionary</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.input_filepath">
+<code class="sig-name descname">input_filepath</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.input_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath to the input HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.output_filepath">
+<code class="sig-name descname">output_filepath</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.output_filepath" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath to the output HDF5 file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.f_baryon">
+<code class="sig-name descname">f_baryon</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.f_baryon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Baryon fraction as allocated in yml file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.io_nRec">
+<code class="sig-name descname">io_nRec</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.io_nRec" title="Permalink to this definition">¶</a></dt>
+<dd><p>IO buffer size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.sub_halo">
+<code class="sig-name descname">sub_halo</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.sub_halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether sub_halo data should be included or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="PyGalaxies.Parameters.ModelParams.omega_m">
+<code class="sig-name descname">omega_m</code><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.omega_m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Density parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Key parameters for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yml_filepath</strong> (<em>str</em>) – Filepath to the yml file containing the model parameters.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – The level of detail needed for debugging messages.</p></li>
+<li><p><strong>debug_flag</strong> (<em>bool</em>) – To print out debugging messages, true or false.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="PyGalaxies.Parameters.ModelParams.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yml_filepath</span></em>, <em class="sig-param"><span class="n">verbosity</span></em>, <em class="sig-param"><span class="n">debug_flag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Key parameters for the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>yml_filepath</strong> (<em>str</em>) – Filepath to the yml file containing the model parameters.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – The level of detail needed for debugging messages.</p></li>
+<li><p><strong>debug_flag</strong> (<em>bool</em>) – To print out debugging messages, true or false.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="PyGalaxies.Parameters.ModelParams.output_params">
+<code class="sig-name descname">output_params</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#PyGalaxies.Parameters.ModelParams.output_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Short method to print out parameters.</p>
+<p>May be replaced for inbuilt method Peter mentioned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Andrew Bowell, Will Roper, and Peter Thomas
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
