@@ -85,7 +85,7 @@ class HDFProperties:
             ]
         )
 
-        self.halo_descend_attrs = ["hot_gas", "cold_gas"]
+        self.halo_descend_attrs = ["hot_gas", "cold_gas", "ejected_gas"]
 
         self.open_graph_input()
         self.halo_output_data = np.empty(

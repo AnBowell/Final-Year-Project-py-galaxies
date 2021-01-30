@@ -135,9 +135,10 @@ class HaloProperties:
 
         # add to docs
         self.redshift = graph_properties.redshifts[halo_ID]
-        self.stellar_mass = 0.0
+        self.total_halo_stellar_mass = 0.0
         self.hot_gas = 1.0
-        self.cold_gas = 3.0
+        self.cold_gas = 2.0
+        self.ejected_gas = 3.0 
 
         self.mass_baryon = 0.0
         self.mass_from_progenitors = 0.0
@@ -345,7 +346,7 @@ class HaloProperties:
 
 
         self.inclusive_contribution = desc_truemass_conts
-        
+
         return None
 
     def calc_halo_DM_descend(self, part_mass):
@@ -556,7 +557,7 @@ class HaloProperties:
                 old_star_mass + star_mass_delta
             )
 
-            self.stellar_mass += old_star_mass + star_mass_delta
+            self.total_halo_stellar_mass += old_star_mass + star_mass_delta
 
         return None
 
