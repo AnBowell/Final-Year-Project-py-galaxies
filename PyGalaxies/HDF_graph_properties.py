@@ -80,12 +80,15 @@ class HDFProperties:
                 ("sub_graph_ids", np.int32),
                 ("prog_DM_mass", np.float64),
                 ("stellar_mass", np.float64),
+                ("AGN_mass", np.float64),
                 ("descended", bool),
                 ("SFR", np.float64),
             ]
         )
 
         self.halo_descend_attrs = ["hot_gas", "cold_gas", "ejected_gas"]
+        
+        self.sub_halo_descend_attrs = ["stellar_mass", "AGN_mass"]
 
         self.open_graph_input()
         self.halo_output_data = np.empty(
@@ -98,6 +101,7 @@ class HDFProperties:
         self.n_subhalo = 0
         self.no_of_graphs = len(self.graph_input_file["/nhalos_in_graph/"][:])
         self.part_mass = self.graph_input_file["Header"].attrs["part_mass"]
+        self.snap_redshifts, self.snap_times = self.read_input_snapshot_times()
 
     def open_graph_input(self):
         """Open input graph file (HDF5) using h5py.
@@ -126,6 +130,20 @@ class HDFProperties:
         open_HDF5_file.close()
 
         return None
+    
+    
+    @staticmethod
+    def read_input_snapshot_times():
+        
+        filepath = 'Input_Params/snapshot_info.txt'
+        data = np.loadtxt(filepath).T
+        
+        snap_redshifts = data[2,:]
+        
+        snap_times = data[4,:]
+        
+        return snap_redshifts, snap_times
+
 
     def open_halo_output(self):
         """Open halo output HDF5 file and create dataset.
@@ -164,7 +182,7 @@ class HDFProperties:
             self.halo_output_data[self.halo_output_iRec]["mass"] = halo.mass
             self.halo_output_data[self.halo_output_iRec][
                 "mass_baryon"
-            ] = halo.mass_baryon
+            ] = halo.total_halo_baryon_mass
             self.halo_output_data[self.halo_output_iRec][
                 "mass_from_progenitors"
             ] = halo.mass_from_progenitors
