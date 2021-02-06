@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import h5py as h5
 import yaml
+from LGalaxies.L_Galaxies import C_get_metaldependent_cooling_rate, C_do_reionization
 
 
 class HaloProperties:
@@ -139,9 +140,12 @@ class HaloProperties:
         self.total_halo_stellar_mass = 0.0 # CHANGE THIS TO BELOW
         
         self.total_halo_baryon_mass = 0.0
-        self.hot_gas = 0.0
+        self.hot_gas_mass = 0.0
+        self.hot_gas_temp = 0.0
+        self.gas_metalicity = 1e-4
         self.cold_gas = 0.0
         self.ejected_gas = 0.0
+        self.metal_dependent_cooling_rate = 0.0
 
         self.mass_from_progenitors = 0.0
         self.mass_baryon_from_progenitors = 0.0
@@ -461,8 +465,7 @@ class HaloProperties:
         for subhalo_baryon_prop in HDF_properties.sub_halo_descend_attrs:
             
             self.total_halo_baryon_mass += np.sum(self.sub_halo_attrs[:][subhalo_baryon_prop])
-
-
+            
         return None
 
     def set_baryon_fraction(self, array_of_halo_properties, f_baryon):
@@ -502,11 +505,19 @@ class HaloProperties:
               )
          
           old_total_baryonic_mass = self.total_halo_baryon_mass
-          self.total_halo_baryon_mass = max(f_baryon * self.mass, this_inclusive_contribution)
+          
+          
+          true_baryon_frac = f_baryon * self.calculate_reionization_frac(
+                                                          self.mass,
+                                                          self.redshift)
+        
+          
+          self.total_halo_baryon_mass = max(true_baryon_frac * self.mass, 
+                                            this_inclusive_contribution)
           
           change_in_baryonic_mass = self.total_halo_baryon_mass - old_total_baryonic_mass
           
-          self.hot_gas += change_in_baryonic_mass
+          self.hot_gas_mass += change_in_baryonic_mass
   
           return None
 
@@ -586,27 +597,146 @@ class HaloProperties:
     
                 self.total_halo_stellar_mass += star_mass_delta
                 
-                self.hot_gas -= star_mass_delta
+                self.hot_gas_mass -= star_mass_delta
 
         return None
+    
+    @staticmethod
+    def calculate_reionization_frac(mass, redshift):
+        """ Calculates modification fraction for baryon fraction.
+        
+        L-Galaxies routine. Recipe from Gnedin 2000, with parameters/eqs from
+        either Okamoto er al 2008 or Kravtsov et al 2004. This depends upon
+        the model chosen (0 or 1 in parameters).      
+        
+        Parameters
+        ----------
+        mass : float
+            Mass of the halo
+        redshift : float
+            Redshift of the halo.
 
-    # def calculate_infall(self, f_baryon):
+        Returns
+        -------
+        reionization_fraction : float
+            Fraction to multiply baryon fraction by.
 
-    #     # Sums total bary mass. Only stellar for now but more to add.
+        """
+        
+        reionization_fraction = C_do_reionization(mass, redshift)
+    
+        return reionization_fraction
+    
+    
+    
+    
+    
+    
+    @staticmethod
+    def calculate_virial_circular_velocity(z, H0, r0):
+        """Calculates the cirular vellocity when at equilibrium.
+        
+        This formula is taken from White and Frenk 1991
+        https://ui.adsabs.harvard.edu/abs/1991ApJ...379...52W/abstract
+        
+        This will then allow for the calculation of the viral temperature.
 
-    #     halo_old_bary_mass = self.total_halo_baryon_mass
+        Parameters
+        ----------
+        z : float
+            Redshift of the halo.
+        H0 : float
+            Global constant - Hubble parameter at t0
+        r0 : float
+            Currently the root mean square radius. Subject to change 
+            Also not 100% sure on the units right now. Maybe Mpc - when multiplied
+            by H0 this gives us kms^(-1)
 
-    #     mass_baryon = max(f_baryon * self.mass, self.total_halo_baryon_mass)
+        Returns
+        -------
+        Vc : float
+            Viral circular velocity.
+        """
+        
+        
+        Vc = 1.67 * ((1 + z) ** (1 / 2)) * H0 * r0
+        
+        return Vc
+    
+    @staticmethod
+    def calculate_virial_temperature(Vc):
+        """ Calculates the virial temperature of the hot gas.
+        
+        Takes in the virial circular velocity calculated from White and Frenk
+        1991 and then returns the virial temperature using an estimation
+        from L-Galaxies 2020 - In the model description. From springel 2001 too.
 
-    #     baryon_mass_delta = mass_baryon - halo_old_bary_mass
+        
+        µm_p\3kB --> is 35.9 ?
+        
+        Vc in this instant is in Mpc
+        
+        Parameters
+        ----------
+        Vc : float
+            Virial circular velocity.
 
-    #     if baryon_mass_delta > 0:
+        Returns
+        -------
+        T_virial : float
+            Virial temperature.
 
-    #         self.total_halo_baryon_mass += baryon_mass_delta
+        """
+    
+        T_virial = 35.9 * (Vc ** 2)        
+        
+        return T_virial
+    
+    
+    def calculate_hot_gas_temp(self, H0):
+        """ Sets the hot gas temperature equal to that of the virial temp.
+        
 
-    #     return None
+        Parameters
+        ----------
+        H0 : float
+            Hubble parameter - constant.
 
+        Returns
+        -------
+        None.
 
+        """
+        
+        Vc = self.calculate_virial_circular_velocity(self.redshift,
+                                                H0, self.rms_radius)
+
+        T_virial = self.calculate_virial_temperature(Vc)
+
+        
+        self.hot_gas_temp = T_virial
+        
+        return None
+    
+    
+    def calculate_metal_dependent_cooling_rate(self):
+        """ Calculates metal dependent cooling rate from c routine.
+
+        Returns
+        -------
+        None.
+
+        """
+        log_metalicity = np.log(self.gas_metalicity)
+        log_temp = np.log(self.hot_gas_temp)
+        
+        cooling_rate = C_get_metaldependent_cooling_rate(log_temp,
+                                                         log_metalicity)
+        
+        self.metal_dependent_cooling_rate = cooling_rate
+        
+        return None
+        
 class PlotHalos:
     def __init__(self, yml_filepath):
         """Load in parameters from the yml graph file.

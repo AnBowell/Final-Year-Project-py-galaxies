@@ -6,6 +6,9 @@ Created on Mon Dec  7 10:55:02 2020
 """
 
 import yaml
+from astropy import constants as const
+from LGalaxies.L_Galaxies import C_update_c_model_params, C_read_cooling_functions, C_read_reionization
+
 
 class ModelParams:
     """Read in yml parameters and store them.
@@ -62,10 +65,22 @@ class ModelParams:
         self.io_nRec = self.param_dict["performance"]["io_nRec"]["Value"]
         self.sub_halo = self.param_dict["model_switches"]["sub_halo"]["Value"]
         self.omega_m = self.param_dict["cosmology"]["omega_m"]["Value"]
-
+        self.omega_lambda = self.param_dict["cosmology"]["omega_lambda"]["Value"]
+        self.omega_gamma = self.param_dict["cosmology"]["omega_gamma"]["Value"]
+        self.H0 = self.param_dict["cosmology"]['H0']["Value"]
+        self.H0 = self.param_dict["cosmology"]['H0']["Value"]
+        self.zr_reionization = self.param_dict["cosmology"]['zr_reionization']["Value"]
+        self.z0_reionization = self.param_dict["cosmology"]['z0_reionization']["Value"]
         self.timing = self.param_dict["Monitoring"]["Timing"]["Value"]
         self.timing_graph_save_path = self.param_dict["Monitoring"]["Timing"]["graph_save_path"]
         self.timing_data_save_path = self.param_dict["Monitoring"]["Timing"]["timing_data_save_path"]
+        
+        self.reionize_model = self.param_dict["model_switches"]["reionization_model"]["Value"]
+        
+        self.omega = self.omega_lambda + self.omega_m + self.omega_gamma
+        
+        self.G = const.G
+        self.c = const.c
 
     def output_params(self):
         """Short method to print out parameters.
@@ -80,4 +95,58 @@ class ModelParams:
         for item in self.param_dict:
             print("{:20s}: {}".format(item, self.param_dict[item]))
 
+        return None
+    
+    def load_paramters_to_C(self):
+        """ Load in global variables to C (L-Galaxies code).
+        
+        Annoyingly I don't think there is any better way to do this. Parameters
+        need to be inputted into the function C_update_c_model_params in the 
+        order described below. This stores them in a global data structure to 
+        be accessed by any of the C routines. 
+        
+        Omega, OmegaLambda, Hubble, G, ReionizationModel, zr_recomb, z0_recomb
+        
+        This also updates which reionisation model to run
+            
+        0 for reionization recipie described in Gnedin (2000),
+        with the fitting from Okamoto et al. 2008 -> Qi(2010)
+        
+        1 for reionization recipie described in Gnedin (2000),
+        using the fitting formulas given by Kravtsov et al (2004) Appendix B,
+        used after Delucia 2004
+        
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        
+        
+        C_update_c_model_params(self.omega, self.omega_lambda, self.H0, 
+                                self.G.value, self.reionize_model, 
+                                self.zr_reionization, self.z0_reionization)
+        
+        return None
+    
+    
+    def read_in_data_tables_from_c(self):
+        """ Read in data tables for c routines.
+        
+        Method to read in the data tables for the L-galaxies C routines using C.
+
+        
+        
+        Returns
+        -------
+        None.
+
+        """
+        
+        C_read_cooling_functions()
+        C_read_reionization()
+        
+        
         return None
