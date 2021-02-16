@@ -12,3 +12,5 @@ cdef extern from "L_Galaxies.h":
     void read_reionization ()
     
     double do_reionization (float Mvir, double Zcurr)
+    
+    int check_if_first_call ()

@@ -169,19 +169,20 @@ double do_reionization(float Mvir, double Zcurr)
   ar = 1 / (1 + modelParams.recombination_zr);
   a0 = 1 / (1 + modelParams.recombination_z0);
   
+  
   modifier=1.;
   if (modelParams.ReionizationModel == 0) {
       /* reionization recipie described in Gnedin (2000), with the fitting
        * from Okamoto et al. 2008 -> Qi(2010)*/
-
+       
       alpha = 2.0;
       a = 1. / (1 + Zcurr);
       a0 = 1.;
 
-      x = - (1 - modelParams.Omega) * a * a * a / (modelParams.Omega + (1-modelParams.Omega) * a * a * a);
+      x = - (1 - modelParams.OmegaM) * a * a * a / (modelParams.OmegaM + (1-modelParams.OmegaM) * a * a * a);
       delta_c = (178 + 82 *x - 39 * x * x) / (1. + x);
 
-      x0 = - (1 - modelParams.Omega) * a0 * a0 * a0 / (modelParams.Omega + (1-modelParams.Omega) * a0 * a0 * a0);
+      x0 = - (1 - modelParams.OmegaM) * a0 * a0 * a0 / (modelParams.OmegaM + (1-modelParams.OmegaM) * a0 * a0 * a0);
       delta_0 = (178 + 82 *x0 - 39 * x0 * x0) / (1. + x0);
 
       tau = 0.73 * pow(Zcurr + 1,0.18)* exp(-pow(0.25 * Zcurr, 2.1));
@@ -191,10 +192,11 @@ double do_reionization(float Mvir, double Zcurr)
       /* if use Okamoto et al. 2008*/
 
       find_interpolate_reionization(Zcurr, &tabindex, &f1, &f2);
-      Mc = f1*log10(Reion_Mc[tabindex])+f2*log10(Reion_Mc[tabindex+1]);
-      Mc = pow(10, Mc-10);
+      
+      Mc = f1*Reion_Mc[tabindex]+f2*Reion_Mc[tabindex+1];
 
       modifier = pow(1 + (pow(2, alpha/3.) -1) * pow(Mc / Mvir, alpha), -3./alpha);
+
   }
   else if (modelParams.ReionizationModel == 1)
     {
@@ -224,21 +226,22 @@ double do_reionization(float Mvir, double Zcurr)
 		     a * ar / 3.0 - (ar * ar / 3.0) * (3.0 - 2.0 * pow(a_on_ar, -0.5)));
     
     /*  this is in units of 10^10Msun/h, note mu=0.59 and mu^-1.5 = 2.21 */
-    Mjeans = 25.0 * pow(modelParams.Omega, -0.5) * 2.21;
+    Mjeans = 25.0 * pow(modelParams.OmegaM, -0.5) * 2.21;
     Mfiltering = Mjeans * pow(f_of_a, 1.5);
     
     
     /*  calculate the characteristic mass coresponding to a halo temperature of 10^4K */
     Vchar = sqrt(Tvir / 36.0);
-    omegaZ = modelParams.Omega * (pow(1.0 + Zcurr,3) / (modelParams.Omega * pow(1.0 + Zcurr,3) + modelParams.OmegaLambda));
+    omegaZ = modelParams.OmegaM * (pow(1.0 + Zcurr,3) / (modelParams.OmegaM * pow(1.0 + Zcurr,3) + modelParams.OmegaLambda));
     xZ = omegaZ - 1.0;
     deltacritZ = 18.0 * M_PI * M_PI + 82.0 * xZ - 39.0 * xZ * xZ;
-    HubbleZ = modelParams.Hubble * sqrt(modelParams.Omega * pow(1.0 + Zcurr,3) + modelParams.OmegaLambda);
+    HubbleZ = modelParams.Hubble * sqrt(modelParams.OmegaM * pow(1.0 + Zcurr,3) + modelParams.OmegaLambda);
     
     Mchar = Vchar * Vchar * Vchar / (modelParams.G * HubbleZ * sqrt(0.5 * deltacritZ));
 
     /*  we use the maximum of Mfiltering and Mchar */
     mass_to_use = max(Mfiltering, Mchar);
+
     modifier = 1.0 / pow(1.0 + 0.26 * (mass_to_use / Mvir),3);
   }
   else if (modelParams.ReionizationModel ==2)

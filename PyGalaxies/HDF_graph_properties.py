@@ -86,7 +86,8 @@ class HDFProperties:
             ]
         )
 
-        self.halo_descend_attrs = ["hot_gas_mass", "cold_gas", "ejected_gas"]
+        self.halo_descend_attrs = ["hot_gas_mass", "cold_gas", "ejected_gas",
+                                   "intracluster_stellar_mass"]
         
         self.sub_halo_descend_attrs = ["stellar_mass", "AGN_mass"]
 

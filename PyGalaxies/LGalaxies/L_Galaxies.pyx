@@ -27,7 +27,10 @@ def C_read_reionization():
     
     return None
 
-
 def C_do_reionization(float Mvir, double Zcurr):
     
     return L_galaxies.do_reionization(Mvir, Zcurr)
+
+def C_check_if_first_call():
+    
+    return L_galaxies.check_if_first_call()

@@ -1,6 +1,6 @@
 struct allModelParameters{
 
-double Omega;
+double OmegaM;
 double OmegaLambda;
 double Hubble;
 double G;
@@ -10,3 +10,5 @@ double recombination_z0;
 };
 
 struct allModelParameters modelParams;
+
+static int first_call;

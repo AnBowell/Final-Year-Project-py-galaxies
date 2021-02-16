@@ -36,8 +36,13 @@ cosmology:
 
  f_baryon:
   Description: 'Baryon fraction'
-  Value:        0.155
+  Value:       0.155
   Units:       'None'
+
+ mu: 
+  Description: 'Mean amount of particles. Can also be linked to metallicity and not const'
+  Value:       0.59265
+  units:       'None'
   
 model_switches:
  HOD:
@@ -48,7 +53,7 @@ model_switches:
   Value:        True
  reionization_model:
   Description: 'Which model to run, 0 or 1. See docs for more details'
-  Value:        1
+  Value:        0
 
 performance:
  io_nRec:

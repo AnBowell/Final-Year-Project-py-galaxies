@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Dec  7 10:57:31 2020
+Created on Mon Dec  7 10:57:31 2020.
 
 @author: Andrew
 """
@@ -13,7 +13,7 @@ from LGalaxies.L_Galaxies import C_get_metaldependent_cooling_rate, C_do_reioniz
 
 
 class HaloProperties:
-    """A container for the properties needed for each halo. 
+    """A container for the properties needed for each halo.
 
     No sophisticated methods, it just truncates the GraphProperites class to
     ensure data from the current generation is selected. A simple method is
@@ -146,6 +146,7 @@ class HaloProperties:
         self.cold_gas = 0.0
         self.ejected_gas = 0.0
         self.metal_dependent_cooling_rate = 0.0
+        self.intracluster_stellar_mass = 0.0
 
         self.mass_from_progenitors = 0.0
         self.mass_baryon_from_progenitors = 0.0
@@ -328,7 +329,22 @@ class HaloProperties:
         return None
 
     def calc_halo_DM_descend(self, part_mass):
+        """If statement to check for progenitors.
+        
+        Finds out if there is a progenitor ot the current halo, if there is
+        gather progenitor properties. If not, the mass from the progenitors is
+        set to 0.
+        
+        Parameters
+        ----------
+        part_mass : float
+            The mass of the dark matter particle.
 
+        Returns
+        -------
+        None.
+
+        """
         if self.nprog > 0:
 
             self.gather_progenitors(part_mass)
@@ -341,7 +357,27 @@ class HaloProperties:
     def calc_halo_attrs_descend(
         self, part_mass, array_of_halo_properties, halo_descend_attrs
     ):
+        """ Calculate and descend halo properties
+        
+        Loop over a list of halo properties that are to descend to their 
+        descendents. Get the attribute and give proportionally to all
+        descendents.
 
+        Parameters
+        ----------
+        part_mass : float
+            Dark matter part mass.
+        array_of_halo_properties : ndarry of type 'Class'
+            Array of instances of halo_properties class.
+        halo_descend_attrs : list of type 'Str'
+            List of strings denoting the properties to be passed down to
+            descendents. They should have the same name as the attribute.
+
+        Returns
+        -------
+        None.
+
+        """
         for halo_property in halo_descend_attrs:
 
             this_inclusive_contribution = 0.0
@@ -396,20 +432,32 @@ class HaloProperties:
         for i_galaxy, galaxy_ID in enumerate(self.sub_graph_halo_ids):
 
             nprog = graph_properties.sub_nprog[galaxy_ID]
+            
+            ndesc = graph_properties.sub_ndesc[galaxy_ID]
+            
+            # New --> Adds any stars that have no galaxy descendent to intracluster mass.
+            if ndesc < 1:
+                
+                
+                stellar_mass_indicies = np.where(
+                        (self.sub_halo_attrs["sub_graph_ids"] == galaxy_ID)
+                    )
+                
+                self.intracluster_stellar_mass += self.sub_halo_attrs[stellar_mass_indicies]["stellar_mass"]
+            
 
             if nprog > 0:
 
                 prog_start_index = graph_properties.sub_prog_start_index[galaxy_ID]
 
-                prog_end_index = prog_start_index + nprog
 
                 prog_sub_ids = graph_properties.sub_direct_prog_ids[
-                    prog_start_index:prog_end_index
+                    prog_start_index:prog_start_index + nprog
                 ]
 
                 prog_masses, prog_total_mass = gather_prog_contrib_mass(
-                    graph_properties, prog_start_index, prog_end_index, part_mass
-                )
+                    graph_properties, prog_start_index, prog_start_index + nprog, 
+                    part_mass)
 
                 self.sub_halo_attrs[i_galaxy]["prog_DM_mass"] = prog_total_mass
 
@@ -453,10 +501,29 @@ class HaloProperties:
 
                 self.sub_halo_attrs[i_galaxy]["prog_DM_mass"] = 0.0
                 
+            
+                
             HDF_properties.n_subhalo += 1
             
 
     def add_halo_baryon_mass_then_topup(self, HDF_properties):
+        """ Adds up all baryons in halo.
+        
+        Loop over all properties in a list contained within the HDF_properties
+        class. For each property get the value and add it to the total baryon
+        mass.
+        
+
+        Parameters
+        ----------
+        HDF_properties : :obj: 'Class'
+            instance of HDF_properties class. 
+
+        Returns
+        -------
+        None.
+
+        """
         
         for halo_baryon_prop in HDF_properties.halo_descend_attrs:
             
@@ -523,6 +590,30 @@ class HaloProperties:
 
     @staticmethod
     def Behroozi_formula(a, z, halo_mass):
+        """ Fitted equation from Behroozi et al 2013 describing star formation.
+        
+        https://arxiv.org/abs/1207.6105
+        
+        This function takes in the halo mass, redhsift and scale factor and
+        returns the expected solar mass within the halo. This is a function
+        that has been fitted from real world data so the magic numbers found 
+        below are arbitrary and can be found in the paper.
+
+        Parameters
+        ----------
+        a : float
+            Scale factor.
+        z : float
+            Redshift.
+        halo_mass : float
+            Dark matter mass of the halo.
+
+        Returns
+        -------
+        stellar_mass : float
+            The expected stellar mass for a halo of a halo_mass size.
+
+        """
 
         log_Mh = np.log10(halo_mass)
 
@@ -549,6 +640,28 @@ class HaloProperties:
 
     @staticmethod
     def powerlaw_Behroozi(x, nu, z, a):
+        """ Powerlaw formula from behroozi et al. 
+        
+        This function is used many times in the main berhoozi formula - look
+        at Behroozi_formula function documentation for details.
+        
+        Parameters
+        ----------
+        x : float
+            Log mass fraction.
+        nu : float
+            Constant from main Behroozi formula.
+        z : float
+            Redshift of the halo.
+        a : float
+            Scale factor of the halo 1/(1+z).
+
+        Returns
+        -------
+        f_x : float
+            Some constant to be used in the Behroozi formula.
+
+        """
 
         alpha = -1.412 + (0.731 * (a - 1)) * nu
 
@@ -565,6 +678,22 @@ class HaloProperties:
     
 
     def add_stellar_mass(self):
+        """ Function to add Behroozi expected stellar mass to existing mass
+        
+        This function ensures that the stellar mass expected from the Behroozi
+        formula is added onto what is already there. There is a check to ensure
+        this cannt decrease - i.e if there is already more stellar mass than 
+        expected it cannot dissapear. 
+        
+        The star formation rate is also calculated here and the mass generated
+        if any, is taken from the hot gas mass of the halo.
+        
+
+        Returns
+        -------
+        None.
+
+        """
 
         if self.sub_graph_halo_ids.size > 0:
 
@@ -664,7 +793,7 @@ class HaloProperties:
         return Vc
     
     @staticmethod
-    def calculate_virial_temperature(Vc):
+    def calculate_virial_temperature(Vc, mu, m_p, k_B):
         """ Calculates the virial temperature of the hot gas.
         
         Takes in the virial circular velocity calculated from White and Frenk
@@ -680,38 +809,51 @@ class HaloProperties:
         ----------
         Vc : float
             Virial circular velocity.
-
+        mu : float
+            Average amount of particles
+        m_p : float
+            Mass of a proton - const from parameters.
+        k_B : float
+            Boltzman constant - const from parameters.
         Returns
         -------
         T_virial : float
             Virial temperature.
 
         """
-    
-        T_virial = 35.9 * (Vc ** 2)        
+        
+        virial_temperature_const_ms = ((0.5 * mu * m_p) / k_B)
+        
+        virial_temperature_const_kms = (virial_temperature_const_ms * 1e6)
+        
+        T_virial = virial_temperature_const_kms * (Vc ** 2)        
         
         return T_virial
     
     
-    def calculate_hot_gas_temp(self, H0):
-        """ Sets the hot gas temperature equal to that of the virial temp.
-        
-
+    def calculate_hot_gas_temp(self, H0, mu, m_p, k_B):
+        """Set the hot gas temperature equal to that of the virial temp.
+    
         Parameters
         ----------
         H0 : float
             Hubble parameter - constant.
-
+        mu : float
+            Average amount of particles
+        m_p : float
+            Mass of a proton - const from parameters.
+        k_B : float
+            Boltzman constant - const from parameters.
+            
         Returns
         -------
         None.
 
         """
-        
         Vc = self.calculate_virial_circular_velocity(self.redshift,
                                                 H0, self.rms_radius)
 
-        T_virial = self.calculate_virial_temperature(Vc)
+        T_virial = self.calculate_virial_temperature(Vc, mu, m_p, k_B)
 
         
         self.hot_gas_temp = T_virial
@@ -720,8 +862,8 @@ class HaloProperties:
     
     
     def calculate_metal_dependent_cooling_rate(self):
-        """ Calculates metal dependent cooling rate from c routine.
-
+        """Calculate metal dependent cooling rate from c routine.
+        
         Returns
         -------
         None.
@@ -733,9 +875,16 @@ class HaloProperties:
         cooling_rate = C_get_metaldependent_cooling_rate(log_temp,
                                                          log_metalicity)
         
-        self.metal_dependent_cooling_rate = cooling_rate
+        self.metal_dependent_cooling_rate = cooling_rate # This in in ergs s^-1 cm ^3
+        
+        #x = PROTONMASS * BOLTZMANN * temp / lambda; // now this has units sec g/cm^3
+        
+        
+        
         
         return None
+    
+        
         
 class PlotHalos:
     def __init__(self, yml_filepath):

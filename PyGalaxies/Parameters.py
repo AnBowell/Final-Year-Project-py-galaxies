@@ -7,7 +7,7 @@ Created on Mon Dec  7 10:55:02 2020
 
 import yaml
 from astropy import constants as const
-from LGalaxies.L_Galaxies import C_update_c_model_params, C_read_cooling_functions, C_read_reionization
+from LGalaxies.L_Galaxies import C_update_c_model_params, C_read_cooling_functions, C_read_reionization, C_check_if_first_call
 
 
 class ModelParams:
@@ -68,9 +68,9 @@ class ModelParams:
         self.omega_lambda = self.param_dict["cosmology"]["omega_lambda"]["Value"]
         self.omega_gamma = self.param_dict["cosmology"]["omega_gamma"]["Value"]
         self.H0 = self.param_dict["cosmology"]['H0']["Value"]
-        self.H0 = self.param_dict["cosmology"]['H0']["Value"]
         self.zr_reionization = self.param_dict["cosmology"]['zr_reionization']["Value"]
         self.z0_reionization = self.param_dict["cosmology"]['z0_reionization']["Value"]
+        self.mu = self.param_dict["cosmology"]["mu"]["Value"]
         self.timing = self.param_dict["Monitoring"]["Timing"]["Value"]
         self.timing_graph_save_path = self.param_dict["Monitoring"]["Timing"]["graph_save_path"]
         self.timing_data_save_path = self.param_dict["Monitoring"]["Timing"]["timing_data_save_path"]
@@ -79,9 +79,12 @@ class ModelParams:
         
         self.omega = self.omega_lambda + self.omega_m + self.omega_gamma
         
-        self.G = const.G
-        self.c = const.c
-
+        self.G = const.G.value
+        self.c = const.c.value
+        self.k_B = const.k_B.value
+        self.m_p = const.m_p.value
+        
+        
     def output_params(self):
         """Short method to print out parameters.
 
@@ -125,8 +128,8 @@ class ModelParams:
         
         
         
-        C_update_c_model_params(self.omega, self.omega_lambda, self.H0, 
-                                self.G.value, self.reionize_model, 
+        C_update_c_model_params(self.omega_m, self.omega_lambda, self.H0, 
+                                self.G, self.reionize_model, 
                                 self.zr_reionization, self.z0_reionization)
         
         return None
@@ -145,8 +148,12 @@ class ModelParams:
 
         """
         
-        C_read_cooling_functions()
-        C_read_reionization()
         
+        if C_check_if_first_call() == 1:
+            C_read_cooling_functions()
+            C_read_reionization()
+        else: 
+            print('Static variables in C already assigned. Data not read in again.')
         
         return None
+    
