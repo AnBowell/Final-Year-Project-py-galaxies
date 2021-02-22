@@ -1,0 +1,80 @@
+# Py-Galaxies input file
+
+input_files:
+ graph_file: '../Input Data/mega_graph_mini_09-11.hdf5'
+ snapshot_info: 'snapshot_info.txt'
+
+output_files:
+ halo_file:   '../Output Data/SMT13Output_array_based.hdf5'
+
+cosmology:
+ omega_m:        
+  Description: 'Matter density parameter'
+  Value:        0.30
+  Units:       'None'
+ omega_lambda:
+  Description: 'Cosmo const parameter'
+  Value:       0.7
+  Units:       'None'
+ omega_gamma:
+  Description: 'Radiation density parameter'
+  Value:       0.0
+  Units:       'None'
+ H0:
+  Description: 'The hubble parameter evaluated at t=0 (from plank)'
+  Value:       67.66
+  Units:       '(km/s)/Mpc'
+  
+ zr_reionization:
+  Description: 'The redshift at which reionization occured'
+  Value:       15
+  Units:       'None'
+ z0_reionization: 
+  Description: 'The redshift at which reionization occured?'
+  Value:       6
+  Units:       'None'
+
+ f_baryon:
+  Description: 'Baryon fraction'
+  Value:       0.155
+  Units:       'None'
+
+ mu: 
+  Description: 'Mean amount of particles. Can also be linked to metallicity and not const'
+  Value:       0.59265
+  units:       'None'
+  
+ beta_prof_ratio: 
+  Description: 'Ratio of virial radius to core radius of beta profile'
+  Value:        10 
+  units:       'None'
+  
+model_switches:
+ HOD:
+  Description: 'Halo occupation description for stars (as primitive test)'
+  Value:        True
+ sub_halo:
+  Description: 'For each graph, load in Sub-halo data?'
+  Value:        True
+ reionization_model:
+  Description: 'Which model to run, 0 or 1. See docs for more details'
+  Value:        0
+
+performance:
+ io_nRec:
+  Description: 'Size of HDF5 io buffer (number of graphs)'
+  Value:        50
+
+Monitoring:
+ Timing:
+  Description: 'Whether or not to time parts of code and save output'
+  Value: True
+  graph_save_path: 'Graph_Outputs/Timing/'
+  timing_data_save_path: 'Monitoring Data/'
+  
+  
+ 
+
+ 
+  
+
