@@ -65,13 +65,24 @@ class HDFProperties:
 
         self.dtype_halo = np.dtype(
             [
+                
                 ("graph_ID", np.int32),
                 ("snap_ID", np.int32),
                 ("halo_ID", np.int32),
                 ("catalog_ID", np.int64),
-                ("mass", np.float32),
+                ("central_subhalo_ID", np.int32),
+                ("mean_pos", np.float32, 3),
+                ("redshift", np.float32),
+                ("metalicity_hot_gas", np.float32),
+                ("metalicity_cooling_rate", np.float32),
+                ("temperature_hot_gas", np.float32),
+                ("velocity_virial", np.float32),
+                ("mass_DM", np.float32),
                 ("mass_baryon", np.float32),
-                ("mass_from_progenitors", np.float32),
+                ("mass_hot_gas", np.float32),
+                ("mass_cold_gas", np.float32),
+                ("mass_ejected_gas", np.float32),
+                ("mass_intracluster_light", np.float32)
             ]
         )
 
@@ -156,7 +167,7 @@ class HDFProperties:
         """
         self.halo_output_file = h5.File(self.HDF_output_filepath, "w")
         self.halo_output_dataset = self.halo_output_file.create_dataset(
-            "Halos", (0,), maxshape=(None,), dtype=self.dtype_halo, compression="gzip"
+            "halo_data", (0,), maxshape=(None,), dtype=self.dtype_halo, compression="gzip"
         )
 
         return None
@@ -180,13 +191,20 @@ class HDFProperties:
             self.halo_output_data[self.halo_output_iRec]["snap_ID"] = halo.snap_ID
             self.halo_output_data[self.halo_output_iRec]["halo_ID"] = halo.halo_ID
             self.halo_output_data[self.halo_output_iRec]["catalog_ID"] = halo.catalog_ID
-            self.halo_output_data[self.halo_output_iRec]["mass"] = halo.mass
-            self.halo_output_data[self.halo_output_iRec][
-                "mass_baryon"
-            ] = halo.total_halo_baryon_mass
-            self.halo_output_data[self.halo_output_iRec][
-                "mass_from_progenitors"
-            ] = halo.mass_from_progenitors
+            self.halo_output_data[self.halo_output_iRec]["central_subhalo_ID"] = halo.central_galaxy_ID
+            self.halo_output_data[self.halo_output_iRec]["mean_pos"] = halo.mean_pos
+            self.halo_output_data[self.halo_output_iRec]["redshift"] = halo.redshift
+            self.halo_output_data[self.halo_output_iRec]["metalicity_hot_gas"] = halo.gas_metalicity
+            self.halo_output_data[self.halo_output_iRec]["metalicity_cooling_rate"] = halo.metal_dependent_cooling_rate
+            self.halo_output_data[self.halo_output_iRec]["temperature_hot_gas"] = halo.hot_gas_temp
+            self.halo_output_data[self.halo_output_iRec]["velocity_virial"] = halo.Vvir
+            self.halo_output_data[self.halo_output_iRec]["mass_DM"] = halo.mass
+            self.halo_output_data[self.halo_output_iRec]["mass_baryon"] = halo.total_halo_baryon_mass
+            self.halo_output_data[self.halo_output_iRec]["mass_hot_gas"] = halo.hot_gas_mass
+            self.halo_output_data[self.halo_output_iRec]["mass_cold_gas"] = halo.cold_gas
+            self.halo_output_data[self.halo_output_iRec]["mass_ejected_gas"] = halo.ejected_gas
+            self.halo_output_data[self.halo_output_iRec]["mass_intracluster_light"] = halo.intracluster_stellar_mass
+            
             self.halo_output_iRec += 1
 
             if self.halo_output_iRec == self.model_params.io_nRec:

@@ -199,8 +199,10 @@ class HaloProperties:
                         central_sub_halo_ID_pos]
                 else:
                     self.central_galaxy_ID = 2**30
-                    
-                
+            else:
+                 self.central_galaxy_ID = 2**30  
+                # Could replace the two lines above with a simple decleration
+                # that the central_galaxy_ID is always initilised with 2**30
 
     @staticmethod
     def find_central_galaxy(
@@ -857,7 +859,8 @@ class HaloProperties:
 
         
         self.hot_gas_temp = T_virial
-        
+        self.Vvir = Vc
+
         return None
     
     
@@ -883,7 +886,69 @@ class HaloProperties:
         
         
         return None
-    
+    def calc_mass_of_hot_gas_cooled(self, mu, m_p, G, beta_prof_ratio,
+                                         beta_prof_ratio_arctan,dt):
+        """
+        
+
+        Parameters
+        ----------
+        mu : TYPE
+            DESCRIPTION.
+        m_p : TYPE
+            DESCRIPTION.
+        G : TYPE
+            DESCRIPTION.
+        beta_prof_ratio : TYPE
+            DESCRIPTION.
+        beta_prof_ratio_arctan : TYPE
+            DESCRIPTION.
+        dt : TYPE
+            DESCRIPTION.
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        #LAMBDA_RATIO is (n_e/n)*(n_i/n) = 0.25  From L-Gal
+        
+        dynamical_time_at_edge = self.rms_radius / self.Vvir
+        
+        lambda_ratio = 0.25
+        
+        f = beta_prof_ratio - beta_prof_ratio_arctan
+        
+        tau_cool_P = ((20. * G * ((mu * m_p * self.rms_radius) ** 2) /
+                     (lambda_ratio * self.metal_dependent_cooling_rate)) * 
+                     ((f ** 2)/(beta_prof_ratio ** 3)))
+        
+        fg0 = self.mass / self.hot_gas_mass
+        
+        dt_ratio =  dt / dynamical_time_at_edge
+        
+        tau_ratio  = (dynamical_time_at_edge * fg0) / tau_cool_P
+        
+        if tau_ratio <= 1:
+            fg = fg0/ (1 + tau_ratio * dt_ratio)
+        else:
+            teq_ratio = np.log(tau_ratio)
+            
+            if dt_ratio <= teq_ratio:
+                
+                fg = fg0 * np.exp(-dt_ratio)
+                
+            else: 
+                
+                fg = fg0 / (tau_ratio * (1 + (dt_ratio - teq_ratio)))
+                
+        cooling_gas = (fg0 - fg) * self.mass
+            
+        self.mass_of_cooling_gas = cooling_gas
+        
+        
+        return None
         
         
 class PlotHalos:

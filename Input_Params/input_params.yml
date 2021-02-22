@@ -4,8 +4,7 @@ input_files:
  graph_file: '../Input Data/mega_graph_mini_09-11.hdf5'
 
 output_files:
- halo_file:   '../Output Data/SMT13HaloOutput.hdf5'
- galaxy_file: '../Output Data/SMT13GalaxyOutput.hdf5'
+ halo_file:   '../Output Data/SMT13Output_class_based.hdf5'
 
 cosmology:
  omega_m:        
