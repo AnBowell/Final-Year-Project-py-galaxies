@@ -334,7 +334,7 @@ def calculate_metal_dependent_cooling_rate(array_of_halo_properties, halo_ID):
     cooling_rate = C_get_metaldependent_cooling_rate(log_temp,
                                                      log_metalicity)
     
-    array_of_halo_properties["metalicity_cooling_rate"] = cooling_rate # This in in ergs s^-1 cm ^3
+    array_of_halo_properties["metalicity_cooling_rate"][halo_ID] = cooling_rate # This in in ergs s^-1 cm ^3
     
     #x = PROTONMASS * BOLTZMANN * temp / lambda; // now this has units sec g/cm^3
     
