@@ -109,7 +109,7 @@ for graph_ID in range(0, amount_of_graphs_in_file):
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
     
     
-    old_snap_time = 1  # Again not sure what to do with this?
+
     for snap_ID in generation_data['generation_id']:
         
 
@@ -118,10 +118,10 @@ for graph_ID in range(0, amount_of_graphs_in_file):
 
             continue
         
-        current_snap_time = model_params.snap_times[snap_ID]
-        
-        dt = current_snap_time - old_snap_time
-        
+        try:
+            dt = model_params.snap_times[snap_ID] - model_params.snap_times[snap_ID-1]
+        except IndexError:
+            dt = model_params.snap_times[snap_ID]
         
 
         
@@ -206,8 +206,7 @@ for graph_ID in range(0, amount_of_graphs_in_file):
                                                 subhalo_ID,subhalo_data,
                                                 subhalo_contrib_data,
                                                 subhalo_properties_that_descend)
-        
-        old_snap_time = current_snap_time
+
         
     
     if graph_ID % 100 == 0:
