@@ -6,6 +6,7 @@ Created on Mon Dec  7 10:55:02 2020
 """
 
 import yaml
+import numpy as np
 from astropy import constants as const
 from LGalaxies.L_Galaxies import C_update_c_model_params, C_read_cooling_functions, C_read_reionization, C_check_if_first_call
 
@@ -84,6 +85,16 @@ class ModelParams:
         self.k_B = const.k_B.value
         self.m_p = const.m_p.value
         
+        self.halo_descend_attrs = ["hot_gas_mass", "cold_gas", "ejected_gas",
+                           "intracluster_stellar_mass"]
+        
+        self.subhalo_descend_attrs = ['cold_gas_mass', 'stellar_mass']
+        
+        self.subhalo_output_list = ['graph_ID', 'snap_ID', 'host_halo_ID',
+                                    'subhalo_ID','mean_pos','redshift','SFR',
+                                    'DM_mass','stellar_mass','cold_gas_mass']
+        
+        self.read_input_snapshot_times()
         
     def output_params(self):
         """Short method to print out parameters.
@@ -157,3 +168,14 @@ class ModelParams:
         
         return None
     
+
+    def read_input_snapshot_times(self):
+        
+        filepath = 'Input_Params/snapshot_info.txt'
+        data = np.loadtxt(filepath).T
+        
+        self.snap_redshifts = data[2,:]
+        
+        self.snap_times = data[4,:]
+        
+        return None

@@ -76,10 +76,8 @@ class HaloProperties:
     def __init__(
         self,
         graph_ID,
-        snap_ID,
         halo_ID,
         graph_properties,
-        part_mass,
         dtype_subhalo_stores,
     ):
         """Clipping graph properties to the correct generation for halo use.
@@ -99,10 +97,10 @@ class HaloProperties:
 
         """
         self.graph_ID = graph_ID
-        self.snap_ID = snap_ID
+        self.snap_ID = None # Not filled in intialisation 
         self.halo_ID = halo_ID
         self.catalog_ID = graph_properties.halo_catalog_halo_ids[halo_ID]
-        self.mass = graph_properties.nparts[halo_ID] * part_mass
+        self.mass = graph_properties.mass[halo_ID] 
 
         self.nprog = graph_properties.nprog[halo_ID]
         self.prog_start = graph_properties.prog_start_index[halo_ID]
@@ -148,61 +146,54 @@ class HaloProperties:
         self.metal_dependent_cooling_rate = 0.0
         self.intracluster_stellar_mass = 0.0
 
-        self.mass_from_progenitors = 0.0
-        self.mass_baryon_from_progenitors = 0.0
-        self.inclusive_contribution = 0.0
         self.done = False
 
-        if graph_properties.sub_halo and type(graph_properties.n_subhalos) != int:
+      
 
-            self.subhalo_start_index = graph_properties.subhalo_start_index[halo_ID]
+        self.subhalo_start_index = graph_properties.subhalo_start_index[halo_ID]
 
-            self.n_subhalo = graph_properties.n_subhalos[halo_ID]
+        self.n_subhalo = graph_properties.n_subhalos[halo_ID]
 
-            self.sub_halo_attrs = np.empty(self.n_subhalo, dtype=dtype_subhalo_stores)
+        self.sub_graph_halo_ids = graph_properties.sub_graph_halo_ids[
+            self.subhalo_start_index : self.subhalo_start_index + self.n_subhalo
+        ]
 
-            self.initialize_sub_halo_attrs()  # Currently starts all halos with 1.
+        # If there are subhalos, find the central one
+        if self.n_subhalo > 0:
+            
+            
+            central_sub_halo_ID_pos, central_sub_halo_dist = self.find_central_galaxy(
+            self.mean_vel,
+            self.velocity_dispersion_3D,
+            self.mean_pos,
+            self.rms_radius,
+            graph_properties.sub_mean_vel[self.sub_graph_halo_ids],
+            graph_properties.sub_velocity_dispersion_3D[
+                self.sub_graph_halo_ids
+            ],
+            graph_properties.sub_mean_pos[self.sub_graph_halo_ids],
+            graph_properties.sub_rms_radius[self.sub_graph_halo_ids],
+            )
 
-            self.sub_graph_halo_ids = graph_properties.sub_graph_halo_ids[
-                self.subhalo_start_index : self.subhalo_start_index + self.n_subhalo
-            ]
-
-            self.sub_halo_attrs[:]["sub_graph_ids"] = self.sub_graph_halo_ids
-
-            if graph_properties.n_subhalos[self.halo_ID] > 0:
-
-                (
-                    central_sub_halo_ID_pos,
-                    central_sub_halo_dist,
-                ) = self.find_central_galaxy(
-                    self.mean_vel,
-                    self.velocity_dispersion_3D,
-                    self.mean_pos,
-                    self.rms_radius,
-                    graph_properties.sub_mean_vel[self.sub_graph_halo_ids],
-                    graph_properties.sub_velocity_dispersion_3D[
-                        self.sub_graph_halo_ids
-                    ],
-                    graph_properties.sub_mean_pos[self.sub_graph_halo_ids],
-                    graph_properties.sub_rms_radius[self.sub_graph_halo_ids],
-                )
-
-                # The central sub-halo dist will be used as a variable.
-                # Keep in the code.
-                
-                #if close enough declare it a central halo - currently 2**30 as a fill 
-                
-                
-                if central_sub_halo_dist < 2**30:
+            # The central sub-halo dist will be used as a variable.
+            # Keep in the code.
+            
+            
+            #if close enough declare it a central halo - currently 2**30 as a fill 
+            
+                        
+            if central_sub_halo_dist < 2**30:
                     
-                    self.central_galaxy_ID = self.sub_graph_halo_ids[
+                self.central_galaxy_ID = self.sub_graph_halo_ids[
                         central_sub_halo_ID_pos]
-                else:
-                    self.central_galaxy_ID = 2**30
             else:
-                 self.central_galaxy_ID = 2**30  
-                # Could replace the two lines above with a simple decleration
-                # that the central_galaxy_ID is always initilised with 2**30
+                self.central_galaxy_ID = 2**30
+                
+        else:
+            self.central_galaxy_ID = 2**30
+   
+            # Could replace the two lines above with a simple decleration
+            # that the central_galaxy_ID is always initilised with 2**30
 
     @staticmethod
     def find_central_galaxy(
@@ -256,339 +247,104 @@ class HaloProperties:
 
         return central_subhalo_ID_pos, total[central_subhalo_ID_pos]
 
-    def initialize_sub_halo_attrs(self):
-        """Assign stellar mass of 1 to all new sub-halos.
 
-        Gives sub-halos initial stellar mass and a bool flag to check whether
-        each galaxy has given its mass to a descendent.
-
-        Returns
-        -------
-        None.
-
-        """
-        self.sub_halo_attrs[:]["stellar_mass"] = 1.
-        self.sub_halo_attrs[:]["AGN_mass"] = 0.
-        self.sub_halo_attrs[:]["descended"] = False
-        self.sub_halo_attrs[:]["SFR"] = 0.0
-
-  
-        return None
-
-    def gather_progenitors(self, part_mass):
-        """Sum the mass from the progenitors.
-
-        Parameters
-        ----------
-        halo : :obj: 'Class'
-            HaloProperties class object
-
-        Returns
-        -------
-        None
-            Halo class object is updated
-
-        """
-        self.mass_from_progenitors = np.sum(self.prog_mass) * part_mass
-
-        return None
-
-    def halo_descendent_props(self):
-        """Calculate the mass of particles that don't descend.
-
-        This functions calculates the true mass contributions to the descendents.
-        This is needed as not 100% of the mass is passed down.
-
-        Parameters
-        ----------
-        halo : :obj: 'Class'
-            HaloProperties class object
-
-        Returns
-        -------
-        None
-
-        """
-        # Get progenitor information
-        mass = self.mass
-        
-    
-        desc_conts = self.desc_mass  # get the number of particles going to a desc
-
-        desc_cont_frac = desc_conts / mass  # convert to fraction of this
-        
-
-        # get the particles that don't move forward
-        extra_cont = (mass - np.sum(desc_conts)) * (desc_cont_frac /
-                                                    np.sum(desc_cont_frac))
-
-        # combine particles that move forward and don't
-        desc_truemass_conts = (desc_conts + extra_cont) / mass
-
-
-        self.inclusive_contribution = desc_truemass_conts
-
-        return None
-
-    def calc_halo_DM_descend(self, part_mass):
-        """If statement to check for progenitors.
-        
-        Finds out if there is a progenitor ot the current halo, if there is
-        gather progenitor properties. If not, the mass from the progenitors is
-        set to 0.
-        
-        Parameters
-        ----------
-        part_mass : float
-            The mass of the dark matter particle.
-
-        Returns
-        -------
-        None.
-
-        """
-        if self.nprog > 0:
-
-            self.gather_progenitors(part_mass)
-
-        else:
-
-            self.mass_from_progenitors = 0.0
             
     # Halo properties descend in proportion to their mass
-    def calc_halo_attrs_descend(
-        self, part_mass, array_of_halo_properties, halo_descend_attrs
-    ):
-        """ Calculate and descend halo properties
-        
-        Loop over a list of halo properties that are to descend to their 
-        descendents. Get the attribute and give proportionally to all
-        descendents.
-
-        Parameters
-        ----------
-        part_mass : float
-            Dark matter part mass.
-        array_of_halo_properties : ndarry of type 'Class'
-            Array of instances of halo_properties class.
-        halo_descend_attrs : list of type 'Str'
-            List of strings denoting the properties to be passed down to
-            descendents. They should have the same name as the attribute.
-
-        Returns
-        -------
-        None.
-
-        """
-        for halo_property in halo_descend_attrs:
-
-            this_inclusive_contribution = 0.0
-
-            for prog in self.prog_ids:
-
-                this_prog_contribution = array_of_halo_properties[
-                    prog
-                ].inclusive_contribution
-
-                this_prog_desc_ids = array_of_halo_properties[prog].desc_ids
-
-                this_inclusive_contribution += (
-                    getattr(array_of_halo_properties[prog], halo_property)
-                    * this_prog_contribution[this_prog_desc_ids == self.halo_ID]
-                )
-
-            setattr(
-                self,
-                halo_property,
-                this_inclusive_contribution + getattr(self, halo_property),
-            )
-
-    def calc_subhalo_attrs_descend(
-        self, graph_properties, HDF_properties, array_of_halo_properties,
-    ):
-        """Collect infomation from galaxy progenitors.
-
-        This method finds the galaxy progenitors and calculates how much
-        stellar mass etc is to be ibtained from them.
-
-
-        Parameters
-        ----------
-        graph_properties : :obj: 'Class'
-            Class of the graph properties. Galaxy information to be extracted
-            from here.
-        part_mass : float
-            The dark matter particle mass.
-        array_of_halo_properties : ndarry of type 'Class'
-            Numpy array containing the halo-classes previously processed. This
-            is so that galaxy stellar mass and other properties can be obtained
-            from progenitors.
-
-        Returns
-        -------
-        None.
-
-        """
-        part_mass = HDF_properties.part_mass
-        
-        for i_galaxy, galaxy_ID in enumerate(self.sub_graph_halo_ids):
-
-            nprog = graph_properties.sub_nprog[galaxy_ID]
-            
-            ndesc = graph_properties.sub_ndesc[galaxy_ID]
-            
-            # New --> Adds any stars that have no galaxy descendent to intracluster mass.
-            if ndesc < 1:
-                
-                
-                stellar_mass_indicies = np.where(
-                        (self.sub_halo_attrs["sub_graph_ids"] == galaxy_ID)
-                    )
-                
-                self.intracluster_stellar_mass += self.sub_halo_attrs[stellar_mass_indicies]["stellar_mass"]
-            
-
-            if nprog > 0:
-
-                prog_start_index = graph_properties.sub_prog_start_index[galaxy_ID]
-
-
-                prog_sub_ids = graph_properties.sub_direct_prog_ids[
-                    prog_start_index:prog_start_index + nprog
-                ]
-
-                prog_masses, prog_total_mass = gather_prog_contrib_mass(
-                    graph_properties, prog_start_index, prog_start_index + nprog, 
-                    part_mass)
-
-                self.sub_halo_attrs[i_galaxy]["prog_DM_mass"] = prog_total_mass
-
-                prog_host_halo_IDs = graph_properties.host_halos[prog_sub_ids]
-
-                prog_halo_properties = array_of_halo_properties[prog_host_halo_IDs]
-
-                for prog_halo, prog_sub_id in zip(prog_halo_properties, prog_sub_ids):
-
-                    row_indicies = np.where(
-                        (prog_halo.sub_halo_attrs["sub_graph_ids"] == prog_sub_id)
-                    )
-
-                    if prog_halo.sub_halo_attrs[row_indicies]["descended"]:
-                        continue
-
-
-                    row_index_this_snap = np.where(
-                        (self.sub_halo_attrs["sub_graph_ids"] == galaxy_ID)
-                    )  # main_desc_id
-                    
-                    
-                    for gal_property in HDF_properties.sub_halo_descend_attrs:
-                    
-                        prog_sub_mass = prog_halo.sub_halo_attrs[row_indicies][
-                            gal_property
-                        ]
-                        
-                        total_mass = (
-                            self.sub_halo_attrs[row_index_this_snap][gal_property]
-                            + prog_sub_mass
-                        )
     
-                        self.sub_halo_attrs[int(row_index_this_snap[0])][
-                            gal_property
-                        ] = total_mass
+    def calc_halo_props_descend(self, part_mass, list_of_halo_properties,
+                                halo_descend_attrs):
+         
+        
+        if self.ndesc > 0:
+
+            desc_cont_frac = self.desc_mass  / self.mass  # convert to fraction of this
+            
     
-                        prog_halo.sub_halo_attrs[int(row_indicies[0])]["descended"] = True
-
-            else:
-
-                self.sub_halo_attrs[i_galaxy]["prog_DM_mass"] = 0.0
+            # get the particles that don't move forward
+            extra_cont = (self.mass - np.sum(self.desc_mass )) * (desc_cont_frac /
+                                                        np.sum(desc_cont_frac))
+    
+            # combine particles that move forward and don't
+            proportional_contribution = (self.desc_mass  + extra_cont) / self.mass
+    
+    
+            for (descendent_id, prop_contrib) in zip(self.desc_ids, 
+                                                     proportional_contribution):
+    
+                for halo_property in halo_descend_attrs:
                 
+                    to_descend = getattr(self, halo_property) * prop_contrib
+                    
+                    
+                    desc_halo = list_of_halo_properties[descendent_id]
+                    
+                    setattr(desc_halo, halo_property,
+                            to_descend + getattr(desc_halo, halo_property))
             
-                
-            HDF_properties.n_subhalo += 1
-            
-
-    def add_halo_baryon_mass_then_topup(self, HDF_properties):
-        """ Adds up all baryons in halo.
-        
-        Loop over all properties in a list contained within the HDF_properties
-        class. For each property get the value and add it to the total baryon
-        mass.
         
 
-        Parameters
-        ----------
-        HDF_properties : :obj: 'Class'
-            instance of HDF_properties class. 
+    
+    
+ 
 
-        Returns
-        -------
-        None.
+    
 
-        """
+    def sum_baryon_and_topup(self, halo_descend_attrs, sub_halo_descend_attrs,
+                             list_of_subhalo_properties,f_baryon):
         
-        for halo_baryon_prop in HDF_properties.halo_descend_attrs:
+        old_total_baryonic_mass = self.total_halo_baryon_mass
+        
+        for halo_baryon_prop in halo_descend_attrs:
             
             self.total_halo_baryon_mass += getattr(self, halo_baryon_prop)
         
-        for subhalo_baryon_prop in HDF_properties.sub_halo_descend_attrs:
+        for subhalo_baryon_prop in sub_halo_descend_attrs:
             
-            self.total_halo_baryon_mass += np.sum(self.sub_halo_attrs[:][subhalo_baryon_prop])
+            for subhalo_ID in self.sub_graph_halo_ids:
             
+                self.total_halo_baryon_mass += getattr(list_of_subhalo_properties[subhalo_ID], 
+                                                       subhalo_baryon_prop)
+  
+
+        true_baryon_frac = f_baryon * self.calculate_reionization_frac(
+                                                             self.mass,
+                                                             self.redshift)
+        
+        self.total_halo_baryon_mass = max(true_baryon_frac * self.mass, 
+                                           self.total_halo_baryon_mass)
+        
+        change_in_baryonic_mass = self.total_halo_baryon_mass - old_total_baryonic_mass
+         
+        self.hot_gas_mass += change_in_baryonic_mass
+         
+         
+         
+    def calculate_SFR_hot_gas_used(self, dt, list_of_subhalo_properties):
+
+        if self.central_galaxy_ID != 2**30:
+            
+            main_subhalo = list_of_subhalo_properties[self.central_galaxy_ID]
+         
+            z = self.redshift
+
+            a = 1 / (1 + z)
+
+            Behroozi_stellar_mass = self.Behroozi_formula(a, z, self.mass)
+
+            old_star_mass = main_subhalo.stellar_mass
+
+            stellar_mass = max(Behroozi_stellar_mass, old_star_mass)
+
+            star_mass_delta = stellar_mass - old_star_mass
+
+            main_subhalo.SFR = star_mass_delta / dt
+            
+            main_subhalo.stellar_mass = stellar_mass
+            
+            self.hot_gas_mass -= star_mass_delta
+        
         return None
 
-    def set_baryon_fraction(self, array_of_halo_properties, f_baryon):
-          """Caclulates the mass of baryons in the halo.
-  
-          Uses the global f_baryon (baryon fraction) variable to calculate the total
-          mass provided by baryons.
-  
-          Parameters
-          ----------
-          halo : :obj: 'Class'
-              HaloProperties class object
-          array_of_halo_properties : ndarry
-              Numpy array of HaloProperties classes for all halos this snapshot.
-          f_baryon : float
-              The baryon fractions from the input parameters.
-  
-          Returns
-          -------
-          None
-              Halo class object is updated
-  
-          """
-          this_inclusive_contribution = 0.0
-  
-          for prog in self.prog_ids:
-  
-              this_prog_contribution = array_of_halo_properties[
-                  prog
-              ].inclusive_contribution
-  
-              this_prog_desc_ids = array_of_halo_properties[prog].desc_ids
-  
-              this_inclusive_contribution += (
-                  array_of_halo_properties[prog].total_halo_baryon_mass
-                  * this_prog_contribution[this_prog_desc_ids == self.halo_ID]
-              )
-         
-          old_total_baryonic_mass = self.total_halo_baryon_mass
-          
-          
-          true_baryon_frac = f_baryon * self.calculate_reionization_frac(
-                                                          self.mass,
-                                                          self.redshift)
-        
-          
-          self.total_halo_baryon_mass = max(true_baryon_frac * self.mass, 
-                                            this_inclusive_contribution)
-          
-          change_in_baryonic_mass = self.total_halo_baryon_mass - old_total_baryonic_mass
-          
-          self.hot_gas_mass += change_in_baryonic_mass
-  
-          return None
 
     @staticmethod
     def Behroozi_formula(a, z, halo_mass):
@@ -679,58 +435,6 @@ class HaloProperties:
     
     
 
-    def add_stellar_mass(self):
-        """ Function to add Behroozi expected stellar mass to existing mass
-        
-        This function ensures that the stellar mass expected from the Behroozi
-        formula is added onto what is already there. There is a check to ensure
-        this cannt decrease - i.e if there is already more stellar mass than 
-        expected it cannot dissapear. 
-        
-        The star formation rate is also calculated here and the mass generated
-        if any, is taken from the hot gas mass of the halo.
-        
-
-        Returns
-        -------
-        None.
-
-        """
-
-        if self.sub_graph_halo_ids.size > 0:
-
-            if self.central_galaxy_ID != 2**30:
-             
-                z = self.redshift
-    
-                a = 1 / (1 + z)
-            
-    
-                Behroozi_stellar_mass = self.Behroozi_formula(a, z, self.mass)
-    
-                index = np.where(
-                    (self.sub_halo_attrs["sub_graph_ids"] == self.central_galaxy_ID)
-                )
-    
-                old_star_mass = self.sub_halo_attrs[index]["stellar_mass"]
-    
-                stellar_mass = max(Behroozi_stellar_mass, old_star_mass)
-    
-                star_mass_delta = stellar_mass - old_star_mass
-                
-    
-                # Maybe change the 1 in future. Time bwteen snapshots
-                self.sub_halo_attrs[int(index[0])]["SFR"] = star_mass_delta / 1
-    
-                self.sub_halo_attrs[int(index[0])]["stellar_mass"] = (
-                    old_star_mass + star_mass_delta
-                )
-    
-                self.total_halo_stellar_mass += star_mass_delta
-                
-                self.hot_gas_mass -= star_mass_delta
-
-        return None
     
     @staticmethod
     def calculate_reionization_frac(mass, redshift):
@@ -886,6 +590,7 @@ class HaloProperties:
         
         
         return None
+    
     def calc_mass_of_hot_gas_cooled(self, mu, m_p, G, beta_prof_ratio,
                                          beta_prof_ratio_arctan,dt):
         """
@@ -947,8 +652,61 @@ class HaloProperties:
             
         self.mass_of_cooling_gas = cooling_gas
         
-        
         return None
+     
+class SubhaloProperties:
+    
+    def __init__(self, graph_ID, host_halo_ID, subhalo_ID, graph_properties):
+        
+        self.graph_ID = graph_ID
+        self.snap_ID = None # Not in initialisation
+        self.host_halo_ID = host_halo_ID
+        self.subhalo_ID = subhalo_ID
+        self.mean_pos = graph_properties.sub_mean_pos[subhalo_ID]
+        self.redshift = graph_properties.sub_redshifts[subhalo_ID]
+        self.DM_mass = graph_properties.sub_mass[subhalo_ID]
+        
+        self.ndesc = graph_properties.sub_ndesc[subhalo_ID]
+    
+        self.desc_start_index = graph_properties.sub_desc_start_index[subhalo_ID]
+
+        self.desc_ids = graph_properties.sub_direct_desc_ids[
+             self.desc_start_index : self.desc_start_index +  self.ndesc
+        ]
+        
+        
+        
+        self.SFR = 0.0
+        self.stellar_mass = 0.0
+        self.cold_gas_mass = 0.0
+        
+        
+        
+    def calc_subhalo_props_descend(self,list_of_subhalo_properties,
+                           subhalo_descend_attrs, list_of_halo_properties):
+        
+        if self.ndesc > 0 :
+            
+            largest_desc_ID = self.desc_ids[0]
+            
+
+            descendent_subhalo = list_of_subhalo_properties[largest_desc_ID]
+    
+            for subhalo_property in subhalo_descend_attrs:
+                
+                to_descend = getattr(self, subhalo_property)
+        
+                setattr(descendent_subhalo, subhalo_property,
+                        getattr(descendent_subhalo, subhalo_property) + to_descend)
+    
+        elif self.ndesc ==0:
+            
+            list_of_halo_properties[self.host_halo_ID].intracluster_stellar_mass += \
+                self.stellar_mass
+                
+        # ndesc = -1 if it is the final generation.
+        
+        
         
         
 class PlotHalos:

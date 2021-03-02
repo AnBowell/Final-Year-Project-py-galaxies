@@ -7,7 +7,7 @@ Created on Mon Dec  7 10:58:24 2020
 
 import numpy as np
 import h5py as h5
-
+import gc
 
 
 class HDFProperties:
@@ -62,7 +62,7 @@ class HDFProperties:
         self.HDF_output_filepath = model_params.output_filepath
         self.graph_input_file = None
         self.halo_output_file = None
-
+       
         self.dtype_halo = np.dtype(
             [
                 
@@ -86,34 +86,46 @@ class HDFProperties:
             ]
         )
 
-        self.dtype_subhalo_stores = np.dtype(
+        self.subhalo_dtype = np.dtype(
             [
-                ("sub_graph_ids", np.int32),
-                ("prog_DM_mass", np.float64),
-                ("stellar_mass", np.float64),
-                ("AGN_mass", np.float64),
-                ("descended", bool),
-                ("SFR", np.float64),
+                ("graph_ID", np.int32),
+                ("snap_ID", np.int32),
+                ("host_halo_ID", np.int32),
+                ("subhalo_ID", np.int32),
+                ("mean_pos", np.float32, 3),
+                ("redshift", np.float32),
+                ("SFR", np.float32),
+                ("DM_mass", np.float32),
+                ("stellar_mass", np.float32),
+                ("cold_gas_mass", np.float32)
             ]
         )
 
-        self.halo_descend_attrs = ["hot_gas_mass", "cold_gas", "ejected_gas",
-                                   "intracluster_stellar_mass"]
-        
-        self.sub_halo_descend_attrs = ["stellar_mass", "AGN_mass"]
 
+        self.sub_halo_descend_attrs = ["stellar_mass", "AGN_mass"]
+        self.halo_output_dataset = None
+        self.open_halo_output() # Make sure this is done first as it closes HDF files.
+  
         self.open_graph_input()
+        
         self.halo_output_data = np.empty(
             self.model_params.io_nRec, dtype=self.dtype_halo
         )
-        self.halo_output_dataset = None
-        self.open_halo_output()
+        
+        self.subhalo_output_data = np.empty(
+            self.model_params.io_nRec, dtype=self.subhalo_dtype
+        )
+        
+       
         self.halo_output_iRec = 0
+        self.subhalo_output_iRec = 0
         self.n_halo = 0
         self.n_subhalo = 0
         self.no_of_graphs = len(self.graph_input_file["/nhalos_in_graph/"][:])
-        self.part_mass = self.graph_input_file["Header"].attrs["part_mass"]
         self.snap_redshifts, self.snap_times = self.read_input_snapshot_times()
+        
+        self.load_in_HDF_metadata()
+        
 
     def open_graph_input(self):
         """Open input graph file (HDF5) using h5py.
@@ -165,11 +177,28 @@ class HDFProperties:
         None
 
         """
-        self.halo_output_file = h5.File(self.HDF_output_filepath, "w")
+  
+        
+        try:
+            self.halo_output_file = h5.File(self.HDF_output_filepath, "w")
+
+        except OSError:
+            for obj in gc.get_objects():   # Browse through ALL objects
+               if isinstance(obj, h5.File):   # Just HDF5 files
+                   try:
+                       obj.close()
+                   except:
+                       pass # Was already closed    
+            self.halo_output_file = h5.File(self.HDF_output_filepath, "w")
+
         self.halo_output_dataset = self.halo_output_file.create_dataset(
             "halo_data", (0,), maxshape=(None,), dtype=self.dtype_halo, compression="gzip"
         )
-
+        
+        self.subhalo_output_dataset = self.halo_output_file.create_dataset(
+            "subhalo_data", (0,), maxshape=(None,), dtype=self.subhalo_dtype, compression="gzip"
+        )
+       
         return None
 
     def output_halos(self, halos):
@@ -208,8 +237,43 @@ class HDFProperties:
             self.halo_output_iRec += 1
 
             if self.halo_output_iRec == self.model_params.io_nRec:
+          
                 self.flush_output()
 
+        return None
+
+    def output_subhalos(self, subhalos, subhalo_output_list):
+        
+        for subhalo in subhalos:
+            
+
+           
+
+                
+           for output_item in subhalo_output_list:
+               
+               self.subhalo_output_data[self.subhalo_output_iRec][output_item] = \
+                   getattr(subhalo,output_item)
+                   
+           
+           self.subhalo_output_iRec += 1
+           if self.subhalo_output_iRec == self.model_params.io_nRec:
+               
+               self.flush_subhalo_output()
+
+        return None
+
+
+    def flush_subhalo_output(self):
+        self.subhalo_output_dataset.resize(
+            (self.subhalo_output_dataset.shape[0] + self.subhalo_output_iRec,))
+        
+        self.subhalo_output_dataset[-self.subhalo_output_iRec:] = \
+            self.subhalo_output_data[:self.subhalo_output_iRec]
+
+        self.subhalo_output_iRec = 0
+     
+        
         return None
 
     def flush_output(self):
@@ -220,12 +284,15 @@ class HDFProperties:
         None
 
         """
+
         self.halo_output_dataset.resize(
             (self.halo_output_dataset.shape[0] + self.halo_output_iRec,)
         )
         self.halo_output_dataset[-self.halo_output_iRec :] = self.halo_output_data[
             : self.halo_output_iRec
         ]
+        
+        
 
         self.halo_output_iRec = 0
         return None
@@ -247,6 +314,18 @@ class HDFProperties:
 
         """
         return h5.File(filepath, "w")
+
+    def load_in_HDF_metadata(self):
+    
+        header_data = self.graph_input_file['Header']
+        
+        self.part_mass = header_data.attrs['part_mass']
+        self.no_data_float = header_data.attrs['NO_DATA_FLOAT']
+        self.no_data_int = header_data.attrs['NO_DATA_INT']
+        
+        self.nhalos_in_graph = self.graph_input_file['nhalos_in_graph'][:]
+        self.nsubhalos_in_graph = self.graph_input_file['sub_nhalos_in_graph'][:]
+        
 
 
 class GraphProperties:
@@ -427,7 +506,7 @@ class GraphProperties:
         self.halo_catalog_halo_ids = open_HDF_group["halo_catalog_halo_ids"][:]
         self.mean_pos = open_HDF_group["mean_pos"][:]
         self.ndesc = open_HDF_group["ndesc"][:]
-        self.nparts = open_HDF_group["nparts"][:]
+        self.mass = open_HDF_group["nparts"][:] * part_mass
         self.nprog = open_HDF_group["nprog"][:]
         self.prog_start_index = open_HDF_group["prog_start_index"][:]
         self.redshifts = open_HDF_group["redshifts"][:]
@@ -440,85 +519,56 @@ class GraphProperties:
         self.rms_radius = open_HDF_group["rms_radius"][:]
         self.v_max = open_HDF_group["v_max"][:]
 
-        self.sub_halo = model_params.sub_halo
+        #self.sub_halo = model_params.sub_halo
 
-        self.graph_halo_ids = np.arange(len(self.nparts))
+        self.graph_halo_ids = np.arange(len(self.mass))
 
         self.n_halos_in_graph = open_HDF_group.attrs["nhalos_in_graph"]
 
         # Add to docs
 
-        if self.sub_halo:
-            # This is temporary until Will uses sub halo stuff.
-            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-            try:
-                self.n_subhalos = open_HDF_group["nsubhalos"][:]
-                self.sub_desc_start_index = open_HDF_group["sub_desc_start_index"][:]
-                self.sub_direct_desc_contribution = (
-                    open_HDF_group["sub_direct_desc_contribution"][:] * part_mass
-                )
-                self.sub_direct_desc_ids = open_HDF_group["sub_direct_desc_ids"][:]
+      
+        self.n_subhalos = open_HDF_group["nsubhalos"][:]
+        self.sub_desc_start_index = open_HDF_group["sub_desc_start_index"][:]
+        self.sub_direct_desc_contribution = (
+            open_HDF_group["sub_direct_desc_contribution"][:] * part_mass
+        )
+        self.sub_direct_desc_ids = open_HDF_group["sub_direct_desc_ids"][:]
 
-                self.sub_direct_prog_contribution = (
-                    open_HDF_group["sub_direct_prog_contribution"][:] * part_mass
-                )
-                self.sub_direct_prog_ids = open_HDF_group["sub_direct_prog_ids"][:]
-                self.sub_generation_id = open_HDF_group["sub_generation_id"][:]
-                self.sub_generation_length = open_HDF_group["sub_generation_length"][:]
-                self.sub_generation_start_index = open_HDF_group[
-                    "sub_generation_start_index"
-                ][:]
+        self.sub_direct_prog_contribution = (
+            open_HDF_group["sub_direct_prog_contribution"][:] * part_mass
+        )
+        self.sub_direct_prog_ids = open_HDF_group["sub_direct_prog_ids"][:]
+        self.sub_generation_id = open_HDF_group["sub_generation_id"][:]
+        self.sub_generation_length = open_HDF_group["sub_generation_length"][:]
+        self.sub_generation_start_index = open_HDF_group[
+            "sub_generation_start_index"
+        ][:]
 
-                self.sub_mean_pos = open_HDF_group["sub_mean_pos"][:]
-                self.sub_ndesc = open_HDF_group["sub_ndesc"][:]
-                self.sub_nparts = open_HDF_group["sub_nparts"][:]
-                self.sub_nprog = open_HDF_group["sub_nprog"][:]
-                self.sub_prog_start_index = open_HDF_group["sub_prog_start_index"][:]
-                self.sub_redshifts = open_HDF_group["sub_redshifts"][:]
-                self.sub_snapshots = open_HDF_group["sub_snapshots"][:]
-                self.subhalo_catalog_halo_ids = open_HDF_group[
-                    "subhalo_catalog_halo_ids"
-                ][:]
+        self.sub_mean_pos = open_HDF_group["sub_mean_pos"][:]
+        self.sub_ndesc = open_HDF_group["sub_ndesc"][:]
+        self.sub_nparts = open_HDF_group["sub_nparts"][:]
+        self.sub_mass = self.sub_nparts * part_mass
+        self.sub_nprog = open_HDF_group["sub_nprog"][:]
+        self.sub_prog_start_index = open_HDF_group["sub_prog_start_index"][:]
+        self.sub_redshifts = open_HDF_group["sub_redshifts"][:]
+        self.sub_snapshots = open_HDF_group["sub_snapshots"][:]
+        self.subhalo_catalog_halo_ids = open_HDF_group[
+            "subhalo_catalog_halo_ids"
+        ][:]
 
-                self.sub_velocity_dispersion_3D = open_HDF_group[
-                    "sub_3D_velocity_dispersion"
-                ][:]
-                self.sub_half_mass_radius = open_HDF_group["sub_half_mass_radius"][:]
-                self.sub_half_mass_velocity_radius = open_HDF_group[
-                    "sub_half_mass_velocity_radius"
-                ][:]
-                self.sub_mean_vel = open_HDF_group["sub_mean_vel"][:]
-                self.sub_rms_radius = open_HDF_group["sub_rms_radius"][:]
-                self.sub_v_max = open_HDF_group["sub_v_max"][:]
-                self.subhalo_start_index = open_HDF_group["subhalo_start_index"][:]
-                self.host_halos = open_HDF_group["host_halos"][:]
+        self.sub_velocity_dispersion_3D = open_HDF_group[
+            "sub_3D_velocity_dispersion"
+        ][:]
+        self.sub_half_mass_radius = open_HDF_group["sub_half_mass_radius"][:]
+        self.sub_half_mass_velocity_radius = open_HDF_group[
+            "sub_half_mass_velocity_radius"
+        ][:]
+        self.sub_mean_vel = open_HDF_group["sub_mean_vel"][:]
+        self.sub_rms_radius = open_HDF_group["sub_rms_radius"][:]
+        self.sub_v_max = open_HDF_group["sub_v_max"][:]
+        self.subhalo_start_index = open_HDF_group["subhalo_start_index"][:]
+        self.host_halos = open_HDF_group["host_halos"][:]
 
-                self.sub_graph_halo_ids = np.arange(len(self.sub_nparts))
+        self.sub_graph_halo_ids = np.arange(len(self.sub_nparts))
 
-            except KeyError:
-                self.n_subhalos = 2 ** 30
-                self.sub_desc_start_index = 2 ** 30
-                self.sub_direct_desc_contribution = 2 ** 30
-                self.sub_direct_desc_ids = 2 ** 30
-                self.sub_direct_prog_contribution = 2 ** 30
-                self.sub_direct_prog_ids = 2 ** 30
-                self.sub_generation_id = 2 ** 30
-                self.sub_generation_length = 2 ** 30
-                self.sub_generation_start_index = 2 ** 30
-                self.sub_graph_halo_ids = 2 ** 30
-                self.sub_mean_pos = 2 ** 30
-                self.sub_ndesc = 2 ** 30
-                self.sub_nparts = 2 ** 30
-                self.sub_nprog = 2 ** 30
-                self.sub_prog_start_index = 2 ** 30
-                self.sub_redshifts = 2 ** 30
-                self.sub_snapshots = 2 ** 30
-                self.subhalo_catalog_halo_ids = 2 ** 30
-                self.sub_velocity_dispersion_3D = 2 ** 30
-                self.sub_half_mass_radius = 2 ** 30
-                self.sub_half_mass_velocity_radius = 2 ** 30
-                self.sub_mean_vel = 2 ** 30
-                self.sub_rms_radius = 2 ** 30
-                self.sub_v_max = 2 ** 30
-                self.subhalo_start_index = 2 ** 30
-                self.host_halos = 2 ** 30
