@@ -60,7 +60,6 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
                                   range(0, HDF_properties.nsubhalos_in_graph[graph_ID]))]
     
     
-    old_snap_time =  1 #?
     
     for snap_ID in graph_properties.generation_id:
         
@@ -68,10 +67,13 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
             continue
         
 
-     
-        current_snap_time = model_params.snap_times[snap_ID]
+        # Be careful with this. Will error on very first generation. Needs fixing.
+        # Try except would be optimi
         
-        dt = current_snap_time - old_snap_time
+        try:
+            dt = model_params.snap_times[snap_ID] - model_params.snap_times[snap_ID-1]
+        except IndexError:
+            dt = model_params.snap_times[snap_ID]
 
         this_generation_halo = graph_properties.graph_halo_ids[
                                graph_properties.generation_start_index[snap_ID]:
@@ -156,8 +158,7 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
 
             HDF_properties.n_halo +=1 
             
-                
-    old_snap_time = current_snap_time
+        
             
             
 
