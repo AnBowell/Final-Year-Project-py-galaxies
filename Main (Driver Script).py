@@ -46,7 +46,7 @@ HDF_file, amount_of_graphs_in_file = read_graph_data.open_HDF_file(model_params.
 list_of_array_data_structure = read_graph_data.get_datastruct_info(HDF_file,
                                                                    amount_of_graphs_in_file)
 
-old_snap_time = 1  # Again not sure what to do with this?
+
 
 for graph_ID in range(0, amount_of_graphs_in_file):
     
@@ -92,7 +92,7 @@ for graph_ID in range(0, amount_of_graphs_in_file):
                                   graph_ID, model_params.part_mass) 
     
     halo.store_essential_subhalo_data(array_of_subhalo_properties, subhalo_data,
-                                      model_params.part_mass) 
+                                      model_params.part_mass, graph_ID) 
     
     # Calculate the temperature of the hot gas.
     
@@ -109,7 +109,7 @@ for graph_ID in range(0, amount_of_graphs_in_file):
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
     
     
-    
+    old_snap_time = 1  # Again not sure what to do with this?
     for snap_ID in generation_data['generation_id']:
         
         if snap_ID == model_params.no_data_int:
@@ -156,7 +156,10 @@ for graph_ID in range(0, amount_of_graphs_in_file):
             
             halo.sum_baryon_and_topup(array_of_halo_properties, halo_ID, 
                                       model_params.f_baryon,
-                                      halo_properties_that_descend)
+                                      halo_properties_that_descend,
+                                      subhalo_properties_that_descend,
+                                      array_of_subhalo_properties,
+                                      halo_data)
  
     
             
@@ -191,6 +194,8 @@ for graph_ID in range(0, amount_of_graphs_in_file):
                             subhalo_start_index + n_subhalo): # Using np.arange as subhalo index 0-->nsubhalo
                 # array of halo properties also included. If there is no descendent
                 # subhalo to push to, the stellar mass goes into the intracluster medium (halo).
+                
+                array_of_subhalo_properties['snap_ID'][subhalo_ID] = snap_ID
                 
                 halo.calc_subhalo_props_descend(array_of_halo_properties,
                                                 array_of_subhalo_properties,

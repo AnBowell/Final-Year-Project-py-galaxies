@@ -230,6 +230,8 @@ class ModelParams:
     
         self.subhalo_properties_dtype = np.dtype(
             [
+                ("graph_ID", np.int32),
+                ("snap_ID", np.int32),
                 ("host_halo_ID", np.int32),
                 ("subhalo_ID", np.int32),
                 ("mean_pos", np.float32, 3),

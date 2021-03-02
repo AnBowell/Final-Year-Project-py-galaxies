@@ -48,7 +48,7 @@ def initialize_subhalo_properties(array_of_subhalo_properties,
     """
     for halo_property in properties_that_descend:
 
-        array_of_subhalo_properties[halo_property][:] = 1.
+        array_of_subhalo_properties[halo_property][:] = 0.
         
     #Inplace edit of array
     return None
@@ -69,8 +69,9 @@ def store_essential_halo_data(array_of_halo_properties, halo_data, graph_ID,
     return None
 
 def store_essential_subhalo_data(array_of_subhalo_properties, subhalo_data,
-                                 part_mass):
+                                 part_mass, graph_ID):
     
+    array_of_subhalo_properties['graph_ID'][:] = graph_ID
     array_of_subhalo_properties['subhalo_ID'][:] = np.arange(0,len(subhalo_data))
     array_of_subhalo_properties['host_halo_ID'][:] = subhalo_data["host_halos"]
     array_of_subhalo_properties['mean_pos'][:] = subhalo_data['sub_mean_pos'] 
@@ -158,15 +159,30 @@ def calc_halo_props_descend(array_of_halo_properties, properties_that_descend,
 
 
 def sum_baryon_and_topup(array_of_halo_properties, halo_ID, f_baryon,
-                         halo_properties_that_descend):
+                         halo_properties_that_descend,
+                         subhalo_properties_that_descend,
+                         array_of_subhalo_properties,halo_data):
     
     
     total_halo_baryon_mass = sum(array_of_halo_properties[halo_ID][
                                         halo_properties_that_descend])
     
-    # WILL NEED TO ADD A LINE HERE TO ADD UP SUB-HALO BAYRONS.
+    subhalo_start_index = halo_data["subhalo_start_index"][halo_ID]
     
+    n_subhalo = halo_data["nsubhalos"][halo_ID]
     
+    total_subhalo_baryon_mass = 0.0
+    
+    for subhalo_data in array_of_subhalo_properties[subhalo_start_index:
+                                               subhalo_start_index + n_subhalo]:
+        
+
+        total_subhalo_baryon_mass += sum(subhalo_data[
+            subhalo_properties_that_descend])
+    
+
+    total_baryon_mass = total_halo_baryon_mass + total_subhalo_baryon_mass
+
     mass_halo_DM = array_of_halo_properties["mass_DM"][halo_ID]
     
     
@@ -177,13 +193,13 @@ def sum_baryon_and_topup(array_of_halo_properties, halo_ID, f_baryon,
 
     
     # Accrete more baryons to equal the cosmic average.
-    new_total_baryon_mass = max(array_of_halo_properties["mass_baryon"][halo_ID],
+    new_total_baryon_mass = max(total_baryon_mass,
                                 true_f_baryon * mass_halo_DM)
     
     
     # Find the mass of new baryons accumulated - this is the hot gas mass.
     # This cannot be negative.
-    change_in_baryonic_mass = new_total_baryon_mass - total_halo_baryon_mass
+    change_in_baryonic_mass = new_total_baryon_mass - total_baryon_mass
 
     
     array_of_halo_properties["mass_baryon"][halo_ID] = new_total_baryon_mass
@@ -468,7 +484,7 @@ def calculate_SFR_hot_gas_used(array_of_halo_properties,
     if central_subhalo_ID != no_data_int:
         
         old_mass_stellar = array_of_subhalo_properties["mass_stellar"][central_subhalo_ID]
-        
+   
         Berhoozi_mass_stellar = array_of_halo_properties["mass_berhoozi_stellar"][halo_ID]
 
         mass_stellar = max(Berhoozi_mass_stellar, old_mass_stellar)
