@@ -112,14 +112,18 @@ for graph_ID in range(0, amount_of_graphs_in_file):
     old_snap_time = 1  # Again not sure what to do with this?
     for snap_ID in generation_data['generation_id']:
         
+
+        
         if snap_ID == model_params.no_data_int:
+
             continue
-        
-        
         
         current_snap_time = model_params.snap_times[snap_ID]
         
         dt = current_snap_time - old_snap_time
+        
+        
+
         
         # The Halo IDs are just 0-n_halos. Array is just created by numpy arange for now
         # as it's a wast of space to store this in the HDF5 file.
