@@ -292,7 +292,7 @@ class HaloProperties:
     def sum_baryon_and_topup(self, halo_descend_attrs, sub_halo_descend_attrs,
                              list_of_subhalo_properties,f_baryon):
         
-        old_total_baryonic_mass = self.total_halo_baryon_mass
+#        old_total_baryonic_mass = self.total_halo_baryon_mass
         
         for halo_baryon_prop in halo_descend_attrs:
             
@@ -304,7 +304,8 @@ class HaloProperties:
             
                 self.total_halo_baryon_mass += getattr(list_of_subhalo_properties[subhalo_ID], 
                                                        subhalo_baryon_prop)
-  
+                
+        old_total_baryonic_mass = self.total_halo_baryon_mass
 
         true_baryon_frac = f_baryon * self.calculate_reionization_frac(
                                                              self.mass,
