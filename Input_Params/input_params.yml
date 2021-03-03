@@ -42,7 +42,12 @@ cosmology:
   Description: 'Mean amount of particles. Can also be linked to metallicity and not const'
   Value:       0.59265
   units:       'None'
-  
+
+ beta_prof_ratio: 
+  Description: 'Ratio of virial radius to core radius of the beta profile'
+  Value:        10.
+  units:       'None'
+
 model_switches:
  HOD:
   Description: 'Halo occupation description for stars (as primitive test)'

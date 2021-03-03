@@ -593,10 +593,9 @@ class HaloProperties:
         return None
     
     def calc_mass_of_hot_gas_cooled(self, mu, m_p, G, beta_prof_ratio,
-                                         beta_prof_ratio_arctan,dt):
+                                         beta_prof_ratio_arctan,dt,
+                                         list_of_subhalo_properties):
         """
-        
-
         Parameters
         ----------
         mu : TYPE
@@ -617,42 +616,71 @@ class HaloProperties:
         None.
 
         """
-        
-        #LAMBDA_RATIO is (n_e/n)*(n_i/n) = 0.25  From L-Gal
-        
-        dynamical_time_at_edge = self.rms_radius / self.Vvir
-        
-        lambda_ratio = 0.25
-        
-        f = beta_prof_ratio - beta_prof_ratio_arctan
-        
-        tau_cool_P = ((20. * G * ((mu * m_p * self.rms_radius) ** 2) /
-                     (lambda_ratio * self.metal_dependent_cooling_rate)) * 
-                     ((f ** 2)/(beta_prof_ratio ** 3)))
-        
-        fg0 = self.mass / self.hot_gas_mass
-        
-        dt_ratio =  dt / dynamical_time_at_edge
-        
-        tau_ratio  = (dynamical_time_at_edge * fg0) / tau_cool_P
-        
-        if tau_ratio <= 1:
-            fg = fg0/ (1 + tau_ratio * dt_ratio)
-        else:
-            teq_ratio = np.log(tau_ratio)
+        if self.central_galaxy_ID != 2**30:
+            #LAMBDA_RATIO is (n_e/n)*(n_i/n) = 0.25  From L-Gal
             
-            if dt_ratio <= teq_ratio:
-                
-                fg = fg0 * np.exp(-dt_ratio)
-                
-            else: 
-                
-                fg = fg0 / (tau_ratio * (1 + (dt_ratio - teq_ratio)))
-                
-        cooling_gas = (fg0 - fg) * self.mass
+            # Metal dependent cooling in erg cm^3 / s. 
             
-        self.mass_of_cooling_gas = cooling_gas
-        
+            # Convert measurements to match
+            
+            rms_radius_kms = 3.086e19 * self.rms_radius #Mpc --> km
+            
+            rms_radius_cgs = self.rms_radius * 3.086e24 #Mpc --> cm
+            
+            G_cgs = G * 10e2 # SI --> cgs
+            
+            dt_seconds = dt * 365.25 * 60 * 60 #Years --> seconds
+            
+            dynamical_time_at_edge = rms_radius_kms / self.Vvir
+       
+            lambda_ratio = 0.25
+            
+            f = beta_prof_ratio - beta_prof_ratio_arctan
+            
+    
+            tau_cool_P = ((20. * G_cgs * ((mu * m_p * rms_radius_cgs) ** 2) /
+                         (lambda_ratio * self.metal_dependent_cooling_rate)) * 
+                         ((f ** 2)/(beta_prof_ratio ** 3)))
+            
+    
+            
+            fg0 = self.mass / self.hot_gas_mass
+            
+            
+            
+            
+            dt_ratio =  dt_seconds / dynamical_time_at_edge
+            
+           
+            
+            tau_ratio  = (dynamical_time_at_edge * fg0) / tau_cool_P
+            
+     
+            
+            if tau_ratio <= 1:
+                fg = fg0/ (1 + tau_ratio * dt_ratio)
+            else:
+                teq_ratio = np.log(tau_ratio)
+                
+                if dt_ratio <= teq_ratio:
+                    
+                    fg = fg0 * np.exp(-dt_ratio)
+                    
+                else: 
+                    
+                    fg = fg0 / (tau_ratio * (1 + (dt_ratio - teq_ratio)))
+                    
+                    
+            
+                    
+            cooling_gas = (fg0 - fg) * self.mass
+                
+            #self.mass_of_cooling_gas = cooling_gas
+            
+            list_of_subhalo_properties[self.central_galaxy_ID].cold_gas_mass = \
+                cooling_gas
+            
+    
         return None
      
 class SubhaloProperties:

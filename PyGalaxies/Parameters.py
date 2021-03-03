@@ -72,6 +72,8 @@ class ModelParams:
         self.zr_reionization = self.param_dict["cosmology"]['zr_reionization']["Value"]
         self.z0_reionization = self.param_dict["cosmology"]['z0_reionization']["Value"]
         self.mu = self.param_dict["cosmology"]["mu"]["Value"]
+        self.beta_prof_ratio = self.param_dict["cosmology"]["beta_prof_ratio"]["Value"]
+        self.beta_prof_ratio_arctan = np.arctan(self.beta_prof_ratio)
         self.timing = self.param_dict["Monitoring"]["Timing"]["Value"]
         self.timing_graph_save_path = self.param_dict["Monitoring"]["Timing"]["graph_save_path"]
         self.timing_data_save_path = self.param_dict["Monitoring"]["Timing"]["timing_data_save_path"]

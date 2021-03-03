@@ -105,11 +105,19 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
                                         model_params.m_p, model_params.k_B)
             
             halo.calculate_metal_dependent_cooling_rate()
-
+            
+            
+            halo.calc_mass_of_hot_gas_cooled(model_params.mu, model_params.m_p, 
+                                             model_params.G, model_params.beta_prof_ratio,
+                                             model_params.beta_prof_ratio_arctan,
+                                             dt, list_of_subhalo_properties)
 
 
             halo.calc_halo_props_descend(HDF_properties.part_mass, list_of_halo_properties,
                                          model_params.halo_descend_attrs)
+            
+            
+            
             
             
             for subhalo_ID in halo.sub_graph_halo_ids:
