@@ -183,8 +183,22 @@ for graph_ID in range(0, amount_of_graphs_in_file):
                                                         halo_ID)
         
         
+            # Use the cooling rate to calculate the mass of hot gas cooled onto
+            # the central subhalo. 
+        
+            halo.calc_mass_of_hot_gas_cooled(model_params.mu, model_params.m_p, 
+                                             model_params.G, model_params.beta_prof_ratio,
+                                             model_params.beta_prof_ratio_arctan, dt, model_params.no_data_int,
+                                             array_of_halo_properties,
+                                             array_of_subhalo_properties, halo_ID,
+                                             halo_data)
+        
+        
+        
+        
             # At end of the halo processing. Push poperties down to descendent 
             # halos.
+        
             
             halo.calc_halo_props_descend(array_of_halo_properties, 
                                  halo_properties_that_descend,

@@ -664,10 +664,91 @@ def calc_subhalo_props_descend(array_of_halo_properties,
         array_of_halo_properties["mass_intracluster_light"][host_halo_ID] += \
         array_of_subhalo_properties["mass_stellar"][subhalo_ID]
       
-    
-   # If ndesc = -1 this is the final generation. There is no need to push the 
-   # subhalo properties anywhere
+    # If ndesc = -1 this is the final generation. There is no need to push the 
+    # subhalo properties anywhere
+   
+    return None
     
 
         
+def calc_mass_of_hot_gas_cooled(mu, m_p, G, beta_prof_ratio,
+                                beta_prof_ratio_arctan,dt, no_data_int,
+                                array_of_halo_properties,
+                                array_of_subhalo_properties,halo_ID,
+                                halo_data):
+ 
+    central_subhalo_ID = array_of_halo_properties["central_subhalo_ID"][halo_ID]
+        
     
+    if central_subhalo_ID != no_data_int:
+        
+        
+        this_halo_data = array_of_halo_properties[halo_ID]
+
+        #LAMBDA_RATIO is (n_e/n)*(n_i/n) = 0.25  From L-Gal
+        
+        # Metal dependent cooling in erg cm^3 / s. 
+        metal_dependent_cooling_rate = this_halo_data['metalicity_cooling_rate']
+        # Convert measurements to match
+        
+        rms_radius_Mpc = halo_data['rms_radius'][halo_ID]
+        
+        rms_radius_kms = 3.086e19 * rms_radius_Mpc#Mpc --> km
+        
+        rms_radius_cgs = rms_radius_Mpc * 3.086e24 #Mpc --> cm
+        
+        G_cgs = G * 10e2 # SI --> cgs
+        
+        dt_seconds = dt * 365.25 * 60 * 60 #Years --> seconds
+        
+        dynamical_time_at_edge = rms_radius_kms / this_halo_data['velocity_virial']
+        
+   
+        lambda_ratio = 0.25
+        
+        f = beta_prof_ratio - beta_prof_ratio_arctan
+        
+
+        tau_cool_P = ((20. * G_cgs * ((mu * m_p * rms_radius_cgs) ** 2) /
+                     (lambda_ratio * metal_dependent_cooling_rate)) * 
+                     ((f ** 2)/(beta_prof_ratio ** 3)))
+        
+
+        
+        fg0 = this_halo_data['mass_DM'] / this_halo_data['mass_hot_gas']
+        
+        
+        
+        
+        dt_ratio =  dt_seconds / dynamical_time_at_edge
+        
+       
+        
+        tau_ratio  = (dynamical_time_at_edge * fg0) / tau_cool_P
+        
+ 
+        
+        if tau_ratio <= 1:
+            fg = fg0/ (1 + tau_ratio * dt_ratio)
+        else:
+            teq_ratio = np.log(tau_ratio)
+            
+            if dt_ratio <= teq_ratio:
+                
+                fg = fg0 * np.exp(-dt_ratio)
+                
+            else: 
+                
+                fg = fg0 / (tau_ratio * (1 + (dt_ratio - teq_ratio)))
+                
+                
+        
+                
+        cooling_gas = (fg0 - fg) * this_halo_data['mass_DM']
+            
+        #self.mass_of_cooling_gas = cooling_gas
+        
+        array_of_subhalo_properties['mass_cold_gas'][central_subhalo_ID] = cooling_gas
+        
+
+    return None
