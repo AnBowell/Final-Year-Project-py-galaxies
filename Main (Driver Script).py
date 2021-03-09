@@ -7,7 +7,7 @@ Created on Wed Feb 17 17:46:42 2021
 import os, sys
 sys.path.insert(0,os.path.join(os.getcwd(),'PyGalaxies')) # This is needed to import C routines.
 
-from PyGalaxies import parameters, read_graph_data, halo, store_output_data
+from PyGalaxies import parameters, read_graph_data, halo, store_output_data, Monitor
 import time
 import numpy as np
 
@@ -46,6 +46,8 @@ HDF_file, amount_of_graphs_in_file = read_graph_data.open_HDF_file(model_params.
 list_of_array_data_structure = read_graph_data.get_datastruct_info(HDF_file,
                                                                    amount_of_graphs_in_file)
 
+if time_code:
+    time_monitor = Monitor.TimeMonitor(amount_of_graphs_in_file, 1)
 
 
 for graph_ID in range(0, amount_of_graphs_in_file):
@@ -56,6 +58,8 @@ for graph_ID in range(0, amount_of_graphs_in_file):
     # Skip over any graph that does not have sub halos. 
     if 'sub_nparts' not in  graph_keys:
         continue
+
+
 
 
     data_struct = read_graph_data.create_storage_structure(open_graph_data,
