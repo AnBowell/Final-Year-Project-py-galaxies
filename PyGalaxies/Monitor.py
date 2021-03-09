@@ -12,6 +12,92 @@ import time
 
 
 
+class TimeMonitor:
+    
+    def __init__(self, amount_of_graphs, amount_of_timers_required):
+        
+        self.amount_of_graphs = amount_of_graphs
+
+        self.timer_start_times = []
+    
+
+        self.time_taken_array = np.zeros(amount_of_graphs,
+                                          dtype = np.dtype([(
+                                              'Time Taken / s',
+                                                         np.float32)]))
+
+    def start_timer(self):
+        
+        self.timer_start_times.append(time.perf_counter())
+        
+    def stop_timer(self, graph_no):
+        
+        end_time = time.perf_counter()
+        
+        start_time = self.timer_start_times.pop()
+        
+        time_taken = end_time - start_time
+
+        
+        self.time_taken_array[graph_no] = time_taken
+        
+
+
+    
+    def save_all_timing_data_to_disk(self,amount_of_halos, amount_of_subhalos):
+        
+        
+        no_subhalo_mask = [amount_of_halos > 0]
+        
+        amount_of_halos = amount_of_halos[no_subhalo_mask]
+        amount_of_subhalos = amount_of_subhalos[no_subhalo_mask]
+        
+        self.time_taken_array = self.time_taken_array[no_subhalo_mask]
+        
+
+        np.savez('../Timing And Memory Tests/TimeTakenPerGraphClassBased.npz',
+                 amount_of_halos = amount_of_halos, 
+                 amount_of_subhalos = amount_of_subhalos,
+                 time_taken = self.time_taken_array['Time Taken / s'])
+
+    
+        print('Data successfully saved')
+
+
+class AnalyseSavedData:
+    
+    def __init__(self, filepath_to_class_based, filepath_to_array_based):
+        
+        self.filepath_to_array_based = filepath_to_array_based
+        self.filepath_to_class_based = filepath_to_class_based
+
+        self.open_files_extract_data()
+    
+    def open_files_extract_data(self):
+        
+        self.array_based_data = np.load(self.filepath_to_array_based)
+        self.filepath_to_class_based = np.load(self.filepath_to_class_based)
+        
+    def plot_time_against_halos(self):
+        
+        fig, ax1 = plt.subplots(figsize = (6,4))
+        
+        ax1.set_ylabel('Processing time / s')
+        
+        ax1.set_xlabel('Number of Halos in graph')
+        
+        ax1.scatter(self.array_based_data['amount_of_halos'],
+                    self.array_based_data['time_taken'])
+        
+        ax1.scatter(self.filepath_to_class_based['amount_of_subhalos'],
+                    self.filepath_to_class_based['time_taken'])
+        
+        ax1.grid(True,alpha=0.5, linestyle='--')
+        ax1.set_xscale('linear')
+        ax1.set_xlim(0,15000)
+        plt.plot()
+        
+
 class Monitor:
     
     def __init__(self, no_of_graphs, amount_of_funcs):

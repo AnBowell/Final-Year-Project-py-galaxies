@@ -637,7 +637,7 @@ class HaloProperties:
             
             f = beta_prof_ratio - beta_prof_ratio_arctan
             
-    
+            # May need a factor of h.
             tau_cool_P = ((20. * G_cgs * ((mu * m_p * rms_radius_cgs) ** 2) /
                          (lambda_ratio * self.metal_dependent_cooling_rate)) * 
                          ((f ** 2)/(beta_prof_ratio ** 3)))

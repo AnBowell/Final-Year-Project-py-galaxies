@@ -10,7 +10,7 @@ sys.path.insert(0,os.path.join(os.getcwd(),'PyGalaxies')) # This is needed to im
 from PyGalaxies import Parameters, Monitor, HDF_graph_properties, Halos
 import time
 import numpy as np
-
+import Monitor
 
 
 model_param_filepath='Input_Params/input_params.yml'
@@ -19,8 +19,8 @@ verbosity = 1
 time_code = True
 
 
+
 model_params = Parameters.ModelParams(model_param_filepath,verbosity,debug_flag)
-#model_params.precalculate_common_constants()
 model_params.load_paramters_to_C()
 model_params.read_in_data_tables_from_c()
 model_params.output_params() 
@@ -30,14 +30,21 @@ model_params.output_params()
 # Open the input HDF5 file containing graph groups and create an output file.
 HDF_properties = HDF_graph_properties.HDFProperties(model_params)
 
+
+if time_code:
+    time_monitor = Monitor.TimeMonitor(HDF_properties.no_of_graphs,
+                                       amount_of_timers_required =1)
     
-start_time = time.time()
+    
 
 
 for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
     
     if HDF_properties.nsubhalos_in_graph[graph_ID] < 1:
         continue
+    
+    if time_code:
+        time_monitor.start_timer()
     
     # Read in data from the graph
     
@@ -67,8 +74,6 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
             continue
         
 
-        # Be careful with this. Will error on very first generation. Needs fixing.
-        # Try except would be optimi
         
         try:
             dt = model_params.snap_times[snap_ID] - model_params.snap_times[snap_ID-1]
@@ -117,8 +122,7 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
                                          model_params.halo_descend_attrs)
             
             
-            
-            
+
             
             for subhalo_ID in halo.sub_graph_halo_ids:
                 
@@ -129,46 +133,23 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
                 subhalo.calc_subhalo_props_descend(list_of_subhalo_properties,
                                            model_params.subhalo_descend_attrs, 
                                            list_of_halo_properties)
+
                 
-                
-            
-            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-
-
-
-
-
-            # halo.halo_descendent_props()
-
-            # halo.calc_halo_DM_descend(HDF_properties.part_mass)
-
-            # halo.calc_halo_attrs_descend(HDF_properties.part_mass, array_of_halo_properties,
-            #                              HDF_properties.halo_descend_attrs)
-
 
             
-            # halo.calc_subhalo_attrs_descend(graph_properties, HDF_properties, array_of_halo_properties)
-            
-            # halo.add_halo_baryon_mass_then_topup(HDF_properties)
-            
-            # halo.set_baryon_fraction(array_of_halo_properties, model_params.f_baryon)
-            
-            # halo.calculate_hot_gas_temp(model_params.H0, model_params.mu, 
-            #                             model_params.m_p, model_params.k_B)
-            
-            # halo.calculate_metal_dependent_cooling_rate()
-            
-            # halo.add_stellar_mass() # Adds on Berhoozi 
+            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
             halo.done = True
-            
-            # array_of_halo_properties[halo_ID] = halo
 
             HDF_properties.n_halo +=1 
             
-        
-            
-            
+    if time_code:
+             
+        time_monitor.stop_timer(graph_ID) 
+                
+
+                
+       
 
     # Save output
 
@@ -190,5 +171,11 @@ if HDF_properties.halo_output_iRec > 0:
 HDF_properties.close_graph_io(HDF_properties.halo_output_file)
 
 
-end_time = time.time()
-print('This took {} seconds'.format(end_time-start_time))
+# Get data for timing class. E.g. number of halos/subhalos for each graph.
+
+if time_code:
+    
+    # Takes out any graphs without subhalos atm.
+         
+    time_monitor.save_all_timing_data_to_disk(HDF_properties.nhalos_in_graph, 
+                                 HDF_properties.nsubhalos_in_graph)
