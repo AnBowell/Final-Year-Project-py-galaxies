@@ -94,7 +94,7 @@ class AnalyseSavedData:
         
         ax1.grid(True,alpha=0.5, linestyle='--')
         ax1.set_xscale('linear')
-        ax1.set_xlim(0,15000)
+        #ax1.set_xlim(0,15000)
         plt.plot()
         
 
