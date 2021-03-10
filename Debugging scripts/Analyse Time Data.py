@@ -13,7 +13,7 @@ import Monitor
 
 
 filepath_to_class_based = '../../Timing And Memory Tests/TimeTakenPerGraphClassBased.npz'
-filepath_to_array_based = '../../Timing And Memory Tests/TimeTakenPerGraph.npz'
+filepath_to_array_based = '../../Timing And Memory Tests/TimeTakenPerGraphArrayBased.npz'
 
 analyse = Monitor.AnalyseSavedData(filepath_to_class_based,
                                    filepath_to_array_based)

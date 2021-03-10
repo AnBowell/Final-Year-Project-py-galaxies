@@ -76,7 +76,7 @@ class AnalyseSavedData:
     def open_files_extract_data(self):
         
         self.array_based_data = np.load(self.filepath_to_array_based)
-        self.filepath_to_class_based = np.load(self.filepath_to_class_based)
+        self.class_based_data = np.load(self.filepath_to_class_based)
         
     def plot_time_against_halos(self):
         
@@ -84,17 +84,30 @@ class AnalyseSavedData:
         
         ax1.set_ylabel('Processing time / s')
         
-        ax1.set_xlabel('Number of Halos in graph')
+        ax1.set_xlabel('Number of haloes or subhaloes in graph')
         
         ax1.scatter(self.array_based_data['amount_of_halos'],
-                    self.array_based_data['time_taken'])
+                    self.array_based_data['time_taken'],color='green',
+                    marker= '^', label='Haloes (array)')
+        ax1.scatter(self.array_based_data['amount_of_subhalos'],
+                    self.array_based_data['time_taken'],color='green',
+                    label='Subhaloes (array)')
         
-        ax1.scatter(self.filepath_to_class_based['amount_of_subhalos'],
-                    self.filepath_to_class_based['time_taken'])
+        ax1.scatter(self.class_based_data['amount_of_halos'],
+                    self.class_based_data['time_taken'],color='blue',
+                    marker= '^',label='Haloes (class)')
+        ax1.scatter(self.class_based_data['amount_of_subhalos'],
+                    self.class_based_data['time_taken'],color='blue',
+                    label='Subhaloes (class)')
         
         ax1.grid(True,alpha=0.5, linestyle='--')
+        ax1.set_axisbelow(True)
         ax1.set_xscale('linear')
         ax1.set_xlim(0,15000)
+        ax1.set_ylim(0,2.)
+        ax1.legend()
+        plt.savefig('../../Timing And Memory Tests/Output Figures/time_comp.png',
+                    dpi=450)
         plt.plot()
         
 

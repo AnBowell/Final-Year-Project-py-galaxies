@@ -47,10 +47,14 @@ list_of_array_data_structure = read_graph_data.get_datastruct_info(HDF_file,
                                                                    amount_of_graphs_in_file)
 
 if time_code:
-    time_monitor = Monitor.TimeMonitor(amount_of_graphs_in_file, 1)
+    time_monitor = Monitor.TimeMonitor(amount_of_graphs_in_file,
+                                       amount_of_timers_required=1)
 
 
 for graph_ID in range(0, amount_of_graphs_in_file):
+    
+    if time_code:
+        time_monitor.start_timer()
     
     open_graph_data, graph_keys = read_graph_data.load_in_graph_data(HDF_file, graph_ID)
     
@@ -225,6 +229,9 @@ for graph_ID in range(0, amount_of_graphs_in_file):
                                                 subhalo_contrib_data,
                                                 subhalo_properties_that_descend)
 
+
+    if time_code:
+        time_monitor.stop_timer(graph_ID)
         
     
     if graph_ID % 100 == 0:
@@ -246,3 +253,8 @@ end_time = time.perf_counter()
 
 
 print('This took {}s'.format(end_time - start_time))
+
+
+if time_code:
+   time_monitor.save_all_timing_data_to_disk(HDF_file['nhalos_in_graph'][:],
+                                             HDF_file['sub_nhalos_in_graph'][:])
