@@ -64,6 +64,56 @@ class TimeMonitor:
         print('Data successfully saved')
 
 
+class MemoryMonitor:
+    
+    def __init__(self, amount_of_graphs):
+        
+        self.process  = psutil.Process()
+        
+        self.mem_store = np.zeros(amount_of_graphs,
+                                  dtype = np.dtype([(
+                                      'memory [MB]',
+                                                 np.float32)]))
+
+
+    def record_mem(self, graph_no):
+        
+        new_mem = self.process.memory_info().rss
+        
+        self.mem_store[graph_no] = new_mem / (1024**2)
+        
+
+        
+    def save_all_mem_data_to_disk(self, amount_of_halos, amount_of_subhalos):
+                
+        
+        no_subhalo_mask = [amount_of_subhalos > 0]
+        
+        amount_of_halos = amount_of_halos[no_subhalo_mask]
+        amount_of_subhalos = amount_of_subhalos[no_subhalo_mask]
+        
+        self.mem_store = self.mem_store[no_subhalo_mask]
+
+        
+
+        np.savez('../Timing And Memory Tests/CumulativeMemoryUsedArrayBased.npz',
+                 amount_of_halos = amount_of_halos, 
+                 amount_of_subhalos = amount_of_subhalos,
+                 mem_used =self.mem_store['memory [MB]'])
+
+    
+        print('Data successfully saved')
+
+
+
+
+
+
+
+
+
+
+
 class AnalyseSavedData:
     
     def __init__(self, filepath_to_class_based, filepath_to_array_based):
@@ -109,6 +159,38 @@ class AnalyseSavedData:
         plt.savefig('../../Timing And Memory Tests/Output Figures/time_comp.png',
                     dpi=450)
         plt.plot()
+        
+    
+    def plot_cum_mem(self):
+        
+        data_x = np.arange(0,len(self.array_based_data['mem_used']),1)
+        
+        
+        fig, ax1 = plt.subplots(figsize = (6,4))
+        
+        ax1.set_ylabel('Processing time / s')
+        
+        ax1.set_xlabel('Number of haloes or subhaloes in graph')
+        
+        ax1.scatter(data_x,
+                    self.array_based_data['mem_used'],color='green',
+                    marker= '^', label='Haloes (array)')
+        
+
+        ax1.scatter(data_x,
+                    self.class_based_data['mem_used'],color='blue',
+                    label='Subhaloes (class)')
+        
+        ax1.grid(True,alpha=0.5, linestyle='--')
+        ax1.set_axisbelow(True)
+        ax1.set_xscale('linear')
+        # ax1.set_xlim(0,15000)
+        # ax1.set_ylim(0,2.)
+        ax1.legend()
+        plt.savefig('../../Timing And Memory Tests/Output Figures/mem_cum.png',
+                    dpi=450)
+        plt.plot()
+        
         
 
 class Monitor:

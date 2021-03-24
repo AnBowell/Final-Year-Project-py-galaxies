@@ -18,7 +18,7 @@ model_param_filepath='Input_Params/input_params.yml'
 debug_flag = False
 verbosity = 1 
 time_code = True
-
+mem_code = True
 #The baryonic properties that descend through the graph. These are the 
 halo_properties_that_descend = ['mass_hot_gas', 'mass_cold_gas',
                             'mass_ejected_gas', 'mass_intracluster_light']
@@ -49,10 +49,18 @@ list_of_array_data_structure = read_graph_data.get_datastruct_info(HDF_file,
 if time_code:
     time_monitor = Monitor.TimeMonitor(amount_of_graphs_in_file,
                                        amount_of_timers_required=1)
+    
+if mem_code:
+    mem_monitor = Monitor.MemoryMonitor(amount_of_graphs_in_file)
+
+
 
 
 for graph_ID in range(0, amount_of_graphs_in_file):
     
+    
+    if mem_code:
+        mem_monitor.record_mem(graph_ID)
     if time_code:
         time_monitor.start_timer()
     
@@ -257,4 +265,9 @@ print('This took {}s'.format(end_time - start_time))
 
 if time_code:
    time_monitor.save_all_timing_data_to_disk(HDF_file['nhalos_in_graph'][:],
+                                             HDF_file['sub_nhalos_in_graph'][:])
+   
+   
+if mem_code:
+   mem_monitor.save_all_mem_data_to_disk(HDF_file['nhalos_in_graph'][:],
                                              HDF_file['sub_nhalos_in_graph'][:])
