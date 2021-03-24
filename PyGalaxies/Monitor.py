@@ -168,18 +168,18 @@ class AnalyseSavedData:
         
         fig, ax1 = plt.subplots(figsize = (6,4))
         
-        ax1.set_ylabel('Processing time / s')
+        ax1.set_ylabel('Cumulative Memory Usage / MB')
         
-        ax1.set_xlabel('Number of haloes or subhaloes in graph')
+        ax1.set_xlabel('Graph Number')
         
-        ax1.scatter(data_x,
+        ax1.plot(data_x,
                     self.array_based_data['mem_used'],color='green',
-                    marker= '^', label='Haloes (array)')
+                    label='Array based',lw=3)
         
 
-        ax1.scatter(data_x,
+        ax1.plot(data_x,
                     self.class_based_data['mem_used'],color='blue',
-                    label='Subhaloes (class)')
+                    label='Class Based',lw=3)
         
         ax1.grid(True,alpha=0.5, linestyle='--')
         ax1.set_axisbelow(True)
