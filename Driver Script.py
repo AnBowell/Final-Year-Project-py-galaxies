@@ -11,6 +11,7 @@ from PyGalaxies import Parameters, Monitor, HDF_graph_properties, Halos
 import time
 import numpy as np
 import Monitor
+import gc
 
 
 model_param_filepath='Input_Params/input_params.yml'
@@ -167,7 +168,7 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
     HDF_properties.output_subhalos(list_of_subhalo_properties,
                                    model_params.subhalo_output_list)
    
-
+    gc.collect()
 
 # Close input file
 HDF_properties.close_graph_io(HDF_properties.graph_input_file)
