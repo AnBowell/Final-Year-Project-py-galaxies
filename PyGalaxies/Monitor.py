@@ -145,9 +145,16 @@ class AnalyseSavedData:
         ax1.scatter(self.filepath_to_class_based['amount_of_subhalos'],
                     self.filepath_to_class_based['time_taken'])
         
+        
         ax1.grid(True,alpha=0.5, linestyle='--')
         ax1.set_xscale('linear')
-        #ax1.set_xlim(0,15000)
+        ax1.set_xlim(0,15000)
+    
+        ax1.legend()
+        plt.savefig('../../Timing And Memory Tests/Output Figures/TimeTakenPerGraph.png',
+                    dpi=450)
+    
+
         plt.plot()
         
 
