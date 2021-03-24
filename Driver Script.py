@@ -17,6 +17,7 @@ model_param_filepath='Input_Params/input_params.yml'
 debug_flag = False
 verbosity = 1 
 time_code = True
+mem_code = True
 
 
 
@@ -34,6 +35,8 @@ HDF_properties = HDF_graph_properties.HDFProperties(model_params)
 if time_code:
     time_monitor = Monitor.TimeMonitor(HDF_properties.no_of_graphs,
                                        amount_of_timers_required =1)
+if mem_code:
+    mem_monitor = Monitor.MemoryMonitor(HDF_properties.no_of_graphs)
     
     
 
@@ -43,16 +46,22 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
     if HDF_properties.nsubhalos_in_graph[graph_ID] < 1:
         continue
     
+    
+    if mem_code:
+        mem_monitor.record_mem(graph_ID)
+                
     if time_code:
         time_monitor.start_timer()
-    
+        
+
     # Read in data from the graph
     
     graph_properties = HDF_graph_properties.GraphProperties(graph_ID,
                                        HDF_properties.graph_input_file,
                                        model_params,
                                        HDF_properties.part_mass)
- 
+
+   
 
     # Loop over and intialise the halo and sub-halo arrays.  
 
@@ -143,12 +152,13 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
 
             HDF_properties.n_halo +=1 
             
+            
+
     if time_code:
              
         time_monitor.stop_timer(graph_ID) 
                 
 
-                
        
 
     # Save output
@@ -156,7 +166,7 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
     HDF_properties.output_halos(list_of_halo_properties)
     HDF_properties.output_subhalos(list_of_subhalo_properties,
                                    model_params.subhalo_output_list)
-
+   
 
 
 # Close input file
@@ -175,7 +185,12 @@ HDF_properties.close_graph_io(HDF_properties.halo_output_file)
 
 if time_code:
     
-    # Takes out any graphs without subhalos atm.
-         
+    # Takes out any graphs without subhalos atm
     time_monitor.save_all_timing_data_to_disk(HDF_properties.nhalos_in_graph, 
+                                 HDF_properties.nsubhalos_in_graph)
+
+
+if mem_code:
+    
+    mem_monitor.save_all_mem_data_to_disk(HDF_properties.nhalos_in_graph, 
                                  HDF_properties.nsubhalos_in_graph)

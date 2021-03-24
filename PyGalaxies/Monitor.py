@@ -42,8 +42,6 @@ class TimeMonitor:
         self.time_taken_array[graph_no] = time_taken
         
 
-
-    
     def save_all_timing_data_to_disk(self,amount_of_halos, amount_of_subhalos):
         
         
@@ -62,6 +60,61 @@ class TimeMonitor:
 
     
         print('Data successfully saved')
+        
+        
+class MemoryMonitor:
+    
+    def __init__(self, amount_of_graphs):
+        
+        self.process  = psutil.Process()
+        
+        self.mem_store = np.zeros(amount_of_graphs,
+                                  dtype = np.dtype([(
+                                      'memory [MB]',
+                                                 np.float32)]))
+
+
+    def record_mem(self, graph_no):
+        
+        new_mem = self.process.memory_info().rss
+        
+        self.mem_store[graph_no] = new_mem / (1024**2)
+        
+
+        
+    def save_all_mem_data_to_disk(self, amount_of_halos, amount_of_subhalos):
+                
+        
+        no_subhalo_mask = [amount_of_subhalos > 0]
+        
+        amount_of_halos = amount_of_halos[no_subhalo_mask]
+        amount_of_subhalos = amount_of_subhalos[no_subhalo_mask]
+        
+        self.mem_store = self.mem_store[no_subhalo_mask]
+
+        
+
+        np.savez('../Timing And Memory Tests/CumulativeMemoryUsedClassBased.npz',
+                 amount_of_halos = amount_of_halos, 
+                 amount_of_subhalos = amount_of_subhalos,
+                 mem_used =self.mem_store['memory [MB]'])
+
+    
+        print('Data successfully saved')
+        
+
+    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
 
 class AnalyseSavedData:
