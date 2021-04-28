@@ -4,7 +4,8 @@
 {
     "distutils": {
         "depends": [
-            "L_Galaxies.h"
+            "L_Galaxies.h",
+            "model_params.h"
         ],
         "include_dirs": [
             "."
@@ -14,7 +15,8 @@
             "L_Galaxies.pyx",
             "cool_func.c",
             "c_model_params.c",
-            "model_infall.c"
+            "model_infall.c",
+            "model_star_formation_and_feedback.c"
         ]
     },
     "module_name": "L_Galaxies"
@@ -626,6 +628,7 @@ static CYTHON_INLINE float __PYX_NAN() {
 #define __PYX_HAVE__L_Galaxies
 #define __PYX_HAVE_API__L_Galaxies
 /* Early includes */
+#include "model_params.h"
 #include "L_Galaxies.h"
 #ifdef _OPENMP
 #include <omp.h>
@@ -1014,6 +1017,7 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
+static PyObject* __pyx_convert__to_py_struct__ReturnTuple(struct ReturnTuple s);
 /* CIntFromPy.proto */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *);
 
@@ -1052,34 +1056,53 @@ int __pyx_module_is_main_L_Galaxies = 0;
 
 /* Implementation of 'L_Galaxies' */
 static const char __pyx_k_G[] = "G";
+static const char __pyx_k_Vc[] = "Vc";
+static const char __pyx_k_dt[] = "dt";
 static const char __pyx_k_Mvir[] = "Mvir";
 static const char __pyx_k_logZ[] = "logZ";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_test[] = "__test__";
+static const char __pyx_k_time[] = "time";
+static const char __pyx_k_EtaSN[] = "EtaSN";
 static const char __pyx_k_Omega[] = "Omega";
 static const char __pyx_k_Zcurr[] = "Zcurr";
+static const char __pyx_k_nstep[] = "nstep";
 static const char __pyx_k_Hubble[] = "Hubble";
 static const char __pyx_k_logTemp[] = "logTemp";
+static const char __pyx_k_EnergySN[] = "EnergySN";
 static const char __pyx_k_z0_recomb[] = "z0_recomb";
 static const char __pyx_k_zr_recomb[] = "zr_recomb";
 static const char __pyx_k_L_Galaxies[] = "L_Galaxies";
 static const char __pyx_k_OmegaLambda[] = "OmegaLambda";
+static const char __pyx_k_Returnstars[] = "Returnstars";
+static const char __pyx_k_SfrColdCrit[] = "SfrColdCrit";
+static const char __pyx_k_rad_cold_gas[] = "rad_cold_gas";
+static const char __pyx_k_SfrEfficiency[] = "SfrEfficiency";
+static const char __pyx_k_mass_cold_gas[] = "mass_cold_gas";
+static const char __pyx_k_reaheat_slope[] = "reaheat_slope";
 static const char __pyx_k_L_Galaxies_pyx[] = "L_Galaxies.pyx";
+static const char __pyx_k_reaheat_pre_vel[] = "reaheat_pre_vel";
+static const char __pyx_k_C_star_formation[] = "C_star_formation";
 static const char __pyx_k_C_do_reionization[] = "C_do_reionization";
 static const char __pyx_k_ReionizationModel[] = "ReionizationModel";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_C_read_reionization[] = "C_read_reionization";
+static const char __pyx_k_Return_reheated_mass[] = "Return_reheated_mass";
 static const char __pyx_k_C_check_if_first_call[] = "C_check_if_first_call";
 static const char __pyx_k_C_update_c_model_params[] = "C_update_c_model_params";
 static const char __pyx_k_C_read_cooling_functions[] = "C_read_cooling_functions";
+static const char __pyx_k_feedback_reheating_epsilon[] = "feedback_reheating_epsilon";
 static const char __pyx_k_C_get_metaldependent_cooling_rat[] = "C_get_metaldependent_cooling_rate";
 static PyObject *__pyx_n_s_C_check_if_first_call;
 static PyObject *__pyx_n_s_C_do_reionization;
 static PyObject *__pyx_n_s_C_get_metaldependent_cooling_rat;
 static PyObject *__pyx_n_s_C_read_cooling_functions;
 static PyObject *__pyx_n_s_C_read_reionization;
+static PyObject *__pyx_n_s_C_star_formation;
 static PyObject *__pyx_n_s_C_update_c_model_params;
+static PyObject *__pyx_n_s_EnergySN;
+static PyObject *__pyx_n_s_EtaSN;
 static PyObject *__pyx_n_s_G;
 static PyObject *__pyx_n_s_Hubble;
 static PyObject *__pyx_n_s_L_Galaxies;
@@ -1088,30 +1111,46 @@ static PyObject *__pyx_n_s_Mvir;
 static PyObject *__pyx_n_s_Omega;
 static PyObject *__pyx_n_s_OmegaLambda;
 static PyObject *__pyx_n_s_ReionizationModel;
+static PyObject *__pyx_n_s_Return_reheated_mass;
+static PyObject *__pyx_n_s_Returnstars;
+static PyObject *__pyx_n_s_SfrColdCrit;
+static PyObject *__pyx_n_s_SfrEfficiency;
+static PyObject *__pyx_n_s_Vc;
 static PyObject *__pyx_n_s_Zcurr;
 static PyObject *__pyx_n_s_cline_in_traceback;
+static PyObject *__pyx_n_s_dt;
+static PyObject *__pyx_n_s_feedback_reheating_epsilon;
 static PyObject *__pyx_n_s_logTemp;
 static PyObject *__pyx_n_s_logZ;
 static PyObject *__pyx_n_s_main;
+static PyObject *__pyx_n_s_mass_cold_gas;
 static PyObject *__pyx_n_s_name;
+static PyObject *__pyx_n_s_nstep;
+static PyObject *__pyx_n_s_rad_cold_gas;
+static PyObject *__pyx_n_s_reaheat_pre_vel;
+static PyObject *__pyx_n_s_reaheat_slope;
 static PyObject *__pyx_n_s_test;
+static PyObject *__pyx_n_s_time;
 static PyObject *__pyx_n_s_z0_recomb;
 static PyObject *__pyx_n_s_zr_recomb;
-static PyObject *__pyx_pf_10L_Galaxies_C_update_c_model_params(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_Omega, double __pyx_v_OmegaLambda, double __pyx_v_Hubble, double __pyx_v_G, int __pyx_v_ReionizationModel, double __pyx_v_zr_recomb, double __pyx_v_z0_recomb); /* proto */
+static PyObject *__pyx_pf_10L_Galaxies_C_update_c_model_params(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_Omega, double __pyx_v_OmegaLambda, double __pyx_v_Hubble, double __pyx_v_G, int __pyx_v_ReionizationModel, double __pyx_v_zr_recomb, double __pyx_v_z0_recomb, float __pyx_v_SfrEfficiency, double __pyx_v_SfrColdCrit, double __pyx_v_EnergySN, double __pyx_v_EtaSN, double __pyx_v_feedback_reheating_epsilon, double __pyx_v_reaheat_pre_vel, double __pyx_v_reaheat_slope); /* proto */
 static PyObject *__pyx_pf_10L_Galaxies_2C_read_cooling_functions(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_10L_Galaxies_4C_get_metaldependent_cooling_rate(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_logTemp, double __pyx_v_logZ); /* proto */
 static PyObject *__pyx_pf_10L_Galaxies_6C_read_reionization(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_10L_Galaxies_8C_do_reionization(CYTHON_UNUSED PyObject *__pyx_self, float __pyx_v_Mvir, double __pyx_v_Zcurr); /* proto */
 static PyObject *__pyx_pf_10L_Galaxies_10C_check_if_first_call(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
+static PyObject *__pyx_pf_10L_Galaxies_12C_star_formation(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_Vc, double __pyx_v_rad_cold_gas, double __pyx_v_mass_cold_gas, double __pyx_v_time, double __pyx_v_dt, int __pyx_v_nstep); /* proto */
 static PyObject *__pyx_tuple_;
 static PyObject *__pyx_tuple__4;
 static PyObject *__pyx_tuple__7;
+static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_codeobj__2;
 static PyObject *__pyx_codeobj__3;
 static PyObject *__pyx_codeobj__5;
 static PyObject *__pyx_codeobj__6;
 static PyObject *__pyx_codeobj__8;
 static PyObject *__pyx_codeobj__9;
+static PyObject *__pyx_codeobj__11;
 /* Late includes */
 
 /* "L_Galaxies.pyx":4
@@ -1119,7 +1158,7 @@ static PyObject *__pyx_codeobj__9;
  * 
  * def C_update_c_model_params(double Omega, double OmegaLambda, double Hubble,             # <<<<<<<<<<<<<<
  *                             double G,int ReionizationModel, double zr_recomb,
- *                             double z0_recomb):
+ *                             double z0_recomb,float SfrEfficiency, double SfrColdCrit,
  */
 
 /* Python wrapper */
@@ -1133,6 +1172,13 @@ static PyObject *__pyx_pw_10L_Galaxies_1C_update_c_model_params(PyObject *__pyx_
   int __pyx_v_ReionizationModel;
   double __pyx_v_zr_recomb;
   double __pyx_v_z0_recomb;
+  float __pyx_v_SfrEfficiency;
+  double __pyx_v_SfrColdCrit;
+  double __pyx_v_EnergySN;
+  double __pyx_v_EtaSN;
+  double __pyx_v_feedback_reheating_epsilon;
+  double __pyx_v_reaheat_pre_vel;
+  double __pyx_v_reaheat_slope;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -1140,12 +1186,26 @@ static PyObject *__pyx_pw_10L_Galaxies_1C_update_c_model_params(PyObject *__pyx_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("C_update_c_model_params (wrapper)", 0);
   {
-    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_Omega,&__pyx_n_s_OmegaLambda,&__pyx_n_s_Hubble,&__pyx_n_s_G,&__pyx_n_s_ReionizationModel,&__pyx_n_s_zr_recomb,&__pyx_n_s_z0_recomb,0};
-    PyObject* values[7] = {0,0,0,0,0,0,0};
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_Omega,&__pyx_n_s_OmegaLambda,&__pyx_n_s_Hubble,&__pyx_n_s_G,&__pyx_n_s_ReionizationModel,&__pyx_n_s_zr_recomb,&__pyx_n_s_z0_recomb,&__pyx_n_s_SfrEfficiency,&__pyx_n_s_SfrColdCrit,&__pyx_n_s_EnergySN,&__pyx_n_s_EtaSN,&__pyx_n_s_feedback_reheating_epsilon,&__pyx_n_s_reaheat_pre_vel,&__pyx_n_s_reaheat_slope,0};
+    PyObject* values[14] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
       switch (pos_args) {
+        case 14: values[13] = PyTuple_GET_ITEM(__pyx_args, 13);
+        CYTHON_FALLTHROUGH;
+        case 13: values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
+        CYTHON_FALLTHROUGH;
+        case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
+        CYTHON_FALLTHROUGH;
+        case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+        CYTHON_FALLTHROUGH;
+        case 10: values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+        CYTHON_FALLTHROUGH;
+        case  9: values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+        CYTHON_FALLTHROUGH;
+        case  8: values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+        CYTHON_FALLTHROUGH;
         case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
         CYTHON_FALLTHROUGH;
         case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
@@ -1172,43 +1232,85 @@ static PyObject *__pyx_pw_10L_Galaxies_1C_update_c_model_params(PyObject *__pyx_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_OmegaLambda)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, 1); __PYX_ERR(0, 4, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 1); __PYX_ERR(0, 4, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Hubble)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, 2); __PYX_ERR(0, 4, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 2); __PYX_ERR(0, 4, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_G)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, 3); __PYX_ERR(0, 4, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 3); __PYX_ERR(0, 4, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ReionizationModel)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, 4); __PYX_ERR(0, 4, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 4); __PYX_ERR(0, 4, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_zr_recomb)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, 5); __PYX_ERR(0, 4, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 5); __PYX_ERR(0, 4, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_z0_recomb)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, 6); __PYX_ERR(0, 4, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 6); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  7:
+        if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_SfrEfficiency)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 7); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  8:
+        if (likely((values[8] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_SfrColdCrit)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 8); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  9:
+        if (likely((values[9] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_EnergySN)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 9); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case 10:
+        if (likely((values[10] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_EtaSN)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 10); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case 11:
+        if (likely((values[11] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_feedback_reheating_epsilon)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 11); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case 12:
+        if (likely((values[12] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_reaheat_pre_vel)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 12); __PYX_ERR(0, 4, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case 13:
+        if (likely((values[13] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_reaheat_slope)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, 13); __PYX_ERR(0, 4, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "C_update_c_model_params") < 0)) __PYX_ERR(0, 4, __pyx_L3_error)
       }
-    } else if (PyTuple_GET_SIZE(__pyx_args) != 7) {
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 14) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
@@ -1218,6 +1320,13 @@ static PyObject *__pyx_pw_10L_Galaxies_1C_update_c_model_params(PyObject *__pyx_
       values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
       values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
       values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+      values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+      values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+      values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+      values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+      values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
+      values[12] = PyTuple_GET_ITEM(__pyx_args, 12);
+      values[13] = PyTuple_GET_ITEM(__pyx_args, 13);
     }
     __pyx_v_Omega = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Omega == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
     __pyx_v_OmegaLambda = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_OmegaLambda == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 4, __pyx_L3_error)
@@ -1226,38 +1335,45 @@ static PyObject *__pyx_pw_10L_Galaxies_1C_update_c_model_params(PyObject *__pyx_
     __pyx_v_ReionizationModel = __Pyx_PyInt_As_int(values[4]); if (unlikely((__pyx_v_ReionizationModel == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 5, __pyx_L3_error)
     __pyx_v_zr_recomb = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_zr_recomb == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 5, __pyx_L3_error)
     __pyx_v_z0_recomb = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_z0_recomb == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L3_error)
+    __pyx_v_SfrEfficiency = __pyx_PyFloat_AsFloat(values[7]); if (unlikely((__pyx_v_SfrEfficiency == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L3_error)
+    __pyx_v_SfrColdCrit = __pyx_PyFloat_AsDouble(values[8]); if (unlikely((__pyx_v_SfrColdCrit == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 6, __pyx_L3_error)
+    __pyx_v_EnergySN = __pyx_PyFloat_AsDouble(values[9]); if (unlikely((__pyx_v_EnergySN == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 7, __pyx_L3_error)
+    __pyx_v_EtaSN = __pyx_PyFloat_AsDouble(values[10]); if (unlikely((__pyx_v_EtaSN == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 7, __pyx_L3_error)
+    __pyx_v_feedback_reheating_epsilon = __pyx_PyFloat_AsDouble(values[11]); if (unlikely((__pyx_v_feedback_reheating_epsilon == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 7, __pyx_L3_error)
+    __pyx_v_reaheat_pre_vel = __pyx_PyFloat_AsDouble(values[12]); if (unlikely((__pyx_v_reaheat_pre_vel == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
+    __pyx_v_reaheat_slope = __pyx_PyFloat_AsDouble(values[13]); if (unlikely((__pyx_v_reaheat_slope == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 8, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 7, 7, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 4, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("C_update_c_model_params", 1, 14, 14, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 4, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("L_Galaxies.C_update_c_model_params", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_10L_Galaxies_C_update_c_model_params(__pyx_self, __pyx_v_Omega, __pyx_v_OmegaLambda, __pyx_v_Hubble, __pyx_v_G, __pyx_v_ReionizationModel, __pyx_v_zr_recomb, __pyx_v_z0_recomb);
+  __pyx_r = __pyx_pf_10L_Galaxies_C_update_c_model_params(__pyx_self, __pyx_v_Omega, __pyx_v_OmegaLambda, __pyx_v_Hubble, __pyx_v_G, __pyx_v_ReionizationModel, __pyx_v_zr_recomb, __pyx_v_z0_recomb, __pyx_v_SfrEfficiency, __pyx_v_SfrColdCrit, __pyx_v_EnergySN, __pyx_v_EtaSN, __pyx_v_feedback_reheating_epsilon, __pyx_v_reaheat_pre_vel, __pyx_v_reaheat_slope);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10L_Galaxies_C_update_c_model_params(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_Omega, double __pyx_v_OmegaLambda, double __pyx_v_Hubble, double __pyx_v_G, int __pyx_v_ReionizationModel, double __pyx_v_zr_recomb, double __pyx_v_z0_recomb) {
+static PyObject *__pyx_pf_10L_Galaxies_C_update_c_model_params(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_Omega, double __pyx_v_OmegaLambda, double __pyx_v_Hubble, double __pyx_v_G, int __pyx_v_ReionizationModel, double __pyx_v_zr_recomb, double __pyx_v_z0_recomb, float __pyx_v_SfrEfficiency, double __pyx_v_SfrColdCrit, double __pyx_v_EnergySN, double __pyx_v_EtaSN, double __pyx_v_feedback_reheating_epsilon, double __pyx_v_reaheat_pre_vel, double __pyx_v_reaheat_slope) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("C_update_c_model_params", 0);
 
-  /* "L_Galaxies.pyx":8
- *                             double z0_recomb):
+  /* "L_Galaxies.pyx":10
+ *                             double reaheat_pre_vel, double reaheat_slope):
  * 
  *     L_galaxies.update_c_model_params(Omega, OmegaLambda, Hubble, G,             # <<<<<<<<<<<<<<
- *                                      ReionizationModel, zr_recomb, z0_recomb)
- * 
+ *                                      ReionizationModel, zr_recomb, z0_recomb,
+ *                                      SfrEfficiency, SfrColdCrit, EnergySN,
  */
-  update_c_model_params(__pyx_v_Omega, __pyx_v_OmegaLambda, __pyx_v_Hubble, __pyx_v_G, __pyx_v_ReionizationModel, __pyx_v_zr_recomb, __pyx_v_z0_recomb);
+  update_c_model_params(__pyx_v_Omega, __pyx_v_OmegaLambda, __pyx_v_Hubble, __pyx_v_G, __pyx_v_ReionizationModel, __pyx_v_zr_recomb, __pyx_v_z0_recomb, __pyx_v_SfrEfficiency, __pyx_v_SfrColdCrit, __pyx_v_EnergySN, __pyx_v_EtaSN, __pyx_v_feedback_reheating_epsilon, __pyx_v_reaheat_pre_vel, __pyx_v_reaheat_slope);
 
-  /* "L_Galaxies.pyx":11
- *                                      ReionizationModel, zr_recomb, z0_recomb)
+  /* "L_Galaxies.pyx":16
+ *                                      reaheat_pre_vel, reaheat_slope)
  * 
  *     return None             # <<<<<<<<<<<<<<
  * 
@@ -1272,7 +1388,7 @@ static PyObject *__pyx_pf_10L_Galaxies_C_update_c_model_params(CYTHON_UNUSED PyO
  * 
  * def C_update_c_model_params(double Omega, double OmegaLambda, double Hubble,             # <<<<<<<<<<<<<<
  *                             double G,int ReionizationModel, double zr_recomb,
- *                             double z0_recomb):
+ *                             double z0_recomb,float SfrEfficiency, double SfrColdCrit,
  */
 
   /* function exit code */
@@ -1282,7 +1398,7 @@ static PyObject *__pyx_pf_10L_Galaxies_C_update_c_model_params(CYTHON_UNUSED PyO
   return __pyx_r;
 }
 
-/* "L_Galaxies.pyx":13
+/* "L_Galaxies.pyx":18
  *     return None
  * 
  * def C_read_cooling_functions():             # <<<<<<<<<<<<<<
@@ -1309,7 +1425,7 @@ static PyObject *__pyx_pf_10L_Galaxies_2C_read_cooling_functions(CYTHON_UNUSED P
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("C_read_cooling_functions", 0);
 
-  /* "L_Galaxies.pyx":15
+  /* "L_Galaxies.pyx":20
  * def C_read_cooling_functions():
  * 
  *     L_galaxies.read_cooling_functions()             # <<<<<<<<<<<<<<
@@ -1318,7 +1434,7 @@ static PyObject *__pyx_pf_10L_Galaxies_2C_read_cooling_functions(CYTHON_UNUSED P
  */
   read_cooling_functions();
 
-  /* "L_Galaxies.pyx":17
+  /* "L_Galaxies.pyx":22
  *     L_galaxies.read_cooling_functions()
  * 
  *     return None             # <<<<<<<<<<<<<<
@@ -1329,7 +1445,7 @@ static PyObject *__pyx_pf_10L_Galaxies_2C_read_cooling_functions(CYTHON_UNUSED P
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
 
-  /* "L_Galaxies.pyx":13
+  /* "L_Galaxies.pyx":18
  *     return None
  * 
  * def C_read_cooling_functions():             # <<<<<<<<<<<<<<
@@ -1344,7 +1460,7 @@ static PyObject *__pyx_pf_10L_Galaxies_2C_read_cooling_functions(CYTHON_UNUSED P
   return __pyx_r;
 }
 
-/* "L_Galaxies.pyx":19
+/* "L_Galaxies.pyx":24
  *     return None
  * 
  * def C_get_metaldependent_cooling_rate(double logTemp, double logZ):             # <<<<<<<<<<<<<<
@@ -1387,11 +1503,11 @@ static PyObject *__pyx_pw_10L_Galaxies_5C_get_metaldependent_cooling_rate(PyObje
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_logZ)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_get_metaldependent_cooling_rate", 1, 2, 2, 1); __PYX_ERR(0, 19, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_get_metaldependent_cooling_rate", 1, 2, 2, 1); __PYX_ERR(0, 24, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "C_get_metaldependent_cooling_rate") < 0)) __PYX_ERR(0, 19, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "C_get_metaldependent_cooling_rate") < 0)) __PYX_ERR(0, 24, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1399,12 +1515,12 @@ static PyObject *__pyx_pw_10L_Galaxies_5C_get_metaldependent_cooling_rate(PyObje
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_logTemp = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_logTemp == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 19, __pyx_L3_error)
-    __pyx_v_logZ = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_logZ == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 19, __pyx_L3_error)
+    __pyx_v_logTemp = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_logTemp == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
+    __pyx_v_logZ = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_logZ == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("C_get_metaldependent_cooling_rate", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 19, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("C_get_metaldependent_cooling_rate", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 24, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("L_Galaxies.C_get_metaldependent_cooling_rate", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1426,7 +1542,7 @@ static PyObject *__pyx_pf_10L_Galaxies_4C_get_metaldependent_cooling_rate(CYTHON
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("C_get_metaldependent_cooling_rate", 0);
 
-  /* "L_Galaxies.pyx":21
+  /* "L_Galaxies.pyx":26
  * def C_get_metaldependent_cooling_rate(double logTemp, double logZ):
  * 
  *     return L_galaxies.get_metaldependent_cooling_rate(logTemp, logZ)             # <<<<<<<<<<<<<<
@@ -1434,13 +1550,13 @@ static PyObject *__pyx_pf_10L_Galaxies_4C_get_metaldependent_cooling_rate(CYTHON
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(get_metaldependent_cooling_rate(__pyx_v_logTemp, __pyx_v_logZ)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(get_metaldependent_cooling_rate(__pyx_v_logTemp, __pyx_v_logZ)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "L_Galaxies.pyx":19
+  /* "L_Galaxies.pyx":24
  *     return None
  * 
  * def C_get_metaldependent_cooling_rate(double logTemp, double logZ):             # <<<<<<<<<<<<<<
@@ -1459,7 +1575,7 @@ static PyObject *__pyx_pf_10L_Galaxies_4C_get_metaldependent_cooling_rate(CYTHON
   return __pyx_r;
 }
 
-/* "L_Galaxies.pyx":24
+/* "L_Galaxies.pyx":29
  * 
  * 
  * def C_read_reionization():             # <<<<<<<<<<<<<<
@@ -1486,7 +1602,7 @@ static PyObject *__pyx_pf_10L_Galaxies_6C_read_reionization(CYTHON_UNUSED PyObje
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("C_read_reionization", 0);
 
-  /* "L_Galaxies.pyx":26
+  /* "L_Galaxies.pyx":31
  * def C_read_reionization():
  * 
  *     L_galaxies.read_reionization()             # <<<<<<<<<<<<<<
@@ -1495,7 +1611,7 @@ static PyObject *__pyx_pf_10L_Galaxies_6C_read_reionization(CYTHON_UNUSED PyObje
  */
   read_reionization();
 
-  /* "L_Galaxies.pyx":28
+  /* "L_Galaxies.pyx":33
  *     L_galaxies.read_reionization()
  * 
  *     return None             # <<<<<<<<<<<<<<
@@ -1506,7 +1622,7 @@ static PyObject *__pyx_pf_10L_Galaxies_6C_read_reionization(CYTHON_UNUSED PyObje
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
 
-  /* "L_Galaxies.pyx":24
+  /* "L_Galaxies.pyx":29
  * 
  * 
  * def C_read_reionization():             # <<<<<<<<<<<<<<
@@ -1521,7 +1637,7 @@ static PyObject *__pyx_pf_10L_Galaxies_6C_read_reionization(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "L_Galaxies.pyx":30
+/* "L_Galaxies.pyx":35
  *     return None
  * 
  * def C_do_reionization(float Mvir, double Zcurr):             # <<<<<<<<<<<<<<
@@ -1564,11 +1680,11 @@ static PyObject *__pyx_pw_10L_Galaxies_9C_do_reionization(PyObject *__pyx_self, 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Zcurr)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("C_do_reionization", 1, 2, 2, 1); __PYX_ERR(0, 30, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("C_do_reionization", 1, 2, 2, 1); __PYX_ERR(0, 35, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "C_do_reionization") < 0)) __PYX_ERR(0, 30, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "C_do_reionization") < 0)) __PYX_ERR(0, 35, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -1576,12 +1692,12 @@ static PyObject *__pyx_pw_10L_Galaxies_9C_do_reionization(PyObject *__pyx_self, 
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
       values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
     }
-    __pyx_v_Mvir = __pyx_PyFloat_AsFloat(values[0]); if (unlikely((__pyx_v_Mvir == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
-    __pyx_v_Zcurr = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Zcurr == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L3_error)
+    __pyx_v_Mvir = __pyx_PyFloat_AsFloat(values[0]); if (unlikely((__pyx_v_Mvir == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 35, __pyx_L3_error)
+    __pyx_v_Zcurr = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_Zcurr == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 35, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("C_do_reionization", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 30, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("C_do_reionization", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 35, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("L_Galaxies.C_do_reionization", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -1603,7 +1719,7 @@ static PyObject *__pyx_pf_10L_Galaxies_8C_do_reionization(CYTHON_UNUSED PyObject
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("C_do_reionization", 0);
 
-  /* "L_Galaxies.pyx":32
+  /* "L_Galaxies.pyx":37
  * def C_do_reionization(float Mvir, double Zcurr):
  * 
  *     return L_galaxies.do_reionization(Mvir, Zcurr)             # <<<<<<<<<<<<<<
@@ -1611,13 +1727,13 @@ static PyObject *__pyx_pf_10L_Galaxies_8C_do_reionization(CYTHON_UNUSED PyObject
  * def C_check_if_first_call():
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(do_reionization(__pyx_v_Mvir, __pyx_v_Zcurr)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(do_reionization(__pyx_v_Mvir, __pyx_v_Zcurr)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "L_Galaxies.pyx":30
+  /* "L_Galaxies.pyx":35
  *     return None
  * 
  * def C_do_reionization(float Mvir, double Zcurr):             # <<<<<<<<<<<<<<
@@ -1636,7 +1752,7 @@ static PyObject *__pyx_pf_10L_Galaxies_8C_do_reionization(CYTHON_UNUSED PyObject
   return __pyx_r;
 }
 
-/* "L_Galaxies.pyx":34
+/* "L_Galaxies.pyx":39
  *     return L_galaxies.do_reionization(Mvir, Zcurr)
  * 
  * def C_check_if_first_call():             # <<<<<<<<<<<<<<
@@ -1667,19 +1783,21 @@ static PyObject *__pyx_pf_10L_Galaxies_10C_check_if_first_call(CYTHON_UNUSED PyO
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("C_check_if_first_call", 0);
 
-  /* "L_Galaxies.pyx":36
+  /* "L_Galaxies.pyx":41
  * def C_check_if_first_call():
  * 
  *     return L_galaxies.check_if_first_call()             # <<<<<<<<<<<<<<
+ * 
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __Pyx_PyInt_From_int(check_if_first_call()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(check_if_first_call()); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "L_Galaxies.pyx":34
+  /* "L_Galaxies.pyx":39
  *     return L_galaxies.do_reionization(Mvir, Zcurr)
  * 
  * def C_check_if_first_call():             # <<<<<<<<<<<<<<
@@ -1691,6 +1809,170 @@ static PyObject *__pyx_pf_10L_Galaxies_10C_check_if_first_call(CYTHON_UNUSED PyO
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_AddTraceback("L_Galaxies.C_check_if_first_call", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "L_Galaxies.pyx":44
+ * 
+ * 
+ * def C_star_formation(double Vc, double rad_cold_gas, double mass_cold_gas,             # <<<<<<<<<<<<<<
+ *                      double time, double dt, int nstep):
+ * 
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_10L_Galaxies_13C_star_formation(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_10L_Galaxies_13C_star_formation = {"C_star_formation", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_10L_Galaxies_13C_star_formation, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_10L_Galaxies_13C_star_formation(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  double __pyx_v_Vc;
+  double __pyx_v_rad_cold_gas;
+  double __pyx_v_mass_cold_gas;
+  double __pyx_v_time;
+  double __pyx_v_dt;
+  int __pyx_v_nstep;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("C_star_formation (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_Vc,&__pyx_n_s_rad_cold_gas,&__pyx_n_s_mass_cold_gas,&__pyx_n_s_time,&__pyx_n_s_dt,&__pyx_n_s_nstep,0};
+    PyObject* values[6] = {0,0,0,0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_Vc)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_rad_cold_gas)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_star_formation", 1, 6, 6, 1); __PYX_ERR(0, 44, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_mass_cold_gas)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_star_formation", 1, 6, 6, 2); __PYX_ERR(0, 44, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_time)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_star_formation", 1, 6, 6, 3); __PYX_ERR(0, 44, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_dt)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_star_formation", 1, 6, 6, 4); __PYX_ERR(0, 44, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  5:
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nstep)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("C_star_formation", 1, 6, 6, 5); __PYX_ERR(0, 44, __pyx_L3_error)
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "C_star_formation") < 0)) __PYX_ERR(0, 44, __pyx_L3_error)
+      }
+    } else if (PyTuple_GET_SIZE(__pyx_args) != 6) {
+      goto __pyx_L5_argtuple_error;
+    } else {
+      values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+      values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+      values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+      values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+      values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+      values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+    }
+    __pyx_v_Vc = __pyx_PyFloat_AsDouble(values[0]); if (unlikely((__pyx_v_Vc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L3_error)
+    __pyx_v_rad_cold_gas = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_rad_cold_gas == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L3_error)
+    __pyx_v_mass_cold_gas = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_mass_cold_gas == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 44, __pyx_L3_error)
+    __pyx_v_time = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_time == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 45, __pyx_L3_error)
+    __pyx_v_dt = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_dt == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 45, __pyx_L3_error)
+    __pyx_v_nstep = __Pyx_PyInt_As_int(values[5]); if (unlikely((__pyx_v_nstep == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 45, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("C_star_formation", 1, 6, 6, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 44, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("L_Galaxies.C_star_formation", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_10L_Galaxies_12C_star_formation(__pyx_self, __pyx_v_Vc, __pyx_v_rad_cold_gas, __pyx_v_mass_cold_gas, __pyx_v_time, __pyx_v_dt, __pyx_v_nstep);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_10L_Galaxies_12C_star_formation(CYTHON_UNUSED PyObject *__pyx_self, double __pyx_v_Vc, double __pyx_v_rad_cold_gas, double __pyx_v_mass_cold_gas, double __pyx_v_time, double __pyx_v_dt, int __pyx_v_nstep) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("C_star_formation", 0);
+
+  /* "L_Galaxies.pyx":47
+ *                      double time, double dt, int nstep):
+ * 
+ *     return L_galaxies.starformation(Vc, rad_cold_gas, mass_cold_gas,             # <<<<<<<<<<<<<<
+ *                                     time, dt, nstep)
+ */
+  __Pyx_XDECREF(__pyx_r);
+
+  /* "L_Galaxies.pyx":48
+ * 
+ *     return L_galaxies.starformation(Vc, rad_cold_gas, mass_cold_gas,
+ *                                     time, dt, nstep)             # <<<<<<<<<<<<<<
+ */
+  __pyx_t_1 = __pyx_convert__to_py_struct__ReturnTuple(starformation(__pyx_v_Vc, __pyx_v_rad_cold_gas, __pyx_v_mass_cold_gas, __pyx_v_time, __pyx_v_dt, __pyx_v_nstep)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "L_Galaxies.pyx":44
+ * 
+ * 
+ * def C_star_formation(double Vc, double rad_cold_gas, double mass_cold_gas,             # <<<<<<<<<<<<<<
+ *                      double time, double dt, int nstep):
+ * 
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("L_Galaxies.C_star_formation", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -1749,7 +2031,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_C_get_metaldependent_cooling_rat, __pyx_k_C_get_metaldependent_cooling_rat, sizeof(__pyx_k_C_get_metaldependent_cooling_rat), 0, 0, 1, 1},
   {&__pyx_n_s_C_read_cooling_functions, __pyx_k_C_read_cooling_functions, sizeof(__pyx_k_C_read_cooling_functions), 0, 0, 1, 1},
   {&__pyx_n_s_C_read_reionization, __pyx_k_C_read_reionization, sizeof(__pyx_k_C_read_reionization), 0, 0, 1, 1},
+  {&__pyx_n_s_C_star_formation, __pyx_k_C_star_formation, sizeof(__pyx_k_C_star_formation), 0, 0, 1, 1},
   {&__pyx_n_s_C_update_c_model_params, __pyx_k_C_update_c_model_params, sizeof(__pyx_k_C_update_c_model_params), 0, 0, 1, 1},
+  {&__pyx_n_s_EnergySN, __pyx_k_EnergySN, sizeof(__pyx_k_EnergySN), 0, 0, 1, 1},
+  {&__pyx_n_s_EtaSN, __pyx_k_EtaSN, sizeof(__pyx_k_EtaSN), 0, 0, 1, 1},
   {&__pyx_n_s_G, __pyx_k_G, sizeof(__pyx_k_G), 0, 0, 1, 1},
   {&__pyx_n_s_Hubble, __pyx_k_Hubble, sizeof(__pyx_k_Hubble), 0, 0, 1, 1},
   {&__pyx_n_s_L_Galaxies, __pyx_k_L_Galaxies, sizeof(__pyx_k_L_Galaxies), 0, 0, 1, 1},
@@ -1758,13 +2043,26 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_Omega, __pyx_k_Omega, sizeof(__pyx_k_Omega), 0, 0, 1, 1},
   {&__pyx_n_s_OmegaLambda, __pyx_k_OmegaLambda, sizeof(__pyx_k_OmegaLambda), 0, 0, 1, 1},
   {&__pyx_n_s_ReionizationModel, __pyx_k_ReionizationModel, sizeof(__pyx_k_ReionizationModel), 0, 0, 1, 1},
+  {&__pyx_n_s_Return_reheated_mass, __pyx_k_Return_reheated_mass, sizeof(__pyx_k_Return_reheated_mass), 0, 0, 1, 1},
+  {&__pyx_n_s_Returnstars, __pyx_k_Returnstars, sizeof(__pyx_k_Returnstars), 0, 0, 1, 1},
+  {&__pyx_n_s_SfrColdCrit, __pyx_k_SfrColdCrit, sizeof(__pyx_k_SfrColdCrit), 0, 0, 1, 1},
+  {&__pyx_n_s_SfrEfficiency, __pyx_k_SfrEfficiency, sizeof(__pyx_k_SfrEfficiency), 0, 0, 1, 1},
+  {&__pyx_n_s_Vc, __pyx_k_Vc, sizeof(__pyx_k_Vc), 0, 0, 1, 1},
   {&__pyx_n_s_Zcurr, __pyx_k_Zcurr, sizeof(__pyx_k_Zcurr), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
+  {&__pyx_n_s_dt, __pyx_k_dt, sizeof(__pyx_k_dt), 0, 0, 1, 1},
+  {&__pyx_n_s_feedback_reheating_epsilon, __pyx_k_feedback_reheating_epsilon, sizeof(__pyx_k_feedback_reheating_epsilon), 0, 0, 1, 1},
   {&__pyx_n_s_logTemp, __pyx_k_logTemp, sizeof(__pyx_k_logTemp), 0, 0, 1, 1},
   {&__pyx_n_s_logZ, __pyx_k_logZ, sizeof(__pyx_k_logZ), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
+  {&__pyx_n_s_mass_cold_gas, __pyx_k_mass_cold_gas, sizeof(__pyx_k_mass_cold_gas), 0, 0, 1, 1},
   {&__pyx_n_s_name, __pyx_k_name, sizeof(__pyx_k_name), 0, 0, 1, 1},
+  {&__pyx_n_s_nstep, __pyx_k_nstep, sizeof(__pyx_k_nstep), 0, 0, 1, 1},
+  {&__pyx_n_s_rad_cold_gas, __pyx_k_rad_cold_gas, sizeof(__pyx_k_rad_cold_gas), 0, 0, 1, 1},
+  {&__pyx_n_s_reaheat_pre_vel, __pyx_k_reaheat_pre_vel, sizeof(__pyx_k_reaheat_pre_vel), 0, 0, 1, 1},
+  {&__pyx_n_s_reaheat_slope, __pyx_k_reaheat_slope, sizeof(__pyx_k_reaheat_slope), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
+  {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
   {&__pyx_n_s_z0_recomb, __pyx_k_z0_recomb, sizeof(__pyx_k_z0_recomb), 0, 0, 1, 1},
   {&__pyx_n_s_zr_recomb, __pyx_k_zr_recomb, sizeof(__pyx_k_zr_recomb), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
@@ -1782,63 +2080,75 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def C_update_c_model_params(double Omega, double OmegaLambda, double Hubble,             # <<<<<<<<<<<<<<
  *                             double G,int ReionizationModel, double zr_recomb,
- *                             double z0_recomb):
+ *                             double z0_recomb,float SfrEfficiency, double SfrColdCrit,
  */
-  __pyx_tuple_ = PyTuple_Pack(7, __pyx_n_s_Omega, __pyx_n_s_OmegaLambda, __pyx_n_s_Hubble, __pyx_n_s_G, __pyx_n_s_ReionizationModel, __pyx_n_s_zr_recomb, __pyx_n_s_z0_recomb); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(14, __pyx_n_s_Omega, __pyx_n_s_OmegaLambda, __pyx_n_s_Hubble, __pyx_n_s_G, __pyx_n_s_ReionizationModel, __pyx_n_s_zr_recomb, __pyx_n_s_z0_recomb, __pyx_n_s_SfrEfficiency, __pyx_n_s_SfrColdCrit, __pyx_n_s_EnergySN, __pyx_n_s_EtaSN, __pyx_n_s_feedback_reheating_epsilon, __pyx_n_s_reaheat_pre_vel, __pyx_n_s_reaheat_slope); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(7, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_update_c_model_params, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 4, __pyx_L1_error)
+  __pyx_codeobj__2 = (PyObject*)__Pyx_PyCode_New(14, 0, 14, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple_, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_update_c_model_params, 4, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__2)) __PYX_ERR(0, 4, __pyx_L1_error)
 
-  /* "L_Galaxies.pyx":13
+  /* "L_Galaxies.pyx":18
  *     return None
  * 
  * def C_read_cooling_functions():             # <<<<<<<<<<<<<<
  * 
  *     L_galaxies.read_cooling_functions()
  */
-  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_read_cooling_functions, 13, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __pyx_codeobj__3 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_read_cooling_functions, 18, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__3)) __PYX_ERR(0, 18, __pyx_L1_error)
 
-  /* "L_Galaxies.pyx":19
+  /* "L_Galaxies.pyx":24
  *     return None
  * 
  * def C_get_metaldependent_cooling_rate(double logTemp, double logZ):             # <<<<<<<<<<<<<<
  * 
  *     return L_galaxies.get_metaldependent_cooling_rate(logTemp, logZ)
  */
-  __pyx_tuple__4 = PyTuple_Pack(2, __pyx_n_s_logTemp, __pyx_n_s_logZ); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_tuple__4 = PyTuple_Pack(2, __pyx_n_s_logTemp, __pyx_n_s_logZ); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__4);
   __Pyx_GIVEREF(__pyx_tuple__4);
-  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_get_metaldependent_cooling_rat, 19, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_codeobj__5 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__4, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_get_metaldependent_cooling_rat, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__5)) __PYX_ERR(0, 24, __pyx_L1_error)
 
-  /* "L_Galaxies.pyx":24
+  /* "L_Galaxies.pyx":29
  * 
  * 
  * def C_read_reionization():             # <<<<<<<<<<<<<<
  * 
  *     L_galaxies.read_reionization()
  */
-  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_read_reionization, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 24, __pyx_L1_error)
+  __pyx_codeobj__6 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_read_reionization, 29, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__6)) __PYX_ERR(0, 29, __pyx_L1_error)
 
-  /* "L_Galaxies.pyx":30
+  /* "L_Galaxies.pyx":35
  *     return None
  * 
  * def C_do_reionization(float Mvir, double Zcurr):             # <<<<<<<<<<<<<<
  * 
  *     return L_galaxies.do_reionization(Mvir, Zcurr)
  */
-  __pyx_tuple__7 = PyTuple_Pack(2, __pyx_n_s_Mvir, __pyx_n_s_Zcurr); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_tuple__7 = PyTuple_Pack(2, __pyx_n_s_Mvir, __pyx_n_s_Zcurr); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__7);
   __Pyx_GIVEREF(__pyx_tuple__7);
-  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_do_reionization, 30, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_codeobj__8 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__7, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_do_reionization, 35, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__8)) __PYX_ERR(0, 35, __pyx_L1_error)
 
-  /* "L_Galaxies.pyx":34
+  /* "L_Galaxies.pyx":39
  *     return L_galaxies.do_reionization(Mvir, Zcurr)
  * 
  * def C_check_if_first_call():             # <<<<<<<<<<<<<<
  * 
  *     return L_galaxies.check_if_first_call()
  */
-  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_check_if_first_call, 34, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_codeobj__9 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_check_if_first_call, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__9)) __PYX_ERR(0, 39, __pyx_L1_error)
+
+  /* "L_Galaxies.pyx":44
+ * 
+ * 
+ * def C_star_formation(double Vc, double rad_cold_gas, double mass_cold_gas,             # <<<<<<<<<<<<<<
+ *                      double time, double dt, int nstep):
+ * 
+ */
+  __pyx_tuple__10 = PyTuple_Pack(6, __pyx_n_s_Vc, __pyx_n_s_rad_cold_gas, __pyx_n_s_mass_cold_gas, __pyx_n_s_time, __pyx_n_s_dt, __pyx_n_s_nstep); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
+  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(6, 0, 6, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_L_Galaxies_pyx, __pyx_n_s_C_star_formation, 44, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -2124,71 +2434,83 @@ if (!__Pyx_RefNanny) {
  * 
  * def C_update_c_model_params(double Omega, double OmegaLambda, double Hubble,             # <<<<<<<<<<<<<<
  *                             double G,int ReionizationModel, double zr_recomb,
- *                             double z0_recomb):
+ *                             double z0_recomb,float SfrEfficiency, double SfrColdCrit,
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_1C_update_c_model_params, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_update_c_model_params, __pyx_t_1) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "L_Galaxies.pyx":13
+  /* "L_Galaxies.pyx":18
  *     return None
  * 
  * def C_read_cooling_functions():             # <<<<<<<<<<<<<<
  * 
  *     L_galaxies.read_cooling_functions()
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_3C_read_cooling_functions, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 13, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_3C_read_cooling_functions, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_read_cooling_functions, __pyx_t_1) < 0) __PYX_ERR(0, 13, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_read_cooling_functions, __pyx_t_1) < 0) __PYX_ERR(0, 18, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "L_Galaxies.pyx":19
+  /* "L_Galaxies.pyx":24
  *     return None
  * 
  * def C_get_metaldependent_cooling_rate(double logTemp, double logZ):             # <<<<<<<<<<<<<<
  * 
  *     return L_galaxies.get_metaldependent_cooling_rate(logTemp, logZ)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_5C_get_metaldependent_cooling_rate, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_5C_get_metaldependent_cooling_rate, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_get_metaldependent_cooling_rat, __pyx_t_1) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_get_metaldependent_cooling_rat, __pyx_t_1) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "L_Galaxies.pyx":24
+  /* "L_Galaxies.pyx":29
  * 
  * 
  * def C_read_reionization():             # <<<<<<<<<<<<<<
  * 
  *     L_galaxies.read_reionization()
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_7C_read_reionization, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_7C_read_reionization, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_read_reionization, __pyx_t_1) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_read_reionization, __pyx_t_1) < 0) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "L_Galaxies.pyx":30
+  /* "L_Galaxies.pyx":35
  *     return None
  * 
  * def C_do_reionization(float Mvir, double Zcurr):             # <<<<<<<<<<<<<<
  * 
  *     return L_galaxies.do_reionization(Mvir, Zcurr)
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_9C_do_reionization, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_9C_do_reionization, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_do_reionization, __pyx_t_1) < 0) __PYX_ERR(0, 30, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_do_reionization, __pyx_t_1) < 0) __PYX_ERR(0, 35, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "L_Galaxies.pyx":34
+  /* "L_Galaxies.pyx":39
  *     return L_galaxies.do_reionization(Mvir, Zcurr)
  * 
  * def C_check_if_first_call():             # <<<<<<<<<<<<<<
  * 
  *     return L_galaxies.check_if_first_call()
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_11C_check_if_first_call, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_11C_check_if_first_call, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_check_if_first_call, __pyx_t_1) < 0) __PYX_ERR(0, 34, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_check_if_first_call, __pyx_t_1) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "L_Galaxies.pyx":44
+ * 
+ * 
+ * def C_star_formation(double Vc, double rad_cold_gas, double mass_cold_gas,             # <<<<<<<<<<<<<<
+ *                      double time, double dt, int nstep):
+ * 
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_10L_Galaxies_13C_star_formation, NULL, __pyx_n_s_L_Galaxies); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_C_star_formation, __pyx_t_1) < 0) __PYX_ERR(0, 44, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "L_Galaxies.pyx":1
@@ -2709,6 +3031,22 @@ static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
     }
 }
 
+static PyObject* __pyx_convert__to_py_struct__ReturnTuple(struct ReturnTuple s) {
+  PyObject* res;
+  PyObject* member;
+  res = __Pyx_PyDict_NewPresized(2); if (unlikely(!res)) return NULL;
+  member = PyFloat_FromDouble(s.Returnstars); if (unlikely(!member)) goto bad;
+  if (unlikely(PyDict_SetItem(res, __pyx_n_s_Returnstars, member) < 0)) goto bad;
+  Py_DECREF(member);
+  member = PyFloat_FromDouble(s.Return_reheated_mass); if (unlikely(!member)) goto bad;
+  if (unlikely(PyDict_SetItem(res, __pyx_n_s_Return_reheated_mass, member) < 0)) goto bad;
+  Py_DECREF(member);
+  return res;
+  bad:
+  Py_XDECREF(member);
+  Py_DECREF(res);
+  return NULL;
+}
 /* CIntFromPy */
 static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
     const int neg_one = (int) ((int) 0 - (int) 1), const_zero = (int) 0;

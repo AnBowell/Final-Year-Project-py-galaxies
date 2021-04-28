@@ -34,7 +34,8 @@ for z in range(0,8, 2):
     # r0 in Mpc
     r0 = np.arange(0.01,10,0.001)
     
-    circular_velocity = Halos.HaloProperties.calculate_virial_circular_velocity(z, H0, r0)
+    circular_velocity = Halos.HaloProperties.calculate_virial_circular_velocity(z, H0,model_params.omega_m, 
+                                                                                model_params.omega_lambda, r0)
     
     virial_temps =  Halos.HaloProperties.calculate_virial_temperature(circular_velocity,
                                                                      model_params.mu,
@@ -86,5 +87,5 @@ ax1.set_yscale('log')
 ax1.set_ylabel('Cooling rate  / s^-1 erg cm^3')
 ax1.set_xlabel('Gas temperature / K')
 ax1.legend()
-plt.savefig('output graphs/Cooling rates.png',dpi=600)
+plt.savefig('output graphs/Cooling_rates_ph.eps')
 plt.show()

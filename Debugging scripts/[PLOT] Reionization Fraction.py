@@ -39,10 +39,10 @@ model_params.read_in_data_tables_from_c()
 if model_params.reionize_model == 0:
     title = 'Okamoto et al (2008)'
     
-    masses = np.arange(10**8, 10**10, 10**6)
+    masses = np.arange(10**8, 10**11, 10**6)
     redshifts = np.arange(0, 10, 0.01)
     
-    extent = [10**8, 10**10,0,10]
+    extent = [10**8, 10**11,0,10]
     
 else:
     title = 'Kravtsov et al (2004)'

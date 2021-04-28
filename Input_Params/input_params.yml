@@ -9,11 +9,11 @@ output_files:
 cosmology:
  omega_m:        
   Description: 'Matter density parameter'
-  Value:        0.30
+  Value:       0.315
   Units:       'None'
  omega_lambda:
   Description: 'Cosmo const parameter'
-  Value:       0.7
+  Value:       0.685
   Units:       'None'
  omega_gamma:
   Description: 'Radiation density parameter'
@@ -21,7 +21,7 @@ cosmology:
   Units:       'None'
  H0:
   Description: 'The hubble parameter evaluated at t=0 (from plank)'
-  Value:       67.66
+  Value:       67.3
   Units:       '(km/s)/Mpc'
   
  zr_reionization:
@@ -64,6 +64,33 @@ performance:
   Description: 'Size of HDF5 io buffer (number of records)'
   Value:        1000
 
+star_params:
+ SFR_efficiency: 
+  Description: 'How efficiently stars form within the central subhalo. Taken from input_Hen15_MR_W1_PLANCK.par'
+  Value: 0.025
+ SFR_cold_crit: 
+  Description: 'Cold gas mass in 10^10 Msun. Also taken from Taken from input_Hen15_MR_W1_PLANCK.par'
+  Value: 0.24
+  
+SN_params:
+ EnergySN:
+  Description: 'How much energy available when a star goes supernova - input_Hen15_MR_W1_PLANCK'
+  Value: 1.0e51
+ EtaSN:
+  Description: 'As above?'
+  Value: 8.0e-3
+ FeedbackReheatingEpsilon:
+  Description: 'Mass of cold gas reheated due to SF (see Martin 1999)'
+  Value: 2.6
+ ReheatPreVelocity:
+  Description: 'Normalization of SN feedback. 480 for Hen 2015 --< seems to large so using Guo 2011'
+  Value: 200.
+ ReheatSlope:
+  Description: 'Slope of the dependes on SN feedback on Vvir'
+  Value: 0.72
+  
+  
+  
 Monitoring:
  Timing:
   Description: 'Whether or not to time parts of code and save output'

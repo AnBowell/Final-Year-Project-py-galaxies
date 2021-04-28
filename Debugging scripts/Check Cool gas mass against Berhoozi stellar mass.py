@@ -22,6 +22,7 @@ ber_stellar_mass = dataset['stellar_mass'][:]
 cold_gas_mass =  dataset['cold_gas_mass'][:]
 
 
+
 stellar_mask = ber_stellar_mass > 0
 
 
@@ -49,7 +50,7 @@ ax1.set_xlabel('Behroozi stellar mass / M_o')
 
 ax1.set_title('On average, cold gas has {:.2f} more mass than Behroozi stellar'.format((cold_gas_mass/ber_stellar_mass).mean()))
 
-plt.savefig('output graphs/Stellar vs cold gas.png', dpi= 400)
+plt.savefig('output graphs/Stellar2 vs cold gas.png', dpi= 400)
 plt.show()
 
 print()

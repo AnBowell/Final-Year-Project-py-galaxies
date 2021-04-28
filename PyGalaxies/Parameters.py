@@ -8,6 +8,7 @@ Created on Mon Dec  7 10:55:02 2020
 import yaml
 import numpy as np
 from astropy import constants as const
+from astropy import units  as u
 from LGalaxies.L_Galaxies import C_update_c_model_params, C_read_cooling_functions, C_read_reionization, C_check_if_first_call
 
 
@@ -77,24 +78,58 @@ class ModelParams:
         self.timing = self.param_dict["Monitoring"]["Timing"]["Value"]
         self.timing_graph_save_path = self.param_dict["Monitoring"]["Timing"]["graph_save_path"]
         self.timing_data_save_path = self.param_dict["Monitoring"]["Timing"]["timing_data_save_path"]
-        
         self.reionize_model = self.param_dict["model_switches"]["reionization_model"]["Value"]
         
         self.omega = self.omega_lambda + self.omega_m + self.omega_gamma
         
-        self.G = const.G.value
+        
+        astropy_G = const.G
+        
+        cosmo_units_G = (u.Mpc * (u.km**2))/ (u.solMass * (u.s**2))
+        
+        
+        self.SolMass_Mpc_G  = astropy_G.to(cosmo_units_G).value
+        
+        
+        self.G = astropy_G.value
+        
+        
         self.c = const.c.value
-        self.k_B = const.k_B.value
+        self.k_B = const.k_B.value # Be explicit in Units.
         self.m_p = const.m_p.value
         
-        self.halo_descend_attrs = ["hot_gas_mass", "cold_gas", "ejected_gas",
-                           "intracluster_stellar_mass"]
+        self.SFR_efficiency = self.param_dict["star_params"]["SFR_efficiency"]["Value"]
+
+        # This is in 10^10 Msun --> convert
+        self.SFR_cold_crit = self.param_dict["star_params"]["SFR_cold_crit"]["Value"]
+        self.SFR_cold_crit *= 10 ** 10
         
-        self.subhalo_descend_attrs = ['cold_gas_mass', 'stellar_mass']
+        
+        # Convert to internal units as per L-gal.
+        self.EnergySN = float(self.param_dict["SN_params"]["EnergySN"]["Value"])
+        
+        #1.989e+33 Msun --> g, 3.08568e+24 is Mpc --> cm   3.08568e+24/100000 is Unit time ins  
+        # Converting to Msun.Mpc^2(Mpc/Km/s)^-2)
+        self.EnergySN =  self.EnergySN / (1.989e+33 * ((3.08568e+24)**2) / ((3.08568e+24/100000)**2))
+    
+        #Already in correct units.
+        self.EtaSN = float(self.param_dict["SN_params"]["EtaSN"]["Value"])
+
+        
+        
+        self.feedback_reheating_epsilon = self.param_dict["SN_params"]["FeedbackReheatingEpsilon"]["Value"]
+        self.reaheat_pre_vel = self.param_dict["SN_params"]["ReheatPreVelocity"]["Value"]
+        self.reaheat_slope = self.param_dict["SN_params"]["ReheatSlope"]["Value"]
+        
+        
+        self.halo_descend_attrs = ["hot_gas_mass", "ejected_gas","intracluster_stellar_mass"]
+        
+        self.subhalo_descend_attrs = ['cold_gas_mass', 'C_stellar_mass']
         
         self.subhalo_output_list = ['graph_ID', 'snap_ID', 'host_halo_ID',
                                     'subhalo_ID','mean_pos','redshift','SFR',
-                                    'DM_mass','stellar_mass','cold_gas_mass']
+                                    'DM_mass','stellar_mass','cold_gas_mass',
+                                    'C_stellar_mass']
         
         self.read_input_snapshot_times()
         
@@ -143,7 +178,10 @@ class ModelParams:
         
         C_update_c_model_params(self.omega_m, self.omega_lambda, self.H0, 
                                 self.G, self.reionize_model, 
-                                self.zr_reionization, self.z0_reionization)
+                                self.zr_reionization, self.z0_reionization,
+                                self.SFR_efficiency, self.SFR_cold_crit,
+                                self.EnergySN, self.EtaSN, self.feedback_reheating_epsilon,
+                                self.reaheat_pre_vel, self.reaheat_slope)
         
         return None
     
@@ -173,11 +211,13 @@ class ModelParams:
 
     def read_input_snapshot_times(self):
         
-        filepath = 'Input_Params/snapshot_info.txt'
-        data = np.loadtxt(filepath).T
-        
-        self.snap_redshifts = data[2,:]
-        
-        self.snap_times = data[4,:]
-        
+        try:
+            filepath = 'Input_Params/snapshot_info.txt'
+            data = np.loadtxt(filepath).T
+            
+            self.snap_redshifts = data[2,:]
+            
+            self.snap_times = data[4,:]
+        except OSError:
+            print('Snapshot info file has not been found. Program will try and continue')
         return None

@@ -19,11 +19,14 @@ import matplotlib.pyplot as plt
 # plt.rc('text', usetex=True) 
 # plt.rc('xtick',labelsize=14)
 # plt.rc('ytick',labelsize=14)
-
 plt.rc('font', family='serif')
-plt.rc('xtick', labelsize='x-small')
-plt.rc('ytick', labelsize='x-small')
-
+plt.rc('xtick', labelsize='x-large')
+plt.rc('ytick', labelsize='x-large')
+plt.style.use('classic')
+# plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
+plt.rc('text', usetex=True) 
+plt.rc('axes', labelsize=18)  
+plt.rc('legend', fontsize=13)
 model_param_filepath='../Input_Params/input_params.yml'
 debug_flag = False
 verbosity = 1
@@ -39,10 +42,20 @@ model_params.read_in_data_tables_from_c()
 if model_params.reionize_model == 0:
     title = 'Okamoto et al (2008)'
     
-    masses = np.arange(10**8, 10**10, 10**6)
+    # masses = np.arange(10**8, 10**11, 10**8)
+    
+    masses = np.logspace(np.log10(10**9), np.log10(10**11),1000)
+    
+    
     redshifts = np.arange(0, 10, 0.01)
     
-    extent = [10**8, 10**10,0,10]
+    
+    
+    
+    extent = [10**9, 10**11,0,10]
+    
+    
+    
     
 else:
     title = 'Kravtsov et al (2004)'
@@ -70,9 +83,11 @@ for x_counter,mass in enumerate(masses):
         
 
 
-fig, ax1 = plt.subplots(figsize = (6,4))
+fig, ax1 = plt.subplots(figsize = (7,4))
 img = ax1.imshow(results_array, extent= extent,aspect ='auto',
                  vmin=0,vmax=1,cmap='inferno')
+ax1.set_xlim(10**9,10**11)
+
 ax1.set_xscale('log')
 ax1.set_ylabel('z')
 ax1.set_xlabel(r'Halo Mass/M$_\odot$')
@@ -81,6 +96,6 @@ cbar.ax.get_yaxis().labelpad = 17
 cbar.set_label('Baryon Fraction Multiplier', rotation=270,fontsize=16)
 #plt.savefig('output graphs/Reionization Fraction {}.png'.format(title), dpi = 600)
 plt.tight_layout()
-plt.savefig('output graphs/Reionization Fraction.eps'.format(title))
-plt.savefig('output graphs/Reionization Fraction.png'.format(title),dpi=400)
+plt.savefig('output graphs/ReionizationFraction.eps'.format(title))
+plt.savefig('output graphs/ReionizationFraction.png'.format(title),dpi=400)
 plt.show()

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import h5py as h5
 import yaml
-from LGalaxies.L_Galaxies import C_get_metaldependent_cooling_rate, C_do_reionization
+from LGalaxies.L_Galaxies import C_get_metaldependent_cooling_rate, C_do_reionization, C_star_formation
 
 
 class HaloProperties:
@@ -79,6 +79,7 @@ class HaloProperties:
         halo_ID,
         graph_properties,
         dtype_subhalo_stores,
+        model_params
     ):
         """Clipping graph properties to the correct generation for halo use.
 
@@ -157,6 +158,8 @@ class HaloProperties:
         self.sub_graph_halo_ids = graph_properties.sub_graph_halo_ids[
             self.subhalo_start_index : self.subhalo_start_index + self.n_subhalo
         ]
+        
+        self.calc_radius_200(self.redshift, model_params)
 
         # If there are subhalos, find the central one
         if self.n_subhalo > 0:
@@ -248,6 +251,17 @@ class HaloProperties:
         return central_subhalo_ID_pos, total[central_subhalo_ID_pos]
 
 
+    def calc_radius_200(self, z, model_params):
+        
+        Hz = model_params.H0 * (((model_params.omega_m * ((1+z) ** 3)) +
+                                 model_params.omega_lambda) ** (1/2))
+        
+    
+        
+        self.R_200 = ((self.mass * model_params.SolMass_Mpc_G) /
+                      (100 * (Hz**2))) ** (1 / 3)
+        
+        return None
             
     # Halo properties descend in proportion to their mass
     
@@ -266,8 +280,7 @@ class HaloProperties:
     
             # combine particles that move forward and don't
             proportional_contribution = (self.desc_mass  + extra_cont) / self.mass
-    
-    
+            
             for (descendent_id, prop_contrib) in zip(self.desc_ids, 
                                                      proportional_contribution):
     
@@ -293,17 +306,17 @@ class HaloProperties:
                              list_of_subhalo_properties,f_baryon):
         
 #        old_total_baryonic_mass = self.total_halo_baryon_mass
-        
-        for halo_baryon_prop in halo_descend_attrs:
-            
-            self.total_halo_baryon_mass += getattr(self, halo_baryon_prop)
+
+        for halo_baryon_prop in halo_descend_attrs:       
+             self.total_halo_baryon_mass += getattr(self, halo_baryon_prop)
         
         for subhalo_baryon_prop in sub_halo_descend_attrs:
-            
             for subhalo_ID in self.sub_graph_halo_ids:
-            
                 self.total_halo_baryon_mass += getattr(list_of_subhalo_properties[subhalo_ID], 
                                                        subhalo_baryon_prop)
+                
+
+                
                 
         old_total_baryonic_mass = self.total_halo_baryon_mass
 
@@ -311,13 +324,19 @@ class HaloProperties:
                                                              self.mass,
                                                              self.redshift)
         
+        
         self.total_halo_baryon_mass = max(true_baryon_frac * self.mass, 
                                            self.total_halo_baryon_mass)
+        
+
+
+        # if self.total_halo_baryon_mass > self.mass:
+        #     print(self.halo_ID)
         
         change_in_baryonic_mass = self.total_halo_baryon_mass - old_total_baryonic_mass
          
         self.hot_gas_mass += change_in_baryonic_mass
-         
+
          
          
     def calculate_SFR_hot_gas_used(self, dt, list_of_subhalo_properties):
@@ -336,13 +355,10 @@ class HaloProperties:
 
             stellar_mass = max(Behroozi_stellar_mass, old_star_mass)
 
-            star_mass_delta = stellar_mass - old_star_mass
 
-            main_subhalo.SFR = star_mass_delta / dt
-            
             main_subhalo.stellar_mass = stellar_mass
             
-            self.hot_gas_mass -= star_mass_delta
+            #self.hot_gas_mass -= star_mass_delta
         
         return None
 
@@ -469,7 +485,7 @@ class HaloProperties:
     
     
     @staticmethod
-    def calculate_virial_circular_velocity(z, H0, r0):
+    def calculate_virial_circular_velocity(z, H0, omega_m, omega_lambda, r0):
         """Calculates the cirular vellocity when at equilibrium.
         
         This formula is taken from White and Frenk 1991
@@ -494,8 +510,11 @@ class HaloProperties:
             Viral circular velocity.
         """
         
+
         
-        Vc = 1.67 * ((1 + z) ** (1 / 2)) * H0 * r0
+        Hz =  H0 * (((omega_m * ((1+z) ** 3)) + omega_lambda) ** (1/2))
+
+        Vc = 10 * Hz * r0
         
         return Vc
     
@@ -530,15 +549,16 @@ class HaloProperties:
         """
         
         virial_temperature_const_ms = ((0.5 * mu * m_p) / k_B)
+
         
         virial_temperature_const_kms = (virial_temperature_const_ms * 1e6)
         
         T_virial = virial_temperature_const_kms * (Vc ** 2)        
-        
+
         return T_virial
     
     
-    def calculate_hot_gas_temp(self, H0, mu, m_p, k_B):
+    def calculate_hot_gas_temp(self, model_params):
         """Set the hot gas temperature equal to that of the virial temp.
     
         Parameters
@@ -557,14 +577,20 @@ class HaloProperties:
         None.
 
         """
+        
         Vc = self.calculate_virial_circular_velocity(self.redshift,
-                                                H0, self.rms_radius)
+                                                     model_params.H0, 
+                                                     model_params.omega_m,
+                                                     model_params.omega_lambda,
+                                                     self.R_200)
 
-        T_virial = self.calculate_virial_temperature(Vc, mu, m_p, k_B)
+        T_virial = self.calculate_virial_temperature(Vc, model_params.mu,
+                                                     model_params.m_p, 
+                                                     model_params.k_B)
 
         
         self.hot_gas_temp = T_virial
-        self.Vvir = Vc
+        self.V_200 = Vc
 
         return None
     
@@ -577,14 +603,13 @@ class HaloProperties:
         None.
 
         """
-        log_metalicity = np.log(self.gas_metalicity)
-        log_temp = np.log(self.hot_gas_temp)
+        log_metalicity = np.log10(self.gas_metalicity)
+        log_temp = np.log10(self.hot_gas_temp)
         
         cooling_rate = C_get_metaldependent_cooling_rate(log_temp,
                                                          log_metalicity)
         
         self.metal_dependent_cooling_rate = cooling_rate # This in in ergs s^-1 cm ^3
-        
         #x = PROTONMASS * BOLTZMANN * temp / lambda; // now this has units sec g/cm^3
         
         
@@ -623,40 +648,43 @@ class HaloProperties:
             
             # Convert measurements to match
             
-            rms_radius_kms = 3.086e19 * self.rms_radius #Mpc --> km
+            rms_radius_km = self.R_200 * 3.086e19  #Mpc --> km
             
-            rms_radius_cgs = self.rms_radius * 3.086e24 #Mpc --> cm
+            rms_radius_cgs = self.R_200 * 3.086e24 #Mpc --> cm
             
             G_cgs = G * 10e2 # SI --> cgs
+    
+
+            m_p_cgs = m_p *  (10e2) #--> kg to g
             
-            dt_seconds = dt * 365.25 * 60 * 60 #Years --> seconds
-            
-            dynamical_time_at_edge = rms_radius_kms / self.Vvir
+            dt_seconds = dt* 3.154e+7 #Years --> seconds
+
+            dynamical_time_at_edge = rms_radius_km/ self.V_200
+         
        
             lambda_ratio = 0.25
             
             f = beta_prof_ratio - beta_prof_ratio_arctan
             
-            # May need a factor of h.
-            tau_cool_P = ((20. * G_cgs * ((mu * m_p * rms_radius_cgs) ** 2) /
+
+            tau_cool_P = ((20. * G_cgs * ((mu * m_p_cgs * rms_radius_cgs) ** 2) /
                          (lambda_ratio * self.metal_dependent_cooling_rate)) * 
                          ((f ** 2)/(beta_prof_ratio ** 3)))
             
-    
+     
+        
             
-            fg0 = self.mass / self.hot_gas_mass
+            fg0 = self.hot_gas_mass/self.mass
             
-            
-            
+           
             
             dt_ratio =  dt_seconds / dynamical_time_at_edge
             
            
             
-            tau_ratio  = (dynamical_time_at_edge * fg0) / tau_cool_P
+            tau_ratio  = dynamical_time_at_edge * fg0 / tau_cool_P
             
-     
-            
+
             if tau_ratio <= 1:
                 fg = fg0/ (1 + tau_ratio * dt_ratio)
             else:
@@ -670,18 +698,30 @@ class HaloProperties:
                     
                     fg = fg0 / (tau_ratio * (1 + (dt_ratio - teq_ratio)))
                     
-                    
-            
-                    
+
+        
             cooling_gas = (fg0 - fg) * self.mass
-                
-            #self.mass_of_cooling_gas = cooling_gas
+
             
-            list_of_subhalo_properties[self.central_galaxy_ID].cold_gas_mass = \
+            list_of_subhalo_properties[self.central_galaxy_ID].cold_gas_mass +=\
                 cooling_gas
+       
+            if cooling_gas > self.hot_gas_mass:
+                print('Cooling gas greater than hot gas in halo {}'.format(self.haloID))
+
+            self.hot_gas_mass -= cooling_gas
             
-    
         return None
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
      
 class SubhaloProperties:
     
@@ -704,7 +744,7 @@ class SubhaloProperties:
         ]
         
         
-        
+        self.C_stellar_mass  = 0.0
         self.SFR = 0.0
         self.stellar_mass = 0.0
         self.cold_gas_mass = 0.0
@@ -717,7 +757,7 @@ class SubhaloProperties:
         if self.ndesc > 0 :
             
             largest_desc_ID = self.desc_ids[0]
-            
+
 
             descendent_subhalo = list_of_subhalo_properties[largest_desc_ID]
     
@@ -734,6 +774,42 @@ class SubhaloProperties:
                 self.stellar_mass
                 
         # ndesc = -1 if it is the final generation.
+        
+        
+        
+    def calculate_stars_formed(self, halo, dt):
+        
+
+      
+        return_dict = C_star_formation(halo.V_200, halo.R_200/10, self.cold_gas_mass,
+                                        0, dt ,1)
+
+        
+        stars_formed = return_dict['Returnstars']
+        reheated_mass = return_dict['Return_reheated_mass']
+        
+        # print('Inputted cold gas: {:.2e} \nOutputted Stars formed: {:.2e}\nOutputted reheated mass: {:.2e}\nSum: {:.2e}'.format(
+        #     self.cold_gas_mass, stars_formed,reheated_mass, self.cold_gas_mass-(stars_formed+reheated_mass)))
+        
+        
+        
+        self.C_stellar_mass += stars_formed
+    
+        self.cold_gas_mass -= (stars_formed + reheated_mass)
+
+        if self.cold_gas_mass < 0:
+            print('Subhalo {} has used up too much cold gas'.format(self.subhalo_ID))
+        
+        
+        # ADD HOT GAS BACK TO MAIN HALO.
+
+        star_mass_delta = stars_formed 
+
+        self.SFR = star_mass_delta / dt
+        
+        
+        return None
+    
         
         
         

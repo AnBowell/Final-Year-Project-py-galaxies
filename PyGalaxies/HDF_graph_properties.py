@@ -97,12 +97,13 @@ class HDFProperties:
                 ("SFR", np.float32),
                 ("DM_mass", np.float32),
                 ("stellar_mass", np.float32),
-                ("cold_gas_mass", np.float32)
+                ("cold_gas_mass", np.float32),
+                ("C_stellar_mass", np.float32)
             ]
         )
 
 
-        self.sub_halo_descend_attrs = ["stellar_mass", "AGN_mass"]
+        # self.sub_halo_descend_attrs = ["stellar_mass", "AGN_mass"]
         self.halo_output_dataset = None
         self.open_halo_output() # Make sure this is done first as it closes HDF files.
   
@@ -226,14 +227,13 @@ class HDFProperties:
             self.halo_output_data[self.halo_output_iRec]["metalicity_hot_gas"] = halo.gas_metalicity
             self.halo_output_data[self.halo_output_iRec]["metalicity_cooling_rate"] = halo.metal_dependent_cooling_rate
             self.halo_output_data[self.halo_output_iRec]["temperature_hot_gas"] = halo.hot_gas_temp
-            self.halo_output_data[self.halo_output_iRec]["velocity_virial"] = halo.Vvir
+            self.halo_output_data[self.halo_output_iRec]["velocity_virial"] = halo.V_200
             self.halo_output_data[self.halo_output_iRec]["mass_DM"] = halo.mass
             self.halo_output_data[self.halo_output_iRec]["mass_baryon"] = halo.total_halo_baryon_mass
             self.halo_output_data[self.halo_output_iRec]["mass_hot_gas"] = halo.hot_gas_mass
             self.halo_output_data[self.halo_output_iRec]["mass_cold_gas"] = halo.cold_gas
             self.halo_output_data[self.halo_output_iRec]["mass_ejected_gas"] = halo.ejected_gas
             self.halo_output_data[self.halo_output_iRec]["mass_intracluster_light"] = halo.intracluster_stellar_mass
-            
             self.halo_output_iRec += 1
 
             if self.halo_output_iRec == self.model_params.io_nRec:

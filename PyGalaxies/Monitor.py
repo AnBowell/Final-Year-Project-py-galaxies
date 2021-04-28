@@ -140,10 +140,10 @@ class AnalyseSavedData:
         ax1.set_xlabel('Number of Halos in graph')
         
         ax1.scatter(self.array_based_data['amount_of_halos'],
-                    self.array_based_data['time_taken'])
+                    self.array_based_data['time_taken'],label='array')
         
         ax1.scatter(self.filepath_to_class_based['amount_of_subhalos'],
-                    self.filepath_to_class_based['time_taken'])
+                    self.filepath_to_class_based['time_taken'],label='class')
         
         
         ax1.grid(True,alpha=0.5, linestyle='--')

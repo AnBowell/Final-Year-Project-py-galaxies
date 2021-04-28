@@ -11,14 +11,15 @@ from PyGalaxies import Parameters, Monitor, HDF_graph_properties, Halos
 import time
 import numpy as np
 import Monitor
-import gc
+import warnings 
 
+warnings.filterwarnings("ignore")
 
 model_param_filepath='Input_Params/input_params.yml'
 debug_flag = False
 verbosity = 1 
 time_code = True
-mem_code = True
+mem_code = False
 
 
 
@@ -36,10 +37,11 @@ HDF_properties = HDF_graph_properties.HDFProperties(model_params)
 if time_code:
     time_monitor = Monitor.TimeMonitor(HDF_properties.no_of_graphs,
                                        amount_of_timers_required =1)
-if mem_code:
-    mem_monitor = Monitor.MemoryMonitor(HDF_properties.no_of_graphs)
+# if mem_code:
+#     mem_monitor = Monitor.MemoryMonitor(HDF_properties.no_of_graphs)
     
     
+start_time = time.perf_counter()
 
 
 for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
@@ -48,8 +50,8 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
         continue
     
     
-    if mem_code:
-        mem_monitor.record_mem(graph_ID)
+    # if mem_code:
+    #     mem_monitor.record_mem(graph_ID)
                 
     if time_code:
         time_monitor.start_timer()
@@ -67,7 +69,7 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
     # Loop over and intialise the halo and sub-halo arrays.  
 
     list_of_halo_properties = [Halos.HaloProperties(str(graph_ID), halo_ID,
-                               graph_properties, HDF_properties.subhalo_dtype) for 
+                               graph_properties, HDF_properties.subhalo_dtype, model_params) for 
                                halo_ID in range(0, HDF_properties.nhalos_in_graph[graph_ID])]
     
     
@@ -116,8 +118,10 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
 
 
 
-            halo.calculate_hot_gas_temp(model_params.H0, model_params.mu, 
-                                        model_params.m_p, model_params.k_B)
+            halo.calculate_hot_gas_temp(model_params)
+                
+                
+
             
             halo.calculate_metal_dependent_cooling_rate()
             
@@ -128,8 +132,8 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
                                              dt, list_of_subhalo_properties)
 
 
-            halo.calc_halo_props_descend(HDF_properties.part_mass, list_of_halo_properties,
-                                         model_params.halo_descend_attrs)
+            # halo.calc_halo_props_descend(HDF_properties.part_mass, list_of_halo_properties,
+            #                              model_params.halo_descend_attrs)
             
             
 
@@ -139,14 +143,21 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
                 subhalo = list_of_subhalo_properties[subhalo_ID]
                 
                 subhalo.snap_ID = snap_ID
+               
+                if subhalo_ID == halo.central_galaxy_ID:
                 
+                    subhalo.calculate_stars_formed(halo, dt)
+         
                 subhalo.calc_subhalo_props_descend(list_of_subhalo_properties,
                                            model_params.subhalo_descend_attrs, 
                                            list_of_halo_properties)
 
-                
 
-            
+
+               
+                     
+            halo.calc_halo_props_descend(HDF_properties.part_mass, list_of_halo_properties,
+                         model_params.halo_descend_attrs)
             #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             
             halo.done = True
@@ -168,7 +179,7 @@ for graph_ID in range(0,HDF_properties.no_of_graphs)[:]:
     HDF_properties.output_subhalos(list_of_subhalo_properties,
                                    model_params.subhalo_output_list)
    
-    gc.collect()
+
 
 # Close input file
 HDF_properties.close_graph_io(HDF_properties.graph_input_file)
@@ -182,6 +193,11 @@ if HDF_properties.halo_output_iRec > 0:
 HDF_properties.close_graph_io(HDF_properties.halo_output_file)
 
 
+end_time  = time.perf_counter()
+
+
+print('Overall, this took {:.2f}'.format(end_time-start_time))
+
 # Get data for timing class. E.g. number of halos/subhalos for each graph.
 
 if time_code:
@@ -191,7 +207,8 @@ if time_code:
                                  HDF_properties.nsubhalos_in_graph)
 
 
-if mem_code:
+# if mem_code:
     
-    mem_monitor.save_all_mem_data_to_disk(HDF_properties.nhalos_in_graph, 
-                                 HDF_properties.nsubhalos_in_graph)
+#     mem_monitor.save_all_mem_data_to_disk(HDF_properties.nhalos_in_graph, 
+#                                  HDF_properties.nsubhalos_in_graph)
+
