@@ -23,8 +23,8 @@ Different physics routines will be added and tracked here.
 - [x] Star formation and feedback
 
 Future Work
-- [] AGN feedback
-- [] Detailed metallicities
+- [ ] AGN feedback
+- [ ] Detailed metallicities
 
 
 ## File-structure
