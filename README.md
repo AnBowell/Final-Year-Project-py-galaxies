@@ -19,19 +19,13 @@ how they can be used to get a desired output.
 Different physics routines will be added and tracked here.
 
 - [x] Baryon accretion
-	- Completed: 16/10/2020
-- [ ] Cooling of hot to cold gas
-	- Completed: 
-- [ ] Star formation and feedback
-	- Completed:
-- [ ] Black hole growth and feedback
-	- Completed:
-- [ ] Merging of galaxies 
-	- Completed:
-- [ ] Star formation histories
-	- Completed:
-- [ ] Detailed metallicities
-	- Completed:
+- [x] Cooling of hot to cold gas
+- [x] Star formation and feedback
+
+Future Work
+- [] AGN feedback
+- [] Detailed metallicities
+
 
 ## File-structure
 
