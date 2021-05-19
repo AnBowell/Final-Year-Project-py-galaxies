@@ -12,8 +12,7 @@ This is my final year project for a Physics MPhys at the University of Sussex.
 The aim of this project is to implement differen physics routines in Python in the effort of creating a Python front end
 for L-Galaxies. 
 	
-THe useful classes and functions will be housed within the PyGalaxies module. Jupyter notebooks will be used to walk through
-how they can be used to get a desired output.
+The useful classes and functions will be housed within the PyGalaxies package. A driver script will then be used to control the flow of the model.
 
 ## Physics-routines
 Different physics routines will be added and tracked here.
