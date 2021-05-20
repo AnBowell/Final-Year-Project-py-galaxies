@@ -329,10 +329,11 @@ class HDFProperties:
 
 
 class GraphProperties:
-    """A container for all data contained within a single graph.
+    """A container for all data within a single graph.
 
-    This class consists of data gathered from a single graph. This documentat-
-    tion will essentially be copied from Will's.
+    This class consists of data read in from an HDF5 group (graph). The
+    documentation provided here was aided by Will Roper as they provided the
+    input data.
 
 
     Attributes
@@ -482,7 +483,7 @@ class GraphProperties:
 
         """
         self.graph_ID = graph_ID
-
+        
         open_HDF_group = open_HDF_file[str(graph_ID)]
 
         self.desc_start_index = open_HDF_group["desc_start_index"][:]
@@ -494,15 +495,11 @@ class GraphProperties:
             open_HDF_group["direct_prog_contribution"][:] * part_mass
         )
         self.direct_prog_ids = open_HDF_group["direct_prog_ids"][:]
-
-        # This is a temporary fix until Will reruns his code. Swap after
         self.generation_length = open_HDF_group["generation_length"][:]
         self.generation_id = np.arange(
             len(self.generation_length), dtype=int
-        )  # open_HDF_group['generation_id'][:]
-
+        )
         self.generation_start_index = open_HDF_group["generation_start_index"][:]
-
         self.halo_catalog_halo_ids = open_HDF_group["halo_catalog_halo_ids"][:]
         self.mean_pos = open_HDF_group["mean_pos"][:]
         self.ndesc = open_HDF_group["ndesc"][:]
@@ -511,30 +508,20 @@ class GraphProperties:
         self.prog_start_index = open_HDF_group["prog_start_index"][:]
         self.redshifts = open_HDF_group["redshifts"][:]
         self.snapshots = open_HDF_group["snapshots"][:]
-
         self.velocity_dispersion_3D = open_HDF_group["3D_velocity_dispersion"][:]
         self.half_mass_radius = open_HDF_group["half_mass_radius"][:]
         self.half_mass_velocity_radius = open_HDF_group["half_mass_velocity_radius"][:]
         self.mean_vel = open_HDF_group["mean_vel"][:]
         self.rms_radius = open_HDF_group["rms_radius"][:]
         self.v_max = open_HDF_group["v_max"][:]
-
-        #self.sub_halo = model_params.sub_halo
-
         self.graph_halo_ids = np.arange(len(self.mass))
-
         self.n_halos_in_graph = open_HDF_group.attrs["nhalos_in_graph"]
-
-        # Add to docs
-
-      
         self.n_subhalos = open_HDF_group["nsubhalos"][:]
         self.sub_desc_start_index = open_HDF_group["sub_desc_start_index"][:]
         self.sub_direct_desc_contribution = (
             open_HDF_group["sub_direct_desc_contribution"][:] * part_mass
         )
         self.sub_direct_desc_ids = open_HDF_group["sub_direct_desc_ids"][:]
-
         self.sub_direct_prog_contribution = (
             open_HDF_group["sub_direct_prog_contribution"][:] * part_mass
         )
@@ -544,7 +531,6 @@ class GraphProperties:
         self.sub_generation_start_index = open_HDF_group[
             "sub_generation_start_index"
         ][:]
-
         self.sub_mean_pos = open_HDF_group["sub_mean_pos"][:]
         self.sub_ndesc = open_HDF_group["sub_ndesc"][:]
         self.sub_nparts = open_HDF_group["sub_nparts"][:]
@@ -556,7 +542,6 @@ class GraphProperties:
         self.subhalo_catalog_halo_ids = open_HDF_group[
             "subhalo_catalog_halo_ids"
         ][:]
-
         self.sub_velocity_dispersion_3D = open_HDF_group[
             "sub_3D_velocity_dispersion"
         ][:]
@@ -569,6 +554,5 @@ class GraphProperties:
         self.sub_v_max = open_HDF_group["sub_v_max"][:]
         self.subhalo_start_index = open_HDF_group["subhalo_start_index"][:]
         self.host_halos = open_HDF_group["host_halos"][:]
-
         self.sub_graph_halo_ids = np.arange(len(self.sub_nparts))
 

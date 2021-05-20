@@ -13,12 +13,12 @@ from LGalaxies.L_Galaxies import C_get_metaldependent_cooling_rate, C_do_reioniz
 
 
 class HaloProperties:
-    """A container for the properties needed for each halo.
-
-    No sophisticated methods, it just truncates the GraphProperites class to
-    ensure data from the current generation is selected. A simple method is
-    included to  truncate the correct properties for subhalos and store them in
-    a structured numpy array.
+    """A container for the properties and methods needed for each halo.
+    
+    This class extracts the data needed for a single halo from the 
+    GraphProperties class. It also contains the methods needed to process
+    the haloes such as infall and cooling routines. Each method within has
+    its own documentation.
 
     Attributes
     ----------
@@ -58,19 +58,47 @@ class HaloProperties:
         Total mass of all the progenitor halos.
     mass_baryon_from_progenitors : float
         Total mass of all the Baryons contained within the progenitor halos.
-    inclusive_contribution : float
-        The amount of mass that goes 'missing' when a halo descends.
     done : bool
         Whether or not the halo has been processed.
     subhalo_start_index : int
-        The index at which the subhalos, corresponding to the main halo, start.
+        The index at which the subhalos, corresponding to the main halo,
+        start.
     n_subhalo : int
         The amount of subhalos in the host halo.
     sub_graph_halo_ids : ndarray of type 'int'
         The subhalo IDs that are contained within the main halo.
-    sub_halo_attrs : ndarray of type 'dtype_subhalo_stores'
-        The subhalo properties. A structured numpy arrary to store all the
-        properties of a single subhalo.
+    mean_pos : ndarray of type 'float'
+        The mean position (x,y,z) of the halo.
+    velocity_dispersion_3D : float
+        The 3D velocity dispersion of the halo.
+    mean_vel : ndarry of type 'float'
+        The mean velocity (V_x,V_y,V_z) of the halo.
+    rms_radius : float
+        The root mean squared radius of the halo
+    redshift : float
+        The redshift of the halo.
+    total_halo_baryon_mass : float
+        The total amount of baryons within the halo. E.g. hot gas + 
+        stellar and cold gas mass from any subhaloes within.
+    hot_gas_mass : float
+        The mass of hot gas within the halo.
+    hot_gas_temp : float
+        The temperature of the hot gas within the halo.
+    gas_metalicity : float
+        The metalicity of the gas. Currently constant at 1e-4.
+    cold_gas : float
+        The mass of cold gas 
+    metal_dependent_cooling_rate : float
+        The cooling rate of the hot gas in ergs cm^3 / s. 
+    intracluster_stellar_mass : float
+        The stellar mass within the halo that does not belong to any
+        subhaloes. This occurs when a subhalo has no descendents.
+    R_200 : float
+        The radius of the halo's sphere which encloses an overdensity
+        of 200 times that of the critical density.
+    central_galaxy_ID : int
+        The ID of the central subhalo if there is one. If not,
+        it is filled with 2**30, the fill value for the model.
     """
 
     def __init__(
@@ -81,30 +109,31 @@ class HaloProperties:
         dtype_subhalo_stores,
         model_params
     ):
-        """Clipping graph properties to the correct generation for halo use.
+        """Extract halo properties from GraphProperties for halo halo_ID
 
         Parameters
         ----------
         graph_ID : str
             The graph_ID (from HDF5 group).
-        snap_ID : int
-            The snapshot ID currently being processed.
         halo_ID : int
             The halo ID of currently being processed.
         graph_properties : :obj: 'Class'
             An instance of GraphProperties.
-        part_mass : int
+        dtype_subhalo_stores : numpy dtype
             The dark matter particle mass.
-
+        model_params : Instance of ModelParams Class
+            An instance of the model params class which contains all of the 
+            global parameters.
         """
         self.graph_ID = graph_ID
-        self.snap_ID = None # Not filled in intialisation 
+        self.snap_ID = None             # Not filled in intialisation 
         self.halo_ID = halo_ID
+        
         self.catalog_ID = graph_properties.halo_catalog_halo_ids[halo_ID]
         self.mass = graph_properties.mass[halo_ID] 
-
         self.nprog = graph_properties.nprog[halo_ID]
         self.prog_start = graph_properties.prog_start_index[halo_ID]
+        
         self.prog_end = self.prog_start + self.nprog
         self.prog_ids = graph_properties.direct_prog_ids[
             self.prog_start : self.prog_end
@@ -112,59 +141,44 @@ class HaloProperties:
         self.prog_mass = graph_properties.direct_prog_contribution[
             self.prog_start : self.prog_end
         ]
-
         self.ndesc = graph_properties.ndesc[halo_ID]
         self.desc_start = graph_properties.desc_start_index[halo_ID]
         self.desc_end = self.desc_start + self.ndesc
+        
         self.desc_ids = graph_properties.direct_desc_ids[
             self.desc_start : self.desc_end
         ]
         self.desc_mass = graph_properties.direct_desc_contribution[
             self.desc_start : self.desc_end
         ]
-        
-
         self.mean_pos = graph_properties.mean_pos[halo_ID]
-
-        # Add in to documentation
-
         self.velocity_dispersion_3D = graph_properties.velocity_dispersion_3D[halo_ID]
         self.mean_vel = graph_properties.mean_vel[halo_ID]
 
         self.rms_radius = graph_properties.rms_radius[halo_ID]
-
-        # add to docs
         self.redshift = graph_properties.redshifts[halo_ID]
-        
-        self.total_halo_stellar_mass = 0.0 # CHANGE THIS TO BELOW
-        
+
         self.total_halo_baryon_mass = 0.0
         self.hot_gas_mass = 0.0
         self.hot_gas_temp = 0.0
         self.gas_metalicity = 1e-4
-        self.cold_gas = 0.0
-        self.ejected_gas = 0.0
+
         self.metal_dependent_cooling_rate = 0.0
         self.intracluster_stellar_mass = 0.0
 
-        self.done = False
-
-      
-
         self.subhalo_start_index = graph_properties.subhalo_start_index[halo_ID]
-
         self.n_subhalo = graph_properties.n_subhalos[halo_ID]
-
         self.sub_graph_halo_ids = graph_properties.sub_graph_halo_ids[
             self.subhalo_start_index : self.subhalo_start_index + self.n_subhalo
         ]
+        self.done = False
         
+        # Find the radius of the haloes overdensity.
         self.calc_radius_200(self.redshift, model_params)
 
         # If there are subhalos, find the central one
         if self.n_subhalo > 0:
-            
-            
+
             central_sub_halo_ID_pos, central_sub_halo_dist = self.find_central_galaxy(
             self.mean_vel,
             self.velocity_dispersion_3D,
@@ -177,14 +191,11 @@ class HaloProperties:
             graph_properties.sub_mean_pos[self.sub_graph_halo_ids],
             graph_properties.sub_rms_radius[self.sub_graph_halo_ids],
             )
-
-            # The central sub-halo dist will be used as a variable.
-            # Keep in the code.
+            # The central sub-halo dist will be used as a variable
+            # in future versions of the code.
+            # If close enough declare it a central halo -
+            # currently 2**30 as a fill 
             
-            
-            #if close enough declare it a central halo - currently 2**30 as a fill 
-            
-                        
             if central_sub_halo_dist < 2**30:
                     
                 self.central_galaxy_ID = self.sub_graph_halo_ids[
@@ -195,8 +206,6 @@ class HaloProperties:
         else:
             self.central_galaxy_ID = 2**30
    
-            # Could replace the two lines above with a simple decleration
-            # that the central_galaxy_ID is always initilised with 2**30
 
     @staticmethod
     def find_central_galaxy(
@@ -204,7 +213,7 @@ class HaloProperties:
     ):
         """Use phase space finds the closest galaxy to main halo.
 
-        This function follows equation 14 in Will's paper:
+        This function follows equation 14 in Roper et al. Paper:
 
         https://arxiv.org/pdf/2003.01187.pdf.
 
@@ -252,15 +261,32 @@ class HaloProperties:
 
 
     def calc_radius_200(self, z, model_params):
+        """ Calculate the spherical overdensity radius of the halo
         
+        Using equation S1 from the L-Galaxies 2015 model description,
+        https://lgalaxiespublicrelease.github.io/Hen15_doc.pdf ,
+        calculate the radius of the halo.
+
+        Parameters
+        ----------
+        z : float
+            Redshift of the halo.
+        model_params : Instance of class ModelParams
+            An instance of the class ModelParams where the global cosmology 
+            parameters have been stored.
+
+        Returns
+        -------
+        None.
+        
+        """
         Hz = model_params.H0 * (((model_params.omega_m * ((1+z) ** 3)) +
                                  model_params.omega_lambda) ** (1/2))
         
-    
         
         self.R_200 = ((self.mass * model_params.SolMass_Mpc_G) /
                       (100 * (Hz**2))) ** (1 / 3)
-        
+
         return None
             
     # Halo properties descend in proportion to their mass
@@ -365,39 +391,35 @@ class HaloProperties:
 
     @staticmethod
     def Behroozi_formula(a, z, halo_mass):
-        """ Fitted equation from Behroozi et al 2013 describing star formation.
+        """ Fitted equation from Behroozi et al. 2013 describing star formation.
         
         https://arxiv.org/abs/1207.6105
-        
-        This function takes in the halo mass, redhsift and scale factor and
-        returns the expected solar mass within the halo. This is a function
-        that has been fitted from real world data so the magic numbers found 
-        below are arbitrary and can be found in the paper.
+        This function takes in the halo mass, redshift, and scale factor,
+        and then returns the expected stellar mass in the halo. This is an
+        equation that has been fitted using real world data so the 'magic
+        numbers' found below are arbitrary and can be found in the paper.
 
         Parameters
         ----------
         a : float
-            Scale factor.
+            Scale factor. 1/(1+z)
         z : float
             Redshift.
         halo_mass : float
-            Dark matter mass of the halo.
+            Dark matter mass of the halo in solar masses.
 
         Returns
         -------
         stellar_mass : float
-            The expected stellar mass for a halo of a halo_mass size.
-
+            The expected stellar mass (in solar masses) for a halo of a 
+            halo_mass size
         """
-
         log_Mh = np.log10(halo_mass)
-
         nu = np.exp(-4 * (a ** 2))
-
-        # characteristic  stellar/halo mass ratio
+        
+        # Characteristic stellar/halo mass ratio
         log_epsilon = -1.777 + ((-0.006 * (a - 1) + (-0.000) * z) * nu) + (-0.119 * (a - 1))
-
-        # characteristic mass
+        # Characteristic mass
         log_M1 = 11.514 + (-1.793 * (a - 1) + ((-0.251) * z)) * nu
 
         log_mass_frac = log_Mh - log_M1
@@ -408,7 +430,6 @@ class HaloProperties:
             + HaloProperties.powerlaw_Behroozi(log_mass_frac, nu, z, a)
             - HaloProperties.powerlaw_Behroozi(0, nu, z, a)
         )
-
         stellar_mass = 10 ** log_stellar_mass
 
         return stellar_mass
@@ -429,7 +450,7 @@ class HaloProperties:
         z : float
             Redshift of the halo.
         a : float
-            Scale factor of the halo 1/(1+z).
+            Scale factor 1/(1+z).
 
         Returns
         -------
@@ -697,8 +718,7 @@ class HaloProperties:
                 else: 
                     
                     fg = fg0 / (tau_ratio * (1 + (dt_ratio - teq_ratio)))
-                    
-
+                
         
             cooling_gas = (fg0 - fg) * self.mass
 
@@ -724,9 +744,66 @@ class HaloProperties:
     
      
 class SubhaloProperties:
+    """ A container for any subhalo properties 
     
-    def __init__(self, graph_ID, host_halo_ID, subhalo_ID, graph_properties):
+    A short class containing the attributes of subhalos as well as
+    any methods that act on the class. For example, star formation.
+    
+    Attributes
+    ----------
+    
+    graph_ID : int
+        The graph ID the subhalo belongs to.
+    snap_ID : int
+        The snapshot the subhalo belongs to.
+    host_halo_ID : int
+        The host halo the subhalo is within.
+    subhalo_ID : int
+        The indentification number of the subhalo.
+    mean_pos : ndarray of type 'float'
+        An array containing the (x,y,z) position of the subhalo.
+    redshift : float
+        The redshift of the subhalo.
+    DM_mass : float
+        The dark matter mass of the subhalo
+    ndesc : int
+        The number of descendents the subhalo has.
+    desc_start_index : int
+        The index at which this subhalo's descendents start.
+    desc_ids : ndarry of type 'int'
+        The IDs of any descendants of this subhalo.
+    C_stellar_mass : float
+        The stellar mass within the subhalo as modelled using the
+        L-Galaxies C-routines.
+    SFR : float
+        The start formation rate of the subhalo. Amount of stars
+        formed / the time between snapshots.
+    stellar_mass : float
+        The stellar mass from the Behroozi calculations.
+    cold_gas_mass : float
+        The mass of cold gas which has been cooled onto the subhalo.
+    
+    """
+    def __init__(self, graph_ID, host_halo_ID, subhalo_ID, 
+                 graph_properties):
+        """ Extract the relevant subhalo data from graph properties.
         
+        Parameters
+        ----------
+        graph_ID : int
+            The current graph ID.
+        host_halo_ID : int
+            The ID of the halo the current subhalo resides in.
+        subhalo_ID : int
+            The ID of the current subhalo.
+        graph_properties : Instance of class GraphProperties
+            An instance of the graph properties class.
+
+        Returns
+        -------
+        None.
+
+        """
         self.graph_ID = graph_ID
         self.snap_ID = None # Not in initialisation
         self.host_halo_ID = host_halo_ID
@@ -743,17 +820,37 @@ class SubhaloProperties:
              self.desc_start_index : self.desc_start_index +  self.ndesc
         ]
         
-        
         self.C_stellar_mass  = 0.0
         self.SFR = 0.0
         self.stellar_mass = 0.0
         self.cold_gas_mass = 0.0
         
-        
-        
     def calc_subhalo_props_descend(self,list_of_subhalo_properties,
-                           subhalo_descend_attrs, list_of_halo_properties):
+                                   subhalo_descend_attrs, 
+                                   list_of_halo_properties):
+        """ Pass on all baryons to a single descendent subhalo.
         
+        This function iterates over a list of properties that need to
+        be passed down to descendents. It utilises getters and setters 
+        to extract values from class attributes while only using a 
+        list. This means only the list has to be changed when new 
+        properties are added.
+
+        Parameters
+        ----------
+        list_of_subhalo_properties : list of Subhalo Classes
+            The main list of classes for subhalo properties.
+        subhalo_descend_attrs : list of type 'str'
+            List of baryonic properties (attribute names) that are to
+            be passed down to descendents.
+        list_of_halo_properties : list of Halo Classes
+            The main list of classes for halo properties.
+
+        Returns
+        -------
+        None.
+
+        """
         if self.ndesc > 0 :
             
             largest_desc_ID = self.desc_ids[0]
@@ -766,43 +863,57 @@ class SubhaloProperties:
                 to_descend = getattr(self, subhalo_property)
         
                 setattr(descendent_subhalo, subhalo_property,
-                        getattr(descendent_subhalo, subhalo_property) + to_descend)
+                        getattr(descendent_subhalo, subhalo_property) 
+                                + to_descend)
     
+        # If no descendents stars go to host halo as intracluster light.
         elif self.ndesc ==0:
             
             list_of_halo_properties[self.host_halo_ID].intracluster_stellar_mass += \
                 self.stellar_mass
                 
-        # ndesc = -1 if it is the final generation.
         
         
         
     def calculate_stars_formed(self, halo, dt):
-        
+        """ Calculate the mass of stars formed using C routine.
 
-      
+        Utilises the Cython C routine to calculate the mass of stars 
+        formed in the central subhalo.
+
+        Parameters
+        ----------
+        halo : Instance of class HaloProperties.
+            The halo the host halo resides in. This is currently 
+            needed as the galactic disk is an approximation based on
+            halo size.
+        dt : float
+            Time between the last snapshot and the current one.
+
+        Returns
+        -------
+        None.
+
+        """
+        # Calculate the mass of cold gas which has been reheated, and
+        # the mass that has been used to form stars.
         return_dict = C_star_formation(halo.V_200, halo.R_200/10, self.cold_gas_mass,
                                         0, dt ,1)
 
         
         stars_formed = return_dict['Returnstars']
         reheated_mass = return_dict['Return_reheated_mass']
-        
-        # print('Inputted cold gas: {:.2e} \nOutputted Stars formed: {:.2e}\nOutputted reheated mass: {:.2e}\nSum: {:.2e}'.format(
-        #     self.cold_gas_mass, stars_formed,reheated_mass, self.cold_gas_mass-(stars_formed+reheated_mass)))
-        
-        
+    
         
         self.C_stellar_mass += stars_formed
     
+        # Take away the stellar mass from the cold gas.
         self.cold_gas_mass -= (stars_formed + reheated_mass)
+
 
         if self.cold_gas_mass < 0:
             print('Subhalo {} has used up too much cold gas'.format(self.subhalo_ID))
         
-        
-        # ADD HOT GAS BACK TO MAIN HALO.
-
         star_mass_delta = stars_formed 
 
         self.SFR = star_mass_delta / dt

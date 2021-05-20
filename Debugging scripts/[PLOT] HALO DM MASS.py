@@ -124,39 +124,70 @@ if both:
             print('No Suhaloes')
             
             
+    print(nprogs.max()/part_mass,nprogs.min()/part_mass)
             
-            
-        
-    
+
+
+
     fig, (ax2,ax1) = plt.subplots(2,1,figsize=(7,6),sharex=True,gridspec_kw={'hspace':0.05})
     
-    ax1.hist(sub_nprogs[sub_redshifts <= 0.001],zorder=2,label='$z = 0$',bins=9)
-    ax1.hist(sub_nprogs[((sub_redshifts > 0.001) & (sub_redshifts <= 1))],zorder=1,label='$0 < z \leq 1$',bins=9)
-    ax1.hist(sub_nprogs[((sub_redshifts > 1) & (sub_redshifts <= 2))],zorder=3,label='$1 < z \leq 2$',bins=9)  
-    ax1.hist(sub_nprogs[(sub_redshifts > 2)],zorder=4,label='$ z > 2$',bins=9,linewidth=0.5)  
+    
+    sub_unique_redshifts = np.unique(sub_redshifts)
+    
+    
+    
+    sub_redshift_one = sub_unique_redshifts[0]
+    sub_redshift_two = sub_unique_redshifts[36]
+    sub_redshift_three = sub_unique_redshifts[45]
+    
+    # bins=np.histogram(np.hstack((np.log18sub_nprogs[sub_redshifts == sub_redshift_one],
+    #                              sub_nprogs[sub_redshifts == sub_redshift_two],
+    #                              sub_nprogs[sub_redshifts == sub_redshift_three])), bins=20)[1]
+    
+    
+    bins = np.logspace(10,14,25)
+    
+    ax1.hist(sub_nprogs[sub_redshifts == sub_redshift_one],zorder=1,label='Snapshot ${}; z = 0.0$'.format(61),bins=bins)
+    ax1.hist(sub_nprogs[sub_redshifts == sub_redshift_two],zorder=2,
+             label='Snapshot ${}; z = {}$'.format(25,np.round(sub_redshift_two,1)),bins=bins)
+    
+    
+    
+    ax1.hist(sub_nprogs[sub_redshifts == sub_redshift_three],zorder=3,
+             label='Snapshot ${}; z = {}$'.format(16,np.round(sub_redshift_three,1)),bins=bins)  
     ax1.set_yscale('log')
+    ax1.set_xscale('log')
     ax1.set_ylabel('N')
     ax1.set_xlabel('M$_\mathrm{DM}$/M$_\odot$')
     ax1.grid(True,linestyle='--')
     ax1.set_axisbelow(True)
     ax1.legend(title='Subhaloes')
-    ax1.set_xlim(-0.2*10**14,5*10**14)
-    ax2.set_xlim(-0.2*10**14,5*10**14)
-    ax2.hist(nprogs[redshifts <= 0.001],zorder=2,label='$z = 0$',bins=9)
-    ax2.hist(nprogs[((redshifts > 0.001) & (redshifts <= 1))],zorder=1,label='$0 < z \leq 1$',bins=9)
-    ax2.hist(nprogs[((redshifts > 1) & (redshifts <= 2))],zorder=3,label='$1 < z \leq 2$',bins=9)  
-    ax2.hist(nprogs[(redshifts > 2)],zorder=4,label='$ z > 2$',bins=9)  
+    ax1.set_xlim(7*10**9,2*10**14)
+    ax2.set_xlim(7*10**9,2*10**14)
+    ax1.set_ylim(1,4*10**3)
+    ax2.set_ylim(1,4*10**3)
+    unique_redshifts = np.unique(redshifts)
+    
+    redshift_one = unique_redshifts[0]
+    redshift_two = unique_redshifts[36]
+    redshift_three = unique_redshifts[45]
+
+    
+    ax2.hist(nprogs[redshifts == redshift_one],zorder=1,label='Snapshot ${};z = 0.0$'.format(61),bins=bins)
+    ax2.hist(nprogs[redshifts == redshift_two],zorder=2,label='Snapshot ${};z = {}$'.format(25,np.round(redshift_two,1)),bins=bins)
+    ax2.hist(nprogs[redshifts == redshift_three],zorder=3,label='Snapshot ${};z = {}$'.format(16,np.round(redshift_three,1)),bins=bins)  
     ax2.set_yscale('log')
+    # ax2.set_xscale('log')
     ax2.set_ylabel('N')
-    ax2.set_ylim(10**0, 2*10**5)
-    ax1.set_ylim(10**0, 2*10**5)
+    # ax2.set_ylim(10**0, 2*10**5)
+    # ax1.set_ylim(10**0, 2*10**5)
     ax2.grid(True,linestyle='--')
     ax2.set_axisbelow(True)
     # ax2.set_xlabel('Mass/$M_\odot$')
     ax2.legend(title='Haloes')
     plt.subplots_adjust(hspace=.0)
     plt.tight_layout()
-    plt.savefig('output graphs/Halo_subhalo_dist.png',dpi=400)
-    plt.savefig('output graphs/Halo_subhalo_dist.eps')
+    plt.savefig('output graphs/Halo_subhalo_dist.png',dpi=400,bbox_inches='tight')
+    plt.savefig('output graphs/Halo_subhalo_dist.eps')#,bbox_inches='tight')
     plt.show()
     

@@ -1,10 +1,9 @@
 # Py-Galaxies input file
-
 input_files:
  graph_file: '../Input Data/mega_graph_mini_09-11.hdf5'
 
 output_files:
- halo_file:   '../Output Data/SMT13Output_class_based.hdf5'
+ halo_file:   '../Output Data/SMT13Output_array_based.hdf5'
 
 cosmology:
  omega_m:        
@@ -12,17 +11,17 @@ cosmology:
   Value:       0.315
   Units:       'None'
  omega_lambda:
-  Description: 'Cosmo const parameter'
+  Description: 'Vaccuum density parameter'
   Value:       0.685
   Units:       'None'
+ H0:    
+  Description: 'The hubble parameter evaluated at t=0 (from plank)'
+  Value:       67.3
+  Units:       '(km/s)/Mpc'
  omega_gamma:
   Description: 'Radiation density parameter'
   Value:       0.0
   Units:       'None'
- H0:
-  Description: 'The hubble parameter evaluated at t=0 (from plank)'
-  Value:       67.3
-  Units:       '(km/s)/Mpc'
   
  zr_reionization:
   Description: 'The redshift at which reionization occured'

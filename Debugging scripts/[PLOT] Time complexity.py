@@ -13,11 +13,11 @@ import Monitor
 
 import matplotlib.pyplot as plt
 import numpy as np
-
+plt.style.use('classic')
 plt.rc('font', family='serif')
-plt.rc('xtick', labelsize='x-large')
-plt.rc('ytick', labelsize='x-large')
-# plt.style.use('classic')
+plt.rc('xtick', labelsize='x-large',direction='in')
+plt.rc('ytick', labelsize='x-large',direction='in')
+
 # plt.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']})
 plt.rc('text', usetex=True) 
 plt.rc('axes', labelsize=18)  
@@ -29,29 +29,49 @@ filepath_to_array_based = '../../Timing And Memory Tests/TimeTakenPerGraphArrayB
 
 
 array_based_data = np.load(filepath_to_array_based)
-filepath_to_class_based = np.load(filepath_to_class_based)
+class_based_data = np.load(filepath_to_class_based)
 
 
-fig, ax1 = plt.subplots(figsize = (6,4))
 
-ax1.set_ylabel('Processing time / s')
+p = np.poly1d(np.polyfit(array_based_data['amount_of_halos'],array_based_data['time_taken'],
+               1))
+p2 = np.poly1d(np.polyfit(class_based_data['amount_of_halos'],class_based_data['time_taken'],
+               1))
 
-ax1.set_xlabel('Number of Halos in graph')
+
+
+to_fit_x = np.linspace(0,13000,500)
+
+
+
+
+fig, ax1 = plt.subplots(figsize = (7,4))
+
+ax1.set_ylabel('Processing Time / s')
+
+ax1.set_xlabel('Number Of Haloes In Graph')
 
 ax1.scatter(array_based_data['amount_of_halos'],
-            array_based_data['time_taken'],label='Array based')
+            array_based_data['time_taken'],label='Array-based\n$y=${:.1e}$x+${:.1e}'.format(p[1],p[0]),color='blue')
 
-ax1.scatter(filepath_to_class_based['amount_of_subhalos'],
-            filepath_to_class_based['time_taken'],label='Class based')
+ax1.plot(to_fit_x, p(to_fit_x))
+ax1.plot(to_fit_x, p2(to_fit_x))
+ax1.scatter(class_based_data['amount_of_halos'],
+            class_based_data['time_taken'],label='Class-based\n$y=${:.1e}$x+${:.1e}'.format(p2[1],p2[0]),color='green')
 
 
-ax1.grid(True,alpha=0.5, linestyle='--')
+
+
+ax1.grid(True, linestyle='--')
+ax1.set_axisbelow(True)
 ax1.set_xscale('linear')
-ax1.set_xlim(0,15000)
-
-ax1.legend()
-plt.savefig('../../Timing And Memory Tests/Output Figures/TimeTakenPerGraph.png',
+ax1.set_xlim(0,13500)
+ax1.set_ylim(0,2.2)
+ax1.minorticks_on()
+# ax.tick_params(axis='both', which='minor',bottom=True)
+ax1.legend(loc='upper left')
+plt.tight_layout()
+plt.savefig('output graphs/TimeTakenPerGraph.png',
             dpi=450)
-
-
+plt.savefig('output graphs/TimeTakenPerGraph.eps')
 plt.plot()

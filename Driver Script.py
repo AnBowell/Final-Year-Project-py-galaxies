@@ -35,8 +35,7 @@ HDF_properties = HDF_graph_properties.HDFProperties(model_params)
 
 
 if time_code:
-    time_monitor = Monitor.TimeMonitor(HDF_properties.no_of_graphs,
-                                       amount_of_timers_required =1)
+    time_monitor = Monitor.TimeMonitor(HDF_properties.no_of_graphs)
 # if mem_code:
 #     mem_monitor = Monitor.MemoryMonitor(HDF_properties.no_of_graphs)
     

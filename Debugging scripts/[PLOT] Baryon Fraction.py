@@ -80,6 +80,8 @@ ax1.set_ylabel(r'M$_\mathrm{bary}$/M$_\mathrm{DM}$')
 ax1.set_xlabel(r'M$_\mathrm{DM}$/M$_\odot$')
 ax1.grid(True, linestyle ='--')
 ax1.set_axisbelow(True)
+
+
 ax1.legend()
 plt.tight_layout()
 plt.savefig('output graphs/Bary_frac.png',dpi=400)
